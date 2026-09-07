@@ -2,7 +2,7 @@
 <html lang="ru">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
 <title>Польский A1 — Спряжение глаголов</title>
 
 <!-- PWA: установка на домашний экран -->
@@ -46,7 +46,9 @@
     -webkit-text-size-adjust:100%;
     -webkit-tap-highlight-color:transparent;
     overscroll-behavior-y:none;
+    touch-action:manipulation;   /* убирает зум по двойному тапу */
   }
+  html{touch-action:manipulation;}
   .wrap{max-width:820px;margin:0 auto;}
   header{text-align:center;margin-bottom:16px;}
   header h1{font-size:1.6rem;margin:0 0 6px;letter-spacing:.3px;}
@@ -371,19 +373,101 @@
   .confirm-actions button{flex:1;}
   .btn-warn{background:var(--accent);color:#fff;}
   .btn-ghost{background:var(--bg2);color:var(--ink);border:1px solid var(--line);}
+
+  /* ---------- главная: выбор темы ---------- */
+  .topic-list{display:grid;gap:12px;}
+  .topic-card{
+    display:flex;align-items:center;gap:15px;width:100%;text-align:left;
+    background:var(--card);border:1px solid var(--line);border-radius:16px;
+    padding:16px 18px;cursor:pointer;box-shadow:0 1px 3px rgba(0,0,0,.04);
+    font:inherit;color:var(--ink);transition:border-color .18s, transform .1s;
+  }
+  .topic-card:hover{border-color:var(--accent2);}
+  .topic-card:active{transform:scale(.99);}
+  .topic-mark{
+    flex:0 0 auto;width:54px;height:54px;border-radius:15px;
+    display:flex;align-items:center;justify-content:center;
+    font-family:'Georgia',serif;font-size:1.6rem;color:#f4f1ea;line-height:1;
+  }
+  .topic-mark-czasowniki{background:var(--accent2);}
+  .topic-mark-liczebniki{background:var(--accent);}
+  .topic-body{flex:1;min-width:0;}
+  .topic-body h3{margin:0 0 3px;font-size:1.12rem;font-family:'Georgia',serif;}
+  .topic-sub{
+    font-family:ui-sans-serif,system-ui,sans-serif;font-size:.8rem;
+    color:var(--muted);line-height:1.4;
+  }
+  .topic-meta{
+    font-family:ui-sans-serif,system-ui,sans-serif;font-size:.72rem;
+    color:var(--accent2);margin-top:5px;letter-spacing:.03em;font-weight:600;
+  }
+  .topic-arrow{flex:0 0 auto;color:var(--muted);font-size:1.1rem;}
+
+  /* ---------- экран настройки ---------- */
+  .back-link{
+    background:none;border:none;padding:4px 0 12px;cursor:pointer;
+    font-family:ui-sans-serif,system-ui,sans-serif;font-size:.85rem;
+    font-weight:600;color:var(--muted);
+  }
+  .back-link:hover{color:var(--accent2);}
+  .setup-section-title{
+    font-family:ui-sans-serif,system-ui,sans-serif;font-size:.72rem;
+    text-transform:uppercase;letter-spacing:.08em;color:var(--muted);
+    margin:20px 0 10px;font-weight:700;
+  }
+  .sub-chips{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
+  @media (max-width:420px){.sub-chips{grid-template-columns:1fr;}}
+  .sub-chip{
+    display:flex;flex-direction:column;align-items:flex-start;gap:2px;
+    padding:9px 12px;border-radius:12px;cursor:pointer;text-align:left;
+    background:var(--bg2);border:1px solid var(--line);color:var(--ink);
+    font-family:ui-sans-serif,system-ui,sans-serif;transition:background .15s,border-color .15s;
+  }
+  .sub-chip-label{font-size:.88rem;font-weight:700;}
+  .sub-chip-caption{font-size:.72rem;color:var(--muted);}
+  .sub-chip.active{background:var(--accent2);border-color:var(--accent2);color:#fff;}
+  .sub-chip.active .sub-chip-caption{color:rgba(255,255,255,.8);}
+  .sub-actions{display:flex;gap:8px;justify-content:center;margin-top:10px;}
+  .mini-btn{
+    background:none;border:none;padding:4px 8px;cursor:pointer;
+    font-family:ui-sans-serif,system-ui,sans-serif;font-size:.78rem;
+    font-weight:600;color:var(--muted);text-decoration:underline dotted;
+  }
+  .mini-btn:hover{color:var(--accent2);}
+
+  /* ---------- карточка с длинным ответом (числительные) ---------- */
+  .card.block .q-sentence{margin-bottom:9px;}
+  .card.block input.blank{
+    display:block;width:100%;text-align:left;padding:5px 2px;margin-top:2px;
+  }
+  .blank-gap{
+    display:inline-block;min-width:64px;
+    border-bottom:2px dotted var(--line);vertical-align:baseline;
+  }
+  .card.block.correct .blank-gap{border-bottom-color:var(--green-line);}
+  .card.block.wrong .blank-gap{border-bottom-color:var(--red-line);}
+  .card.block.wrong input.blank{text-decoration:none;}
+
+  /* ---------- заголовки таблицы в модале ---------- */
+  .conj-table th{
+    text-align:left;padding:5px 8px;
+    font-family:ui-sans-serif,system-ui,sans-serif;font-size:.68rem;
+    text-transform:uppercase;letter-spacing:.05em;color:var(--muted);
+    border-bottom:1px solid var(--line);font-weight:700;
+  }
 </style>
 </head>
 <body>
 <div class="wrap">
   <header>
-    <span class="badge">Уровень A1</span>
-    <h1>Спряжение глаголов — настоящее время</h1>
-    <p id="headerSub">По 10 предложений в каждом тесте. У ошибок слово «спряжение»/«Исключение» кликабельно — открывает таблицу всех форм.</p>
+    <span class="badge" id="headerBadge">Тренажёр</span>
+    <h1 id="headerTitle">Польский язык</h1>
+    <p id="headerSub">Выбери тему, которую хочешь потренировать.</p>
   </header>
 
   <div id="app"></div>
 
-  <footer id="footerNote">Глаголы: być, mieć, mówić, czytać, pisać, robić, iść, jechać, jeść, pić, chcieć, móc, wiedzieć, znać, mieszkać, pracować, uczyć się, lubić, grać, słuchać, kupować, rozumieć, spać, widzieć, pomagać, jeździć, tańczyć, gotować, pływać.</footer>
+  <footer id="footerNote"></footer>
 </div>
 
 <div class="modal-backdrop" id="modalBackdrop">
@@ -391,6 +475,19 @@
 </div>
 
 <script>
+/* ============ ОБЩЕЕ ============ */
+function shuffle(arr){
+  for(let i=arr.length-1;i>0;i--){
+    const j=Math.floor(Math.random()*(i+1));
+    [arr[i],arr[j]]=[arr[j],arr[i]];
+  }
+  return arr;
+}
+function normalize(s){
+  return (s || '').trim().toLowerCase().replace(/\s+/g,' ');
+}
+
+/* ============ ТЕМА: ГЛАГОЛЫ (данные) ============ */
 const PERSON_LABEL = {
   "ja":"1 лицо ед.ч. (ja)",
   "ty":"2 лицо ед.ч. (ty)",
@@ -486,7 +583,7 @@ function getConjGroup(verb){
   return null;
 }
 
-const DATA = [
+const VERB_DATA = [
   {v:"być", person:"ja", sentence:"Ja ___ studentem z Ukrainy.", answer:"jestem"},
   {v:"być", person:"ty", sentence:"Czy ty ___ lekarzem?", answer:"jesteś"},
   {v:"być", person:"on/ona/ono", sentence:"Ona ___ bardzo miła.", answer:"jest"},
@@ -639,102 +736,528 @@ const DATA = [
   {v:"pływać", person:"oni/one", sentence:"Oni ___ w jeziorze.", answer:"pływają"}
 ];
 
-function shuffle(arr){
-  for(let i=arr.length-1;i>0;i--){
-    const j=Math.floor(Math.random()*(i+1));
-    [arr[i],arr[j]]=[arr[j],arr[i]];
-  }
-  return arr;
-}
+/* ============ ТЕМА: ЧИСЛИТЕЛЬНЫЕ ============ */
+const NUM_SUBTOPICS = [
+  {id:'jednosci',   label:'Цифры',   caption:'0–10'},
+  {id:'dziesiatki', label:'Десятки', caption:'11–99'},
+  {id:'setki',      label:'Сотни',   caption:'100–999'},
+  {id:'tysiace',    label:'Тысячи',  caption:'1000 и больше'},
+  {id:'daty',       label:'Даты',    caption:'kiedy? / w którym roku?'},
+  {id:'czas',       label:'Время',   caption:'która godzina?'}
+];
 
+const NUM_REF = {
+  jednosci: {
+    title:'Цифры 0–10',
+    sub:'Базовая форма (мужской и средний род).',
+    cols:['Цифра','По-польски'],
+    rows:[['0','zero'],['1','jeden'],['2','dwa'],['3','trzy'],['4','cztery'],['5','pięć'],
+          ['6','sześć'],['7','siedem'],['8','osiem'],['9','dziewięć'],['10','dziesięć']]
+  },
+  dziesiatki: {
+    title:'11–19 и десятки',
+    sub:'Составное число = десяток + единица через пробел: 25 → dwadzieścia pięć, 47 → czterdzieści siedem.',
+    cols:['Число','По-польски'],
+    rows:[['11','jedenaście'],['12','dwanaście'],['13','trzynaście'],['14','czternaście'],
+          ['15','piętnaście'],['16','szesnaście'],['17','siedemnaście'],['18','osiemnaście'],
+          ['19','dziewiętnaście'],['20','dwadzieścia'],['30','trzydzieści'],['40','czterdzieści'],
+          ['50','pięćdziesiąt'],['60','sześćdziesiąt'],['70','siedemdziesiąt'],
+          ['80','osiemdziesiąt'],['90','dziewięćdziesiąt']]
+  },
+  setki: {
+    title:'Сотни',
+    sub:'Сотня + десяток + единица через пробел: 365 → trzysta sześćdziesiąt pięć. Обрати внимание: 200 и 300–400 образуются не как остальные.',
+    cols:['Число','По-польски'],
+    rows:[['100','sto'],['200','dwieście'],['300','trzysta'],['400','czterysta'],['500','pięćset'],
+          ['600','sześćset'],['700','siedemset'],['800','osiemset'],['900','dziewięćset']]
+  },
+  tysiace: {
+    title:'Тысячи',
+    sub:'После 2, 3, 4 — «tysiące», после 5 и больше — «tysięcy». Ровно одна тысяча — просто «tysiąc», без «jeden».',
+    cols:['Число','По-польски'],
+    rows:[['1000','tysiąc'],['2000','dwa tysiące'],['3000','trzy tysiące'],['4000','cztery tysiące'],
+          ['5000','pięć tysięcy'],['9000','dziewięć tysięcy'],['10 000','dziesięć tysięcy'],
+          ['20 000','dwadzieścia tysięcy'],['100 000','sto tysięcy'],
+          ['1500','tysiąc pięćset'],['2500','dwa tysiące pięćset'],['3450','trzy tysiące czterysta pięćdziesiąt']]
+  },
+  daty: {
+    title:'Даты',
+    sub:'Kiedy? — день в родительном падеже (-ego) + месяц в родительном: pierwszego maja. Месяцы: stycznia, lutego, marca, kwietnia, maja, czerwca, lipca, sierpnia, września, października, listopada, grudnia. W którym roku? — склоняется только последнее слово: w tysiąc dziewięćset osiemdziesiątym piątym roku.',
+    cols:['Число','Kiedy? (-ego)'],
+    rows:[['1','pierwszego'],['2','drugiego'],['3','trzeciego'],['4','czwartego'],['5','piątego'],
+          ['6','szóstego'],['7','siódmego'],['8','ósmego'],['9','dziewiątego'],['10','dziesiątego'],
+          ['11','jedenastego'],['12','dwunastego'],['15','piętnastego'],['17','siedemnastego'],
+          ['20','dwudziestego'],['22','dwudziestego drugiego'],['24','dwudziestego czwartego'],
+          ['30','trzydziestego'],['31','trzydziestego pierwszego']]
+  },
+  czas: {
+    title:'Время',
+    sub:'Час — порядковое числительное женского рода (godzina — она). «Jest…» — именительный, «o…» (во сколько) — предложный. Минуты называются обычным числительным: 17:30 → siedemnasta trzydzieści.',
+    cols:['Час','Jest… (который)','o… (во сколько)'],
+    rows:[['1','pierwsza','pierwszej'],['2','druga','drugiej'],['3','trzecia','trzeciej'],
+          ['4','czwarta','czwartej'],['5','piąta','piątej'],['6','szósta','szóstej'],
+          ['7','siódma','siódmej'],['8','ósma','ósmej'],['9','dziewiąta','dziewiątej'],
+          ['10','dziesiąta','dziesiątej'],['11','jedenasta','jedenastej'],['12','dwunasta','dwunastej'],
+          ['13','trzynasta','trzynastej'],['15','piętnasta','piętnastej'],
+          ['17','siedemnasta','siedemnastej'],['19','dziewiętnasta','dziewiętnastej'],
+          ['20','dwudziesta','dwudziestej'],['21','dwudziesta pierwsza','dwudziestej pierwszej'],
+          ['23','dwudziesta trzecia','dwudziestej trzeciej']]
+  }
+};
+
+/* sub — подтема, hint — что показать в шапке карточки, alt — другие допустимые ответы */
+const NUM_DATA = [
+  /* ---------- цифры 0–10 ---------- */
+  {sub:'jednosci', hint:'0',  sentence:"Mój wynik to ___ punktów.",        answer:"zero"},
+  {sub:'jednosci', hint:'1',  sentence:"Autobus numer ___ jedzie do centrum.", answer:"jeden"},
+  {sub:'jednosci', hint:'1',  sentence:"To jest ___ złoty.",               answer:"jeden"},
+  {sub:'jednosci', hint:'2',  sentence:"Ile to jest 1 + 1? To ___.",       answer:"dwa"},
+  {sub:'jednosci', hint:'3',  sentence:"Na stole są ___ książki.",         answer:"trzy"},
+  {sub:'jednosci', hint:'3',  sentence:"Ile to jest 6 − 3? To ___.",       answer:"trzy"},
+  {sub:'jednosci', hint:'4',  sentence:"Mam ___ koty.",                    answer:"cztery"},
+  {sub:'jednosci', hint:'4',  sentence:"Rok ma ___ pory roku.",            answer:"cztery"},
+  {sub:'jednosci', hint:'5',  sentence:"W klasie jest ___ uczniów.",       answer:"pięć"},
+  {sub:'jednosci', hint:'5',  sentence:"Poczekaj ___ minut.",              answer:"pięć"},
+  {sub:'jednosci', hint:'6',  sentence:"To kosztuje ___ złotych.",         answer:"sześć"},
+  {sub:'jednosci', hint:'6',  sentence:"Kup ___ jajek, proszę.",           answer:"sześć"},
+  {sub:'jednosci', hint:'7',  sentence:"W tygodniu jest ___ dni.",         answer:"siedem"},
+  {sub:'jednosci', hint:'7',  sentence:"Pokój numer ___, proszę.",         answer:"siedem"},
+  {sub:'jednosci', hint:'8',  sentence:"Pracuję ___ godzin dziennie.",     answer:"osiem"},
+  {sub:'jednosci', hint:'9',  sentence:"Ile to jest 4 + 5? To ___.",       answer:"dziewięć"},
+  {sub:'jednosci', hint:'9',  sentence:"W biurze pracuje ___ osób.",       answer:"dziewięć"},
+  {sub:'jednosci', hint:'10', sentence:"Mam ___ palców u rąk.",            answer:"dziesięć"},
+  {sub:'jednosci', hint:'10', sentence:"Ile to jest 5 + 5? To ___.",       answer:"dziesięć"},
+
+  /* ---------- десятки 11–99 ---------- */
+  {sub:'dziesiatki', hint:'11', sentence:"Mój syn ma ___ lat.",             answer:"jedenaście"},
+  {sub:'dziesiatki', hint:'12', sentence:"Rok ma ___ miesięcy.",            answer:"dwanaście"},
+  {sub:'dziesiatki', hint:'13', sentence:"W pokoju jest ___ krzeseł.",      answer:"trzynaście"},
+  {sub:'dziesiatki', hint:'14', sentence:"To kosztuje ___ złotych.",        answer:"czternaście"},
+  {sub:'dziesiatki', hint:'15', sentence:"Czekam już ___ minut.",           answer:"piętnaście"},
+  {sub:'dziesiatki', hint:'16', sentence:"Moja siostra ma ___ lat.",        answer:"szesnaście"},
+  {sub:'dziesiatki', hint:'17', sentence:"W grupie jest ___ studentów.",    answer:"siedemnaście"},
+  {sub:'dziesiatki', hint:'18', sentence:"Kończę ___ lat w maju.",          answer:"osiemnaście"},
+  {sub:'dziesiatki', hint:'19', sentence:"Autobus numer ___ jedzie na dworzec.", answer:"dziewiętnaście"},
+  {sub:'dziesiatki', hint:'20', sentence:"Bilet kosztuje ___ złotych.",     answer:"dwadzieścia"},
+  {sub:'dziesiatki', hint:'21', sentence:"Mam ___ lat.",                    answer:"dwadzieścia jeden"},
+  {sub:'dziesiatki', hint:'25', sentence:"Mój kolega ma ___ lat.",          answer:"dwadzieścia pięć"},
+  {sub:'dziesiatki', hint:'30', sentence:"W klasie jest ___ uczniów.",      answer:"trzydzieści"},
+  {sub:'dziesiatki', hint:'33', sentence:"Mój brat ma ___ lata.",           answer:"trzydzieści trzy"},
+  {sub:'dziesiatki', hint:'40', sentence:"To kosztuje ___ złotych.",        answer:"czterdzieści"},
+  {sub:'dziesiatki', hint:'47', sentence:"W hotelu jest ___ pokoi.",        answer:"czterdzieści siedem"},
+  {sub:'dziesiatki', hint:'50', sentence:"Mam ___ złotych.",                answer:"pięćdziesiąt"},
+  {sub:'dziesiatki', hint:'58', sentence:"Moja mama ma ___ lat.",           answer:"pięćdziesiąt osiem"},
+  {sub:'dziesiatki', hint:'60', sentence:"Godzina ma ___ minut.",           answer:"sześćdziesiąt"},
+  {sub:'dziesiatki', hint:'64', sentence:"W szkole pracują ___ osoby.",     answer:"sześćdziesiąt cztery"},
+  {sub:'dziesiatki', hint:'70', sentence:"Bilet kosztuje ___ złotych.",     answer:"siedemdziesiąt"},
+  {sub:'dziesiatki', hint:'72', sentence:"Mój dziadek ma ___ lata.",        answer:"siedemdziesiąt dwa"},
+  {sub:'dziesiatki', hint:'80', sentence:"W bibliotece jest ___ książek.",  answer:"osiemdziesiąt"},
+  {sub:'dziesiatki', hint:'86', sentence:"To kosztuje ___ złotych.",        answer:"osiemdziesiąt sześć"},
+  {sub:'dziesiatki', hint:'90', sentence:"Film trwa ___ minut.",            answer:"dziewięćdziesiąt"},
+  {sub:'dziesiatki', hint:'99', sentence:"W sklepie jest ___ produktów.",   answer:"dziewięćdziesiąt dziewięć"},
+
+  /* ---------- сотни 100–999 ---------- */
+  {sub:'setki', hint:'100', sentence:"To kosztuje ___ złotych.",            answer:"sto"},
+  {sub:'setki', hint:'200', sentence:"Bilet kosztuje ___ złotych.",         answer:"dwieście"},
+  {sub:'setki', hint:'300', sentence:"Do Krakowa jest ___ kilometrów.",     answer:"trzysta"},
+  {sub:'setki', hint:'400', sentence:"W szkole jest ___ uczniów.",          answer:"czterysta"},
+  {sub:'setki', hint:'500', sentence:"Mam ___ złotych.",                    answer:"pięćset"},
+  {sub:'setki', hint:'600', sentence:"Hotel ma ___ pokoi.",                 answer:"sześćset"},
+  {sub:'setki', hint:'700', sentence:"Ta książka ma ___ stron.",            answer:"siedemset"},
+  {sub:'setki', hint:'800', sentence:"Zapłaciłem ___ złotych.",             answer:"osiemset"},
+  {sub:'setki', hint:'900', sentence:"W miasteczku mieszka ___ osób.",      answer:"dziewięćset"},
+  {sub:'setki', hint:'101', sentence:"To kosztuje ___ złotych.",            answer:"sto jeden"},
+  {sub:'setki', hint:'150', sentence:"Kurtka kosztuje ___ złotych.",        answer:"sto pięćdziesiąt"},
+  {sub:'setki', hint:'220', sentence:"Do Gdańska jest ___ kilometrów.",     answer:"dwieście dwadzieścia"},
+  {sub:'setki', hint:'250', sentence:"Do Warszawy jest ___ kilometrów.",    answer:"dwieście pięćdziesiąt"},
+  {sub:'setki', hint:'365', sentence:"Rok ma ___ dni.",                     answer:"trzysta sześćdziesiąt pięć"},
+  {sub:'setki', hint:'480', sentence:"W teatrze jest ___ miejsc.",          answer:"czterysta osiemdziesiąt"},
+  {sub:'setki', hint:'512', sentence:"Mam ___ złotych.",                    answer:"pięćset dwanaście"},
+  {sub:'setki', hint:'630', sentence:"Bilet kosztuje ___ złotych.",         answer:"sześćset trzydzieści"},
+  {sub:'setki', hint:'725', sentence:"Ta książka ma ___ stron.",            answer:"siedemset dwadzieścia pięć"},
+  {sub:'setki', hint:'840', sentence:"Komputer kosztuje ___ złotych.",      answer:"osiemset czterdzieści"},
+  {sub:'setki', hint:'999', sentence:"W hotelu jest ___ gości.",            answer:"dziewięćset dziewięćdziesiąt dziewięć"},
+
+  /* ---------- тысячи ---------- */
+  {sub:'tysiace', hint:'1000',    sentence:"To kosztuje ___ złotych.",      answer:"tysiąc", alt:["jeden tysiąc"]},
+  {sub:'tysiace', hint:'2000',    sentence:"Zarabiam ___ złotych.",         answer:"dwa tysiące"},
+  {sub:'tysiace', hint:'3000',    sentence:"Laptop kosztuje ___ złotych.",  answer:"trzy tysiące"},
+  {sub:'tysiace', hint:'4000',    sentence:"Zapłaciłem ___ złotych.",       answer:"cztery tysiące"},
+  {sub:'tysiace', hint:'5000',    sentence:"Mam ___ złotych.",              answer:"pięć tysięcy"},
+  {sub:'tysiace', hint:'6000',    sentence:"Samochód kosztuje ___ złotych.", answer:"sześć tysięcy"},
+  {sub:'tysiace', hint:'7000',    sentence:"Mam ___ złotych oszczędności.", answer:"siedem tysięcy"},
+  {sub:'tysiace', hint:'8000',    sentence:"Kredyt to ___ złotych.",        answer:"osiem tysięcy"},
+  {sub:'tysiace', hint:'10 000',  sentence:"W mieście mieszka ___ osób.",   answer:"dziesięć tysięcy"},
+  {sub:'tysiace', hint:'20 000',  sentence:"W miasteczku mieszka ___ osób.", answer:"dwadzieścia tysięcy"},
+  {sub:'tysiace', hint:'100 000', sentence:"Samochód kosztuje ___ złotych.", answer:"sto tysięcy"},
+  {sub:'tysiace', hint:'1100',    sentence:"Bilet kosztuje ___ złotych.",   answer:"tysiąc sto"},
+  {sub:'tysiace', hint:'1200',    sentence:"Do Berlina jest ___ kilometrów.", answer:"tysiąc dwieście"},
+  {sub:'tysiace', hint:'1500',    sentence:"Telefon kosztuje ___ złotych.", answer:"tysiąc pięćset"},
+  {sub:'tysiace', hint:'2500',    sentence:"Bilet kosztuje ___ złotych.",   answer:"dwa tysiące pięćset"},
+  {sub:'tysiace', hint:'2025',    sentence:"Zapłaciłem ___ złotych.",       answer:"dwa tysiące dwadzieścia pięć"},
+  {sub:'tysiace', hint:'3450',    sentence:"Zapłaciłem ___ złotych.",       answer:"trzy tysiące czterysta pięćdziesiąt"},
+  {sub:'tysiace', hint:'1990',    sentence:"Komputer kosztuje ___ złotych.", answer:"tysiąc dziewięćset dziewięćdziesiąt"},
+
+  /* ---------- даты: kiedy? ---------- */
+  {sub:'daty', hint:'kiedy? · 1 maja',        sentence:"Święto Pracy jest ___.",        answer:"pierwszego maja"},
+  {sub:'daty', hint:'kiedy? · 3 maja',        sentence:"Święto Konstytucji jest ___.",  answer:"trzeciego maja"},
+  {sub:'daty', hint:'kiedy? · 6 stycznia',    sentence:"Trzech Króli jest ___.",        answer:"szóstego stycznia"},
+  {sub:'daty', hint:'kiedy? · 8 marca',       sentence:"Dzień Kobiet jest ___.",        answer:"ósmego marca"},
+  {sub:'daty', hint:'kiedy? · 11 listopada',  sentence:"Święto Niepodległości jest ___.", answer:"jedenastego listopada"},
+  {sub:'daty', hint:'kiedy? · 24 grudnia',    sentence:"Wigilia jest ___.",             answer:"dwudziestego czwartego grudnia"},
+  {sub:'daty', hint:'kiedy? · 2 lutego',      sentence:"Spotkanie jest ___.",           answer:"drugiego lutego"},
+  {sub:'daty', hint:'kiedy? · 9 czerwca',     sentence:"Koncert jest ___.",             answer:"dziewiątego czerwca"},
+  {sub:'daty', hint:'kiedy? · 12 lutego',     sentence:"Test jest ___.",                answer:"dwunastego lutego"},
+  {sub:'daty', hint:'kiedy? · 15 sierpnia',   sentence:"Urodziny mamy są ___.",         answer:"piętnastego sierpnia"},
+  {sub:'daty', hint:'kiedy? · 17 kwietnia',   sentence:"Mój urlop zaczyna się ___.",    answer:"siedemnastego kwietnia"},
+  {sub:'daty', hint:'kiedy? · 22 lipca',      sentence:"Wracam z wakacji ___.",         answer:"dwudziestego drugiego lipca"},
+  {sub:'daty', hint:'kiedy? · 30 września',   sentence:"Egzamin jest ___.",             answer:"trzydziestego września"},
+  {sub:'daty', hint:'kiedy? · 31 października', sentence:"Halloween jest ___.",         answer:"trzydziestego pierwszego października"},
+  /* ---------- даты: w którym roku? ---------- */
+  {sub:'daty', hint:'w którym roku? · 1918', sentence:"Polska odzyskała niepodległość w ___ roku.", answer:"tysiąc dziewięćset osiemnastym"},
+  {sub:'daty', hint:'w którym roku? · 1978', sentence:"Mój tata urodził się w ___ roku.", answer:"tysiąc dziewięćset siedemdziesiątym ósmym"},
+  {sub:'daty', hint:'w którym roku? · 1985', sentence:"To było w ___ roku.",            answer:"tysiąc dziewięćset osiemdziesiątym piątym"},
+  {sub:'daty', hint:'w którym roku? · 1990', sentence:"Urodziłem się w ___ roku.",      answer:"tysiąc dziewięćset dziewięćdziesiątym"},
+  {sub:'daty', hint:'w którym roku? · 1999', sentence:"Skończyłem szkołę w ___ roku.",  answer:"tysiąc dziewięćset dziewięćdziesiątym dziewiątym"},
+  {sub:'daty', hint:'w którym roku? · 2000', sentence:"To było w ___ roku.",            answer:"dwutysięcznym"},
+  {sub:'daty', hint:'w którym roku? · 2004', sentence:"Polska weszła do Unii w ___ roku.", answer:"dwa tysiące czwartym"},
+  {sub:'daty', hint:'w którym roku? · 2010', sentence:"Byłem w Polsce w ___ roku.",     answer:"dwa tysiące dziesiątym"},
+  {sub:'daty', hint:'w którym roku? · 2020', sentence:"Zacząłem pracę w ___ roku.",     answer:"dwa tysiące dwudziestym"},
+  {sub:'daty', hint:'w którym roku? · 2024', sentence:"Przeprowadziłem się w ___ roku.", answer:"dwa tysiące dwudziestym czwartym"},
+
+  /* ---------- время ---------- */
+  {sub:'czas', hint:'która? · 7:00',  sentence:"Jest ___.",                     answer:"siódma"},
+  {sub:'czas', hint:'która? · 8:00',  sentence:"Jest ___.",                     answer:"ósma"},
+  {sub:'czas', hint:'która? · 12:00', sentence:"Jest ___.",                     answer:"dwunasta"},
+  {sub:'czas', hint:'która? · 13:00', sentence:"Jest ___.",                     answer:"trzynasta"},
+  {sub:'czas', hint:'która? · 15:00', sentence:"Jest ___.",                     answer:"piętnasta"},
+  {sub:'czas', hint:'która? · 6:30',  sentence:"Jest ___.",                     answer:"szósta trzydzieści"},
+  {sub:'czas', hint:'która? · 9:15',  sentence:"Jest ___.",                     answer:"dziewiąta piętnaście"},
+  {sub:'czas', hint:'która? · 10:30', sentence:"Jest ___.",                     answer:"dziesiąta trzydzieści"},
+  {sub:'czas', hint:'która? · 11:40', sentence:"Jest ___.",                     answer:"jedenasta czterdzieści"},
+  {sub:'czas', hint:'która? · 14:20', sentence:"Jest ___.",                     answer:"czternasta dwadzieścia"},
+  {sub:'czas', hint:'która? · 16:25', sentence:"Jest ___.",                     answer:"szesnasta dwadzieścia pięć"},
+  {sub:'czas', hint:'która? · 17:30', sentence:"Jest ___.",                     answer:"siedemnasta trzydzieści"},
+  {sub:'czas', hint:'która? · 18:05', sentence:"Jest ___.",                     answer:"osiemnasta pięć"},
+  {sub:'czas', hint:'która? · 19:50', sentence:"Jest ___.",                     answer:"dziewiętnasta pięćdziesiąt"},
+  {sub:'czas', hint:'która? · 20:45', sentence:"Jest ___.",                     answer:"dwudziesta czterdzieści pięć"},
+  {sub:'czas', hint:'która? · 21:10', sentence:"Jest ___.",                     answer:"dwudziesta pierwsza dziesięć"},
+  {sub:'czas', hint:'która? · 22:15', sentence:"Jest ___.",                     answer:"dwudziesta druga piętnaście"},
+  {sub:'czas', hint:'która? · 23:55', sentence:"Jest ___.",                     answer:"dwudziesta trzecia pięćdziesiąt pięć"},
+  {sub:'czas', hint:'o której? · 8:00',  sentence:"Zaczynam pracę o ___.",      answer:"ósmej"},
+  {sub:'czas', hint:'o której? · 10:00', sentence:"Spotkanie jest o ___.",      answer:"dziesiątej"},
+  {sub:'czas', hint:'o której? · 15:00', sentence:"Kończę pracę o ___.",        answer:"piętnastej"},
+  {sub:'czas', hint:'o której? · 19:30', sentence:"Film zaczyna się o ___.",    answer:"dziewiętnastej trzydzieści"},
+  {sub:'czas', hint:'o której? · 21:00', sentence:"Wracam do domu o ___.",      answer:"dwudziestej pierwszej"}
+];
+
+/* ============ РЕЕСТР ТЕМ ============
+   Каждая тема отдаёт вопросы в общем формате:
+   {g:'ключ группы', hint:'подпись в карточке', sentence:'... ___ ...', answer:'', alt:[], ref:'ключ справки'}
+   Движок ниже ничего не знает про глаголы и числительные — только про этот формат. */
+
+const TOPICS = {
+  czasowniki: {
+    id:'czasowniki',
+    title:'Глаголы',
+    subtitle:'Спряжение в настоящем времени',
+    quizTitle:'Спряжение глаголов — настоящее время',
+    mark:'cz',
+    level:'A1',
+    subtopics:null,
+    footer:'Глаголы: być, mieć, mówić, czytać, pisać, robić, iść, jechać, jeść, pić, chcieć, móc, wiedzieć, znać, mieszkać, pracować, uczyć się, lubić, grać, słuchać, kupować, rozumieć, spać, widzieć, pomagać, jeździć, tańczyć, gotować, pływać.',
+    hintNote:'У ошибок слово «спряжение»/«Исключение» кликабельно — открывает таблицу всех форм.',
+    blockInput:false,
+
+    questions(){
+      return VERB_DATA.map(q => {
+        const isExc = EXCEPTIONS.has(q.v);
+        const group = isExc ? null : getConjGroup(q.v);
+        return {
+          g: isExc ? 'EXC' : (group ? group.key : 'OTHER'),
+          hint: q.v,
+          sentence: q.sentence,
+          answer: q.answer,
+          ref: q.v,
+          person: q.person,
+          v: q.v
+        };
+      });
+    },
+
+    groupLabel(key){
+      if(key === 'EXC') return 'Исключения';
+      return CONJ_GROUPS[key] ? CONJ_GROUPS[key].shortLabel : key;
+    },
+
+    wrongHtml(q){
+      if(q.g === 'EXC'){
+        return `<span class="icon">✕</span><button type="button" class="ref-link" data-ref="${q.ref}">Исключение</button>. Правильно: <b>${q.answer}</b>.`;
+      }
+      const group = CONJ_GROUPS[q.g];
+      if(!group) return `<span class="icon">✕</span>Правильно: <b>${q.answer}</b>.`;
+      const ending = group.endings[q.person];
+      return `<span class="icon">✕</span>По <button type="button" class="ref-link" data-ref="${q.ref}">спряжению</button> — ${group.label}, ${PERSON_LABEL[q.person]}, окончание <b>${ending}</b> → нужно <b>${q.answer}</b>.`;
+    },
+
+    adviceHtml(key){
+      if(key === 'EXC'){
+        return `<li><span class="a-ico">📌</span><span>Учи наизусть <button type="button" class="ref-link" data-ref="${EXC_BASE_VERB}">глаголы-исключения</button>: być, mieć, iść, jechać, jeść, chcieć, móc, wiedzieć — их формы не подчиняются общим правилам.</span></li>`;
+      }
+      const g = CONJ_GROUPS[key];
+      if(!g) return '';
+      const endsStr = PERSON_ORDER.map(p => `${p} ${g.endings[p]}`).join(', ');
+      return `<li><span class="a-ico">📌</span><span>Подтяни <button type="button" class="ref-link" data-ref="${g.baseVerb}">${g.shortLabel}</button> — глаголы с окончанием инфинитива «<b>${g.infEnding}</b>» (например <i>${g.baseVerb}</i>). Личные окончания: ${endsStr}.</span></li>`;
+    },
+
+    reference(refKey){
+      const forms = PARADIGMS[refKey];
+      if(!forms) return null;
+      const isExc = EXCEPTIONS.has(refKey);
+      const group = isExc ? null : getConjGroup(refKey);
+      return {
+        title: refKey,
+        tag: isExc ? 'Искл.' : (group ? group.shortLabel : ''),
+        sub: 'Все формы, настоящее время',
+        cols: ['Лицо','Окончание','Форма'],
+        rows: PERSON_ORDER.map((p, i) => [p, (!isExc && group) ? group.endings[p] : '—', forms[i]])
+      };
+    }
+  },
+
+  liczebniki: {
+    id:'liczebniki',
+    title:'Числительные',
+    subtitle:'Цифры, даты и время словами',
+    quizTitle:'Числительные — пиши словами',
+    mark:'7',
+    level:'A1',
+    subtopics:NUM_SUBTOPICS,
+    footer:'Пиши числительное словами, польскими буквами: ą, ć, ę, ł, ń, ó, ś, ź, ż.',
+    hintNote:'У ошибок название подтемы кликабельно — открывает таблицу-подсказку.',
+    blockInput:true,
+
+    questions(subs){
+      return NUM_DATA
+        .filter(q => !subs || subs.has(q.sub))
+        .map(q => ({
+          g: q.sub,
+          hint: q.hint,
+          sentence: q.sentence,
+          answer: q.answer,
+          alt: q.alt || [],
+          ref: q.sub
+        }));
+    },
+
+    groupLabel(key){
+      const s = NUM_SUBTOPICS.find(s => s.id === key);
+      return s ? s.label : key;
+    },
+
+    wrongHtml(q){
+      return `<span class="icon">✕</span><button type="button" class="ref-link" data-ref="${q.ref}">${this.groupLabel(q.g)}</button> — правильно: <b>${q.answer}</b>.`;
+    },
+
+    adviceHtml(key){
+      const s = NUM_SUBTOPICS.find(s => s.id === key);
+      const ref = NUM_REF[key];
+      if(!s || !ref) return '';
+      return `<li><span class="a-ico">📌</span><span>Подтяни <button type="button" class="ref-link" data-ref="${key}">${s.label.toLowerCase()}</button> (${s.caption}). ${ref.sub}</span></li>`;
+    },
+
+    reference(refKey){
+      const r = NUM_REF[refKey];
+      if(!r) return null;
+      return {title:r.title, tag:'Подсказка', sub:r.sub, cols:r.cols, rows:r.rows};
+    }
+  }
+};
+
+const TOPIC_ORDER = ['czasowniki','liczebniki'];
+
+/* ============ СОСТОЯНИЕ ============ */
 const BATCH_SIZE = 10;
-function buildBatches(){
-  const all = shuffle(DATA.slice());
-  const batches = [];
-  for(let i=0;i<all.length;i+=BATCH_SIZE){
-    batches.push(all.slice(i, i+BATCH_SIZE));
-  }
-  return batches;
-}
-const MAX_TESTS = Math.floor(DATA.length / BATCH_SIZE); // 9
 
-// ---------------- app state ----------------
-let state = 'start'; // 'start' | 'quiz' | 'summary'
+let state = 'home';            // 'home' | 'setup' | 'quiz' | 'summary'
+let topic = null;              // текущая тема из TOPICS
+let selectedSubs = null;       // Set выбранных подтем (null, если у темы их нет)
 let selectedCount = 3;
 let sessionBatches = [];
 let currentIndex = 0;
 let checked = false;
-
-let stats = {
-  correct:0, wrong:0, total:0,
-  groupWrong:{A:0,B:0,C:0,D:0,E:0},
-  groupTotal:{A:0,B:0,C:0,D:0,E:0},
-  excWrong:0, excTotal:0
-};
+let stats = null;
 
 const app = document.getElementById('app');
+const headerTitle = document.getElementById('headerTitle');
 const headerSub = document.getElementById('headerSub');
+const headerBadge = document.getElementById('headerBadge');
 const footerNote = document.getElementById('footerNote');
 const modalBackdrop = document.getElementById('modalBackdrop');
 const modalBox = document.getElementById('modalBox');
 
-function normalize(s){
-  return (s || '').trim().toLowerCase().replace(/\s+/g,' ');
+function currentPool(){
+  return topic.questions(selectedSubs);
+}
+function maxTests(){
+  return Math.max(1, Math.floor(currentPool().length / BATCH_SIZE));
+}
+function buildBatches(){
+  const all = shuffle(currentPool());
+  const batches = [];
+  for(let i = 0; i < all.length; i += BATCH_SIZE){
+    batches.push(all.slice(i, i + BATCH_SIZE));
+  }
+  return batches.filter(b => b.length > 0);
 }
 
 function resetStats(){
-  stats = {
-    correct:0, wrong:0, total:0,
-    groupWrong:{A:0,B:0,C:0,D:0,E:0},
-    groupTotal:{A:0,B:0,C:0,D:0,E:0},
-    excWrong:0, excTotal:0
-  };
+  stats = {correct:0, wrong:0, total:0, byGroup:{}};
+}
+function bumpStat(key, ok){
+  if(!stats.byGroup[key]) stats.byGroup[key] = {wrong:0, total:0};
+  stats.byGroup[key].total++;
+  if(!ok) stats.byGroup[key].wrong++;
 }
 
-/* ============ START SCREEN ============ */
-function renderStart(){
-  headerSub.textContent = 'Выбери, сколько тестов по 10 предложений хочешь пройти за раз.';
+function setHeader(badge, title, sub){
+  headerBadge.textContent = badge;
+  headerTitle.textContent = title;
+  headerSub.textContent = sub;
+}
+
+/* ============ ГЛАВНАЯ: ВЫБОР ТЕМЫ ============ */
+function renderHome(){
+  setHeader('Тренажёр', 'Польский язык', 'Выбери тему, которую хочешь потренировать.');
+  footerNote.style.display = 'none';
+
+  const cards = TOPIC_ORDER.map(id => {
+    const t = TOPICS[id];
+    const total = t.questions(null).length;
+    const subs = t.subtopics ? t.subtopics.map(s => s.label).join(' · ') : t.subtitle;
+    return `
+      <button type="button" class="topic-card" data-topic="${id}">
+        <div class="topic-mark topic-mark-${id}">${t.mark}</div>
+        <div class="topic-body">
+          <h3>${t.title}</h3>
+          <div class="topic-sub">${subs}</div>
+          <div class="topic-meta">${t.level} · ${total} ${plural(total,'вопрос','вопроса','вопросов')}</div>
+        </div>
+        <div class="topic-arrow">→</div>
+      </button>`;
+  }).join('');
+
+  app.innerHTML = `<div class="topic-list">${cards}</div>`;
+
+  app.querySelectorAll('.topic-card').forEach(c => {
+    c.addEventListener('click', () => {
+      topic = TOPICS[c.dataset.topic];
+      selectedSubs = topic.subtopics ? new Set(topic.subtopics.map(s => s.id)) : null;
+      selectedCount = Math.min(3, maxTests());
+      state = 'setup';
+      render();
+      window.scrollTo({top:0, behavior:'smooth'});
+    });
+  });
+}
+
+function plural(n, one, few, many){
+  const n10 = n % 10, n100 = n % 100;
+  if(n10 === 1 && n100 !== 11) return one;
+  if(n10 >= 2 && n10 <= 4 && (n100 < 12 || n100 > 14)) return few;
+  return many;
+}
+
+/* ============ НАСТРОЙКА ТЕСТА ============ */
+function renderSetup(){
+  setHeader(topic.level, topic.quizTitle, `По ${BATCH_SIZE} предложений в каждом тесте.`);
+  footerNote.textContent = topic.footer;
   footerNote.style.display = 'block';
 
+  const subsHtml = topic.subtopics ? `
+    <div class="setup-section-title">Подтемы</div>
+    <div class="sub-chips" id="subChips">
+      ${topic.subtopics.map(s => `
+        <button type="button" class="sub-chip${selectedSubs.has(s.id) ? ' active' : ''}" data-sub="${s.id}">
+          <span class="sub-chip-label">${s.label}</span>
+          <span class="sub-chip-caption">${s.caption}</span>
+        </button>`).join('')}
+    </div>
+    <div class="sub-actions">
+      <button type="button" class="mini-btn" id="subAll">Все</button>
+      <button type="button" class="mini-btn" id="subNone">Снять все</button>
+    </div>` : '';
+
   app.innerHTML = `
+    <button type="button" class="back-link" id="backHome">← Другая тема</button>
     <div class="start-card">
-      <h2>Сколько тестов пройти?</h2>
-      <div class="sub">В каждом тесте — 10 предложений на разные глаголы и лица</div>
+      <h2>${topic.title}</h2>
+      <div class="sub">${topic.subtitle}</div>
+      ${subsHtml}
+      <div class="setup-section-title">Сколько тестов</div>
       <div class="stepper">
         <button type="button" id="stepDown">−</button>
         <div class="stepper-value" id="stepValue">${selectedCount}</div>
         <button type="button" id="stepUp">+</button>
       </div>
-      <div class="stepper-caption">тестов подряд (максимум ${MAX_TESTS} из ${MAX_TESTS*BATCH_SIZE} слов)</div>
-      <div class="quick-chips" id="quickChips">
-        ${[1,3,5,MAX_TESTS].map(n => `<button type="button" class="chip${n===selectedCount?' active':''}" data-n="${n}">${n === MAX_TESTS ? 'Все ('+MAX_TESTS+')' : n}</button>`).join('')}
-      </div>
+      <div class="stepper-caption" id="stepCaption"></div>
+      <div class="quick-chips" id="quickChips"></div>
       <button type="button" class="btn-start" id="startBtn">Начать</button>
     </div>
   `;
 
-  const stepValue = document.getElementById('stepValue');
-  function syncChips(){
+  function syncAll(){
+    const pool = currentPool().length;
+    const max = maxTests();
+    if(selectedCount > max) selectedCount = max;
+    if(selectedCount < 1) selectedCount = 1;
+
+    document.getElementById('stepValue').textContent = selectedCount;
+    document.getElementById('stepCaption').textContent =
+      pool === 0
+        ? 'Выбери хотя бы одну подтему'
+        : `тестов подряд (максимум ${max} из ${pool} ${plural(pool,'вопроса','вопросов','вопросов')})`;
+
+    const chips = [...new Set([1, 3, 5, max])].filter(n => n >= 1 && n <= max).sort((a,b) => a-b);
+    document.getElementById('quickChips').innerHTML = chips.map(n =>
+      `<button type="button" class="chip${n === selectedCount ? ' active' : ''}" data-n="${n}">${n === max && max > 1 ? 'Все ('+max+')' : n}</button>`
+    ).join('');
     document.querySelectorAll('#quickChips .chip').forEach(c => {
-      c.classList.toggle('active', Number(c.dataset.n) === selectedCount);
+      c.addEventListener('click', () => { selectedCount = Number(c.dataset.n); syncAll(); });
     });
-    stepValue.textContent = selectedCount;
+
+    if(topic.subtopics){
+      document.querySelectorAll('#subChips .sub-chip').forEach(c => {
+        c.classList.toggle('active', selectedSubs.has(c.dataset.sub));
+      });
+    }
+    document.getElementById('startBtn').disabled = pool === 0;
   }
-  document.getElementById('stepDown').addEventListener('click', () => {
-    selectedCount = Math.max(1, selectedCount - 1);
-    syncChips();
+
+  document.getElementById('backHome').addEventListener('click', () => {
+    state = 'home'; render(); window.scrollTo({top:0, behavior:'smooth'});
   });
-  document.getElementById('stepUp').addEventListener('click', () => {
-    selectedCount = Math.min(MAX_TESTS, selectedCount + 1);
-    syncChips();
-  });
-  document.querySelectorAll('#quickChips .chip').forEach(c => {
-    c.addEventListener('click', () => {
-      selectedCount = Number(c.dataset.n);
-      syncChips();
+  document.getElementById('stepDown').addEventListener('click', () => { selectedCount--; syncAll(); });
+  document.getElementById('stepUp').addEventListener('click', () => { selectedCount++; syncAll(); });
+
+  if(topic.subtopics){
+    document.querySelectorAll('#subChips .sub-chip').forEach(c => {
+      c.addEventListener('click', () => {
+        const id = c.dataset.sub;
+        if(selectedSubs.has(id)) selectedSubs.delete(id); else selectedSubs.add(id);
+        syncAll();
+      });
     });
-  });
+    document.getElementById('subAll').addEventListener('click', () => {
+      topic.subtopics.forEach(s => selectedSubs.add(s.id)); syncAll();
+    });
+    document.getElementById('subNone').addEventListener('click', () => {
+      selectedSubs.clear(); syncAll();
+    });
+  }
+
   document.getElementById('startBtn').addEventListener('click', () => {
+    if(currentPool().length === 0) return;
     sessionBatches = buildBatches().slice(0, selectedCount);
     currentIndex = 0;
     resetStats();
@@ -742,11 +1265,14 @@ function renderStart(){
     render();
     window.scrollTo({top:0, behavior:'smooth'});
   });
+
+  syncAll();
 }
 
-/* ============ QUIZ SCREEN ============ */
+/* ============ ЭКРАН ТЕСТА ============ */
 function renderQuiz(){
-  headerSub.textContent = 'У ошибок слово «спряжение»/«Исключение» кликабельно — открывает таблицу всех форм.';
+  setHeader(topic.level, topic.quizTitle, topic.hintNote);
+  footerNote.textContent = topic.footer;
   footerNote.style.display = 'block';
   checked = false;
 
@@ -770,17 +1296,20 @@ function renderQuiz(){
   const quizEl = document.getElementById('quiz');
   batch.forEach((q, i) => {
     const card = document.createElement('div');
-    card.className = 'card';
+    card.className = 'card' + (topic.blockInput ? ' block' : '');
     card.dataset.index = i;
 
     const parts = q.sentence.split('___');
     const meta = document.createElement('div');
     meta.className = 'q-meta';
-    meta.innerHTML = `<span>Предложение ${i+1}</span><span class="verb-hint">${q.v}</span>`;
+    meta.innerHTML = `<span>Предложение ${i+1}</span><span class="verb-hint">${q.hint}</span>`;
 
     const sentence = document.createElement('div');
     sentence.className = 'q-sentence';
-    sentence.innerHTML = `${parts[0]}<input type="text" class="blank" autocomplete="off" autocapitalize="off" spellcheck="false" data-i="${i}">${parts[1] || ''}`;
+    const field = `<input type="text" class="blank" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" data-i="${i}">`;
+    sentence.innerHTML = topic.blockInput
+      ? `${parts[0]}<span class="blank-gap"></span>${parts[1] || ''}${field}`
+      : `${parts[0]}${field}${parts[1] || ''}`;
 
     const feedback = document.createElement('div');
     feedback.className = 'feedback';
@@ -807,9 +1336,7 @@ function renderQuiz(){
 
   document.getElementById('checkBtn').addEventListener('click', requestCheck);
   document.getElementById('resetBtn').addEventListener('click', () => {
-    state = 'start';
-    render();
-    window.scrollTo({top:0, behavior:'smooth'});
+    state = 'setup'; render(); window.scrollTo({top:0, behavior:'smooth'});
   });
 }
 
@@ -837,11 +1364,8 @@ function requestCheck(){
   const inputs = document.querySelectorAll('#quiz input.blank');
   let empty = 0;
   inputs.forEach(inp => { if(inp.value.trim() === '') empty++; });
-  if(empty > 0){
-    showConfirmModal(empty, inputs.length);
-  } else {
-    checkAnswers();
-  }
+  if(empty > 0) showConfirmModal(empty, inputs.length);
+  else checkAnswers();
 }
 
 function showConfirmModal(empty, total){
@@ -855,12 +1379,15 @@ function showConfirmModal(empty, total){
     </div>
   `;
   modalBackdrop.classList.add('open');
-  document.getElementById('modalCloseBtn').addEventListener('click', closeConjModal);
-  document.getElementById('confirmBack').addEventListener('click', closeConjModal);
-  document.getElementById('confirmGo').addEventListener('click', () => {
-    closeConjModal();
-    checkAnswers();
-  });
+  document.getElementById('modalCloseBtn').addEventListener('click', closeModal);
+  document.getElementById('confirmBack').addEventListener('click', closeModal);
+  document.getElementById('confirmGo').addEventListener('click', () => { closeModal(); checkAnswers(); });
+}
+
+function isCorrect(q, value){
+  const user = normalize(value);
+  if(user === normalize(q.answer)) return true;
+  return (q.alt || []).some(a => normalize(a) === user);
 }
 
 function checkAnswers(){
@@ -871,36 +1398,22 @@ function checkAnswers(){
     const card = document.querySelector(`#quiz .card[data-index="${i}"]`);
     const input = card.querySelector('input.blank');
     const fb = document.getElementById(`fb-${i}`);
-    const userVal = normalize(input.value);
-    const correctVal = normalize(q.answer);
     card.classList.remove('correct','wrong');
     input.disabled = true;
     fb.innerHTML = '';
 
-    const isExc = EXCEPTIONS.has(q.v);
-    const group = isExc ? null : getConjGroup(q.v);
-
+    const ok = isCorrect(q, input.value);
     stats.total++;
-    if(isExc) stats.excTotal++;
-    if(group) stats.groupTotal[group.key]++;
+    bumpStat(q.g, ok);
 
-    if(userVal === correctVal){
+    if(ok){
       card.classList.add('correct');
       correctCount++;
       stats.correct++;
     } else {
       card.classList.add('wrong');
       stats.wrong++;
-      if(isExc){
-        stats.excWrong++;
-        fb.innerHTML = `<span class="icon">✕</span><button type="button" class="conj-link" data-verb="${q.v}">Исключение</button>. Правильно: <b>${q.answer}</b>.`;
-      } else if(group){
-        stats.groupWrong[group.key]++;
-        const ending = group.endings[q.person];
-        fb.innerHTML = `<span class="icon">✕</span>По <button type="button" class="conj-link" data-verb="${q.v}">спряжению</button> — ${group.label}, ${PERSON_LABEL[q.person]}, окончание <b>${ending}</b> → нужно <b>${q.answer}</b>.`;
-      } else {
-        fb.innerHTML = `<span class="icon">✕</span>Правильно: <b>${q.answer}</b>.`;
-      }
+      fb.innerHTML = topic.wrongHtml(q);
     }
   });
 
@@ -921,13 +1434,8 @@ function checkAnswers(){
   const isLast = currentIndex >= sessionBatches.length - 1;
   nextBtn.textContent = isLast ? 'Посмотреть итоги →' : 'Следующий тест →';
   nextBtn.addEventListener('click', () => {
-    if(isLast){
-      state = 'summary';
-      render();
-    } else {
-      currentIndex++;
-      render();
-    }
+    if(isLast){ state = 'summary'; } else { currentIndex++; }
+    render();
     window.scrollTo({top:0, behavior:'smooth'});
   }, {once:true});
 
@@ -935,39 +1443,21 @@ function checkAnswers(){
   document.querySelector('.toolbar').scrollIntoView({behavior:'smooth', block:'start'});
 }
 
+/* ============ ИТОГИ ============ */
 const RADIAL_R = 66;
 const RADIAL_C = 2 * Math.PI * RADIAL_R;
 
-function groupAdviceHtml(key){
-  const g = CONJ_GROUPS[key];
-  const endsStr = PERSON_ORDER.map(p => `${p} ${g.endings[p]}`).join(', ');
-  return `<li><span class="a-ico">📌</span><span>Подтяни <button type="button" class="conj-link" data-verb="${g.baseVerb}">${g.shortLabel}</button> — глаголы с окончанием инфинитива «<b>${g.infEnding}</b>» (например <i>${g.baseVerb}</i>). Личные окончания: ${endsStr}.</span></li>`;
-}
-
-function excAdviceHtml(){
-  return `<li><span class="a-ico">📌</span><span>Учи наизусть <button type="button" class="conj-link" data-verb="${EXC_BASE_VERB}">глаголы-исключения</button>: być, mieć, iść, jechać, jeść, chcieć, móc, wiedzieć — их формы не подчиняются общим правилам.</span></li>`;
-}
-
-/* ============ SUMMARY SCREEN ============ */
 function renderSummary(){
-  headerSub.textContent = 'Итоги сессии.';
+  setHeader(topic.level, topic.quizTitle, 'Итоги сессии.');
   footerNote.style.display = 'none';
 
   const pct = stats.total ? Math.round(stats.correct/stats.total*100) : 0;
   const pctClass = pct >= 80 ? 'great' : pct >= 50 ? 'ok' : 'low';
 
-  // breakdown rows: groups + exceptions, sorted by wrong count desc, only show if wrong>0
-  const rows = [];
-  Object.keys(CONJ_GROUPS).forEach(key => {
-    const w = stats.groupWrong[key];
-    if(w > 0){
-      rows.push({key, label: CONJ_GROUPS[key].shortLabel, wrong: w, total: stats.groupTotal[key]});
-    }
-  });
-  if(stats.excWrong > 0){
-    rows.push({key:'EXC', label: 'Исключения', wrong: stats.excWrong, total: stats.excTotal});
-  }
-  rows.sort((a,b) => b.wrong - a.wrong);
+  const rows = Object.keys(stats.byGroup)
+    .filter(k => stats.byGroup[k].wrong > 0)
+    .map(k => ({key:k, label:topic.groupLabel(k), wrong:stats.byGroup[k].wrong, total:stats.byGroup[k].total}))
+    .sort((a,b) => b.wrong - a.wrong);
   const maxWrong = rows.length ? rows[0].wrong : 1;
 
   const breakdownHtml = rows.length ? rows.map(r => `
@@ -978,13 +1468,9 @@ function renderSummary(){
     </div>
   `).join('') : `<div class="breakdown-row"><div class="breakdown-label">Ошибок не было 🎉</div></div>`;
 
-  // advice: top 2 problem areas, with concrete conjugation + infinitive ending + clickable table link
-  let adviceHtml = '';
-  if(stats.wrong === 0){
-    adviceHtml = `<li class="good"><span class="a-ico">🎉</span><span>Отлично! Все ответы верные — можно переходить к следующему уровню или увеличивать число тестов за сессию.</span></li>`;
-  } else {
-    adviceHtml = rows.slice(0, 2).map(r => r.key === 'EXC' ? excAdviceHtml() : groupAdviceHtml(r.key)).join('');
-  }
+  const adviceHtml = stats.wrong === 0
+    ? `<li class="good"><span class="a-ico">🎉</span><span>Отлично! Все ответы верные — можно увеличить число тестов за сессию или взять другую тему.</span></li>`
+    : rows.slice(0, 2).map(r => topic.adviceHtml(r.key)).join('');
 
   app.innerHTML = `
     <div class="summary-card">
@@ -995,11 +1481,9 @@ function renderSummary(){
             <circle class="radial-fill ${pctClass}" id="radialFill" cx="84" cy="84" r="${RADIAL_R}"
               stroke-dasharray="${RADIAL_C}" stroke-dashoffset="${RADIAL_C}"></circle>
           </svg>
-          <div class="radial-center">
-            <div class="big-pct ${pctClass}">${pct}%</div>
-          </div>
+          <div class="radial-center"><div class="big-pct ${pctClass}">${pct}%</div></div>
         </div>
-        <div class="pct-caption">верно: <b>${stats.correct}</b> из <b>${stats.total}</b> (${sessionBatches.length} ${sessionBatches.length===1?'тест':'тестов'})</div>
+        <div class="pct-caption">верно: <b>${stats.correct}</b> из <b>${stats.total}</b> (${sessionBatches.length} ${plural(sessionBatches.length,'тест','теста','тестов')})</div>
       </div>
       <div class="summary-legend">
         <span>✓ Правильно: <b>${stats.correct}</b></span>
@@ -1014,75 +1498,75 @@ function renderSummary(){
     </div>
     <div class="actions">
       <button class="btn-primary" id="restartBtn">Пройти ещё раз</button>
+      <button class="btn-secondary" id="homeBtn">Другая тема</button>
     </div>
   `;
 
   document.getElementById('restartBtn').addEventListener('click', () => {
-    state = 'start';
-    render();
-    window.scrollTo({top:0, behavior:'smooth'});
+    state = 'setup'; render(); window.scrollTo({top:0, behavior:'smooth'});
+  });
+  document.getElementById('homeBtn').addEventListener('click', () => {
+    state = 'home'; render(); window.scrollTo({top:0, behavior:'smooth'});
   });
 
-  // animate the radial fill from 0 to the target percentage
   const fillEl = document.getElementById('radialFill');
   const targetOffset = RADIAL_C * (1 - pct/100);
   requestAnimationFrame(() => {
-    requestAnimationFrame(() => {
-      fillEl.style.strokeDashoffset = String(targetOffset);
-    });
+    requestAnimationFrame(() => { fillEl.style.strokeDashoffset = String(targetOffset); });
   });
 }
 
-/* ============ MODAL (conjugation table, shared) ============ */
+/* ============ МОДАЛ-ПОДСКАЗКА ============ */
 document.addEventListener('click', (e) => {
-  const link = e.target.closest('.conj-link');
-  if(link){
-    openConjModal(link.dataset.verb);
-    return;
-  }
-  if(e.target === modalBackdrop){
-    closeConjModal();
-  }
+  const link = e.target.closest('.ref-link');
+  if(link){ openRefModal(link.dataset.ref); return; }
+  if(e.target === modalBackdrop) closeModal();
 });
 document.addEventListener('keydown', (e) => {
-  if(e.key === 'Escape') closeConjModal();
+  if(e.key === 'Escape') closeModal();
 });
 
-function openConjModal(verb){
-  const forms = PARADIGMS[verb];
-  if(!forms) return;
+function openRefModal(refKey){
+  if(!topic) return;
+  const r = topic.reference(refKey);
+  if(!r) return;
 
-  const isExc = EXCEPTIONS.has(verb);
-  const group = isExc ? null : getConjGroup(verb);
-  const headerTag = isExc ? "Искл." : (group ? group.shortLabel : "");
-
-  const rows = PERSON_ORDER.map((p, idx) => {
-    const ending = (!isExc && group) ? group.endings[p] : "—";
-    return `<tr><td>${p}</td><td class="end-col">${ending}</td><td>${forms[idx]}</td></tr>`;
-  }).join('');
+  const head = `<tr>${r.cols.map(c => `<th>${c}</th>`).join('')}</tr>`;
+  const body = r.rows.map(row =>
+    `<tr>${row.map((cell, i) => `<td${i === 1 && r.cols.length === 3 ? ' class="end-col"' : ''}>${cell}</td>`).join('')}</tr>`
+  ).join('');
 
   modalBox.innerHTML = `
     <button type="button" class="modal-close" id="modalCloseBtn">✕</button>
-    <h3>${verb} <span class="modal-tag">(${headerTag})</span></h3>
-    <div class="modal-sub">Все формы, настоящее время</div>
-    <table class="conj-table">${rows}</table>
+    <h3>${r.title} ${r.tag ? `<span class="modal-tag">(${r.tag})</span>` : ''}</h3>
+    <div class="modal-sub">${r.sub}</div>
+    <table class="conj-table">${head}${body}</table>
   `;
   modalBackdrop.classList.add('open');
-  document.getElementById('modalCloseBtn').addEventListener('click', closeConjModal);
+  document.getElementById('modalCloseBtn').addEventListener('click', closeModal);
+  modalBox.scrollTop = 0;
 }
 
-function closeConjModal(){
+function closeModal(){
   modalBackdrop.classList.remove('open');
 }
 
-/* ============ router ============ */
+/* ============ РОУТЕР ============ */
 function render(){
-  if(state === 'start') renderStart();
+  if(state === 'home') renderHome();
+  else if(state === 'setup') renderSetup();
   else if(state === 'quiz') renderQuiz();
   else if(state === 'summary') renderSummary();
 }
 
 render();
+
+/* ============ ЗАПРЕТ ЗУМА ============
+   touch-action:manipulation в CSS убирает зум по двойному тапу,
+   а это — щипок двумя пальцами в Safari. */
+['gesturestart','gesturechange','gestureend'].forEach(ev => {
+  document.addEventListener(ev, e => e.preventDefault(), {passive:false});
+});
 
 /* ============ PWA: офлайн-режим ============ */
 if('serviceWorker' in navigator){
