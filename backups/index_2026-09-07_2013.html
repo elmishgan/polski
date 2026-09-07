@@ -100,21 +100,14 @@
   .btn-xl{font-size:1.18rem;padding:18px 20px;letter-spacing:.03em;}
 
   /* ---------- свайпер ---------- */
-  /* лента во всю ширину экрана: карточка уезжает за край, рамок вокруг нет */
-  .swiper{
-    position:relative;
-    margin-left:calc(-12px - env(safe-area-inset-left));
-    margin-right:calc(-12px - env(safe-area-inset-right));
-  }
+  .swiper{position:relative;}
   .swiper-track{
-    position:relative;
     display:flex;overflow-x:auto;scroll-snap-type:x mandatory;
     scrollbar-width:none;-ms-overflow-style:none;
     -webkit-overflow-scrolling:touch;touch-action:pan-x pan-y;
-    padding:4px 8%;
   }
   .swiper-track::-webkit-scrollbar{display:none;}
-  .slide{flex:0 0 84%;scroll-snap-align:center;padding:0 6px;}
+  .slide{flex:0 0 100%;scroll-snap-align:center;padding:0 2px;}
   .sw-arrow{
     position:absolute;top:50%;transform:translateY(-50%);z-index:2;
     width:34px;height:34px;border-radius:50%;border:2px solid rgba(255,255,255,.45);
@@ -124,8 +117,8 @@
   }
   .sw-arrow:active{background:rgba(15,22,60,.8);}
   .sw-prev{left:-4px;} .sw-next{right:-4px;}
-  .sw-dots{display:flex;justify-content:center;gap:6px;margin-top:12px;flex-wrap:wrap;}
-  .sw-dot{width:9px;height:9px;border-radius:50%;background:rgba(255,255,255,.28);transition:all .2s;cursor:pointer;}
+  .sw-dots{display:flex;justify-content:center;gap:6px;margin-top:10px;}
+  .sw-dot{width:8px;height:8px;border-radius:50%;background:rgba(255,255,255,.28);transition:all .2s;}
   .sw-dot.active{background:var(--gold);width:22px;border-radius:999px;}
 
   /* ---------- карточка темы / подтемы ---------- */
@@ -134,8 +127,8 @@
     box-shadow:0 5px 0 rgba(0,0,0,.28), inset 0 2px 0 rgba(255,255,255,.25);
     border:2px solid rgba(255,255,255,.28);
   }
-  .pick-topic{min-height:230px;display:flex;flex-direction:column;justify-content:center;}
-  .pick-sub{min-height:206px;display:flex;flex-direction:column;justify-content:center;}
+  .pick-topic{min-height:186px;display:flex;flex-direction:column;justify-content:center;}
+  .pick-sub{min-height:132px;display:flex;flex-direction:column;justify-content:center;}
   .pick-c-green{background:linear-gradient(180deg,#57cc6a,#2f9440);}
   .pick-c-amber{background:linear-gradient(180deg,#ffb445,#e8791f);}
   .pick-c-blue{background:linear-gradient(180deg,#5ba3ff,#2f6fd0);}
@@ -149,20 +142,10 @@
   .pick h2{margin:0 0 5px;font-size:1.35rem;font-weight:900;text-shadow:0 2px 0 rgba(0,0,0,.2);}
   .pick-sub h2{font-size:1.15rem;}
   .pick p{margin:0;font-size:.85rem;font-weight:600;color:rgba(255,255,255,.9);line-height:1.35;}
-  .pick-stats{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;margin-top:12px;}
-  .pk-chip{
-    background:rgba(0,0,0,.24);border-radius:999px;padding:4px 10px;
-    font-size:.72rem;font-weight:800;letter-spacing:.01em;
+  .pick-count{
+    display:inline-block;margin-top:10px;padding:4px 12px;border-radius:999px;
+    background:rgba(0,0,0,.22);font-size:.76rem;font-weight:800;letter-spacing:.02em;
   }
-  .screen-title{
-    font-size:1.32rem;font-weight:900;text-align:center;margin:2px 0 4px;
-    text-shadow:0 2px 0 rgba(0,0,0,.22);
-  }
-  .screen-sub{
-    font-size:.7rem;font-weight:800;text-transform:uppercase;letter-spacing:.09em;
-    color:var(--muted);text-align:center;margin:0 0 6px;
-  }
-  .screen-pad{margin-top:16px;}
 
   /* ---------- степпер ---------- */
   .stepper{display:flex;align-items:center;justify-content:center;gap:16px;}
@@ -468,7 +451,7 @@ function getConjGroup(verb){
   return null;
 }
 
-const VERB_DATA_MANUAL = [
+const VERB_DATA = [
   {v:"być", person:"ja", sentence:"Ja ___ studentem z Ukrainy.", answer:"jestem"},
   {v:"być", person:"ty", sentence:"Czy ty ___ lekarzem?", answer:"jesteś"},
   {v:"być", person:"on/ona/ono", sentence:"Ona ___ bardzo miła.", answer:"jest"},
@@ -622,130 +605,6 @@ const VERB_DATA_MANUAL = [
 ];
 
 /* ============ ТЕМА: ЧИСЛИТЕЛЬНЫЕ ============ */
-
-/* ---- новые глаголы: дописываются к парадигмам и группам выше ---- */
-/* Новые глаголы (к 29 существующим) */
-const NEW_PARADIGMS = {
-  "wracać":      ["wracam","wracasz","wraca","wracamy","wracacie","wracają"],
-  "oglądać":     ["oglądam","oglądasz","ogląda","oglądamy","oglądacie","oglądają"],
-  "sprzątać":    ["sprzątam","sprzątasz","sprząta","sprzątamy","sprzątacie","sprzątają"],
-  "nazywać się": ["nazywam się","nazywasz się","nazywa się","nazywamy się","nazywacie się","nazywają się"],
-  "zaczynać":    ["zaczynam","zaczynasz","zaczyna","zaczynamy","zaczynacie","zaczynają"],
-  "pamiętać":    ["pamiętam","pamiętasz","pamięta","pamiętamy","pamiętacie","pamiętają"],
-  "czekać":      ["czekam","czekasz","czeka","czekamy","czekacie","czekają"],
-  "szukać":      ["szukam","szukasz","szuka","szukamy","szukacie","szukają"],
-  "odpoczywać":  ["odpoczywam","odpoczywasz","odpoczywa","odpoczywamy","odpoczywacie","odpoczywają"],
-  "pytać":       ["pytam","pytasz","pyta","pytamy","pytacie","pytają"],
-  "dzwonić":     ["dzwonię","dzwonisz","dzwoni","dzwonimy","dzwonicie","dzwonią"],
-  "kończyć":     ["kończę","kończysz","kończy","kończymy","kończycie","kończą"],
-  "płacić":      ["płacę","płacisz","płaci","płacimy","płacicie","płacą"],
-  "prosić":      ["proszę","prosisz","prosi","prosimy","prosicie","proszą"],
-  "dawać":       ["daję","dajesz","daje","dajemy","dajecie","dają"],
-  "wstawać":     ["wstaję","wstajesz","wstaje","wstajemy","wstajecie","wstają"],
-  "brać":        ["biorę","bierzesz","bierze","bierzemy","bierzecie","biorą"]
-};
-
-/* куда какой глагол дописать: A -ać(-am), B -ować, C -ę/-esz, D -ę/-isz, EXC исключения */
-const NEW_GROUPS = {
-  A: ["wracać","oglądać","sprzątać","nazywać się","zaczynać","pamiętać","czekać","szukać","odpoczywać","pytać"],
-  C: ["dawać","wstawać"],
-  D: ["dzwonić","kończyć","płacić","prosić"],
-  EXC: ["brać"]
-};
-
-/* Дополнения подобраны так, чтобы подходить ко всем шести лицам без изменений.
-   Точку/вопрос ставит генератор. */
-const VERB_TAILS = {
-  "być":         ["w domu","w pracy","w Polsce"],
-  "mieć":        ["psa i kota","dużo pracy","nowy telefon"],
-  "mówić":       ["po polsku","po angielsku","prawdę"],
-  "czytać":      ["książkę","gazetę","wiadomości"],
-  "pisać":       ["e-mail","list do babci","wiadomość"],
-  "robić":       ["obiad","zadanie domowe","zakupy"],
-  "iść":         ["do domu","do sklepu","na spacer"],
-  "jechać":      ["do Krakowa","na wakacje","autobusem"],
-  "jeść":        ["śniadanie","zupę","kolację"],
-  "pić":         ["kawę","herbatę","wodę"],
-  "chcieć":      ["kawy","spać","iść do kina"],
-  "móc":         ["przyjść jutro","to zrobić","poczekać chwilę"],
-  "wiedzieć":    ["wszystko","gdzie to jest","o tym"],
-  "znać":        ["to miejsce","tę piosenkę","jego brata"],
-  "mieszkać":    ["w Warszawie","w centrum","blisko parku"],
-  "pracować":    ["w biurze","od rana","w weekend"],
-  "uczyć się":   ["polskiego","matematyki","nowych słów"],
-  "lubić":       ["kawę","polskie filmy","muzykę"],
-  "grać":        ["w piłkę","na gitarze","w szachy"],
-  "słuchać":     ["muzyki","radia","podcastu"],
-  "kupować":     ["chleb","bilety","prezenty"],
-  "rozumieć":    ["po polsku","to pytanie","wszystko"],
-  "spać":        ["osiem godzin","do południa","w hotelu"],
-  "widzieć":     ["ten dom","coś dziwnego","morze z okna"],
-  "pomagać":     ["mamie","koledze","w kuchni"],
-  "jeździć":     ["rowerem","samochodem","do pracy autobusem"],
-  "tańczyć":     ["bardzo dobrze","w klubie","na weselu"],
-  "gotować":     ["obiad","zupę","coś pysznego"],
-  "pływać":      ["w basenie","bardzo dobrze","w jeziorze"],
-  "wracać":      ["do domu","z pracy","późno wieczorem"],
-  "oglądać":     ["film","telewizję","mecz"],
-  "sprzątać":    ["pokój","w kuchni","w sobotę"],
-  "nazywać się": ["jak mój dziadek","inaczej","tak samo"],
-  "zaczynać":    ["pracę o ósmej","nowy kurs","od początku"],
-  "pamiętać":    ["o spotkaniu","ten dzień","jego imię"],
-  "czekać":      ["na autobus","na wyniki","przed kinem"],
-  "szukać":      ["pracy","kluczy","mieszkania"],
-  "odpoczywać":  ["w weekend","po pracy","nad morzem"],
-  "pytać":       ["o drogę","o cenę","o godzinę"],
-  "dzwonić":     ["do mamy","do lekarza","codziennie"],
-  "kończyć":     ["pracę o piątej","studia w czerwcu","lekcję"],
-  "płacić":      ["kartą","gotówką","za obiad"],
-  "prosić":      ["o pomoc","o kawę","o rachunek"],
-  "dawać":       ["prezenty","dobre rady","drugą szansę"],
-  "wstawać":     ["wcześnie","o siódmej","zawsze o tej porze"],
-  "brać":        ["parasol","taksówkę","urlop w lipcu"]
-};
-
-/* местоимение по лицу: [для утверждения, для вопроса] */
-const PRONOUN = {
-  "ja":          ["Ja","ja"],
-  "ty":          ["Ty","ty"],
-  "on/ona/ono":  ["On","on"],
-  "my":          ["My","my"],
-  "wy":          ["Wy","wy"],
-  "oni/one":     ["Oni","oni"]
-};
-const PRONOUN_ALT = {"on/ona/ono":["Ona","ona"], "oni/one":["One","one"]};
-
-function buildVerbData(){
-  const out = [];
-  Object.keys(VERB_TAILS).forEach(v => {
-    const forms = PARADIGMS[v];
-    if(!forms) return;
-    VERB_TAILS[v].forEach((tail, ti) => {
-      PERSON_ORDER.forEach((person, pi) => {
-        /* для разнообразия чередуем On/Ona и Oni/One */
-        const alt = PRONOUN_ALT[person] && (ti + pi) % 2 === 1;
-        const [Cap, low] = alt ? PRONOUN_ALT[person] : PRONOUN[person];
-        const answer = forms[pi];
-        out.push({v, person, sentence: `${Cap} ___ ${tail}.`, answer});
-        /* вопрос — для всех лиц кроме «ja»: «Czy ja…» звучит неестественно */
-        if(person !== 'ja'){
-          out.push({v, person, sentence: `Czy ${low} ___ ${tail}?`, answer});
-        }
-      });
-    });
-  });
-  return out;
-}
-
-
-Object.assign(PARADIGMS, NEW_PARADIGMS);
-Object.keys(NEW_GROUPS).forEach(k => {
-  if(k === 'EXC') NEW_GROUPS[k].forEach(v => EXCEPTIONS.add(v));
-  else CONJ_GROUPS[k].verbs.push(...NEW_GROUPS[k]);
-});
-
-/* руками написанные предложения + сгенерированные по лицам и дополнениям */
-const VERB_DATA = VERB_DATA_MANUAL.concat(buildVerbData());
 const NUM_SUBTOPICS = [
   {id:'jednosci',   label:'Цифры',   caption:'0–10'},
   {id:'dziesiatki', label:'Десятки', caption:'11–99'},
@@ -815,7 +674,7 @@ const NUM_REF = {
 };
 
 /* sub — подтема, hint — что показать в шапке карточки, alt — другие допустимые ответы */
-const NUM_DATA_MANUAL = [
+const NUM_DATA = [
   /* ---------- цифры 0–10 ---------- */
   {sub:'jednosci', hint:'0',  sentence:"Mój wynik to ___ punktów.",        answer:"zero"},
   {sub:'jednosci', hint:'1',  sentence:"Autobus numer ___ jedzie do centrum.", answer:"jeden"},
@@ -960,301 +819,134 @@ const NUM_DATA_MANUAL = [
   {sub:'czas', hint:'o której? · 21:00', sentence:"Wracam do domu o ___.",      answer:"dwudziestej pierwszej"}
 ];
 
+/* ============ РЕЕСТР ТЕМ ============
+   Движок ничего не знает про глаголы и числительные — только про общий формат вопроса:
+   {g:'ключ группы', hint:'подпись', sentence:'... ___ ...', answer:'', alt:[], ref:'ключ справки'} */
 
-/* ===== числительные словами (правила, а не список) ===== */
-const N_ONES  = ['zero','jeden','dwa','trzy','cztery','pięć','sześć','siedem','osiem','dziewięć'];
-const N_TEENS = ['dziesięć','jedenaście','dwanaście','trzynaście','czternaście','piętnaście','szesnaście','siedemnaście','osiemnaście','dziewiętnaście'];
-const N_TENS  = ['','','dwadzieścia','trzydzieści','czterdzieści','pięćdziesiąt','sześćdziesiąt','siedemdziesiąt','osiemdziesiąt','dziewięćdziesiąt'];
-const N_HUND  = ['','sto','dwieście','trzysta','czterysta','pięćset','sześćset','siedemset','osiemset','dziewięćset'];
-
-/* род влияет только на последнюю единицу и двойку: jeden/jedna/jedno, dwa/dwie */
-function oneForm(o, g){
-  if(o === 1) return g === 'f' ? 'jedna' : g === 'n' ? 'jedno' : 'jeden';
-  if(o === 2) return g === 'f' ? 'dwie' : 'dwa';
-  return N_ONES[o];
-}
-/* oneGender: род применяется к последней «1» только если всё число — ровно 1.
-   В составных (21, 31…) остаётся jeden, а существительное уходит в родительный мн.
-   На «2» это не распространяется: 22 книги → dwadzieścia dwie książki. */
-function under1000(n, g, oneGender){
-  const parts = [];
-  const h = Math.floor(n / 100), r = n % 100;
-  if(h) parts.push(N_HUND[h]);
-  if(r >= 10 && r < 20) parts.push(N_TEENS[r - 10]);
-  else {
-    const t = Math.floor(r / 10), o = r % 10;
-    if(t >= 2) parts.push(N_TENS[t]);
-    if(o) parts.push(o === 1 && !oneGender ? 'jeden' : oneForm(o, g));
-  }
-  return parts.join(' ');
-}
-function thousandNoun(th){
-  const l = th % 10, l2 = th % 100;
-  return (l >= 2 && l <= 4 && !(l2 >= 12 && l2 <= 14)) ? 'tysiące' : 'tysięcy';
-}
-function numToPl(n, g){
-  g = g || 'm';
-  if(n === 0) return 'zero';
-  const th = Math.floor(n / 1000), r = n % 1000;
-  const parts = [];
-  if(th === 1) parts.push('tysiąc');
-  else if(th > 1){ parts.push(under1000(th, 'm', false)); parts.push(thousandNoun(th)); }
-  if(r) parts.push(under1000(r, g, n === 1));
-  return parts.join(' ');
-}
-/* форма существительного: 1 → ед.ч., 2-4 → им.мн., остальное → род.мн. */
-function nounForm(n, f){
-  if(n === 1) return f[0];
-  const l = n % 10, l2 = n % 100;
-  return (l >= 2 && l <= 4 && !(l2 >= 12 && l2 <= 14)) ? f[1] : f[2];
-}
-
-/* ===== даты ===== */
-const DAY_GEN = ['','pierwszego','drugiego','trzeciego','czwartego','piątego','szóstego','siódmego',
-  'ósmego','dziewiątego','dziesiątego','jedenastego','dwunastego','trzynastego','czternastego',
-  'piętnastego','szesnastego','siedemnastego','osiemnastego','dziewiętnastego','dwudziestego',
-  'dwudziestego pierwszego','dwudziestego drugiego','dwudziestego trzeciego','dwudziestego czwartego',
-  'dwudziestego piątego','dwudziestego szóstego','dwudziestego siódmego','dwudziestego ósmego',
-  'dwudziestego dziewiątego','trzydziestego','trzydziestego pierwszego'];
-const MONTH_GEN = ['stycznia','lutego','marca','kwietnia','maja','czerwca','lipca','sierpnia',
-  'września','października','listopada','grudnia'];
-const MONTH_DAYS = [31,28,31,30,31,30,31,31,30,31,30,31];
-
-const ORD_LOC_U = ['','pierwszym','drugim','trzecim','czwartym','piątym','szóstym','siódmym','ósmym','dziewiątym'];
-/* индексируется как [n-10], поэтому без ведущего пустого элемента */
-const ORD_LOC_T = ['dziesiątym','jedenastym','dwunastym','trzynastym','czternastym','piętnastym',
-  'szesnastym','siedemnastym','osiemnastym','dziewiętnastym'];
-const ORD_LOC_D = ['','','dwudziestym','trzydziestym','czterdziestym','pięćdziesiątym',
-  'sześćdziesiątym','siedemdziesiątym','osiemdziesiątym','dziewięćdziesiątym'];
-
-function ordLoc2(n){
-  if(n < 10) return ORD_LOC_U[n];
-  if(n < 20) return ORD_LOC_T[n - 10];
-  const t = Math.floor(n / 10), o = n % 10;
-  return o ? ORD_LOC_D[t] + ' ' + ORD_LOC_U[o] : ORD_LOC_D[t];
-}
-/* в польском в годе склоняется только последний элемент (последние две цифры) */
-function yearLoc(y){
-  if(y === 2000) return 'dwutysięcznym';
-  if(y >= 2001 && y <= 2099) return 'dwa tysiące ' + ordLoc2(y - 2000);
-  if(y >= 1901 && y <= 1999) return 'tysiąc dziewięćset ' + ordLoc2(y - 1900);
-  return null;
-}
-
-/* ===== время ===== */
-const HOUR_NOM = ['','pierwsza','druga','trzecia','czwarta','piąta','szósta','siódma','ósma','dziewiąta',
-  'dziesiąta','jedenasta','dwunasta','trzynasta','czternasta','piętnasta','szesnasta','siedemnasta',
-  'osiemnasta','dziewiętnasta','dwudziesta','dwudziesta pierwsza','dwudziesta druga','dwudziesta trzecia'];
-const HOUR_LOC = ['','pierwszej','drugiej','trzeciej','czwartej','piątej','szóstej','siódmej','ósmej','dziewiątej',
-  'dziesiątej','jedenastej','dwunastej','trzynastej','czternastej','piętnastej','szesnastej','siedemnastej',
-  'osiemnastej','dziewiętnastej','dwudziestej','dwudziestej pierwszej','dwudziestej drugiej','dwudziestej trzeciej'];
-const MIN_WORD = {0:'',5:'zero pięć',10:'dziesięć',15:'piętnaście',20:'dwadzieścia',25:'dwadzieścia pięć',
-  30:'trzydzieści',35:'trzydzieści pięć',40:'czterdzieści',45:'czterdzieści pięć',50:'pięćdziesiąt',55:'pięćdziesiąt pięć'};
-
-
-/* Вопросы по числительным собираются по правилам, а не пишутся руками:
-   форма существительного и род числительного считаются от самого числа. */
-
-const N_NOUNS = {
-  rok:      {g:'m', f:['rok','lata','lat']},
-  zloty:    {g:'m', f:['złoty','złote','złotych']},
-  bilet:    {g:'m', f:['bilet','bilety','biletów']},
-  kilometr: {g:'m', f:['kilometr','kilometry','kilometrów']},
-  pokoj:    {g:'m', f:['pokój','pokoje','pokoi']},
-  punkt:    {g:'m', f:['punkt','punkty','punktów']},
-  minuta:   {g:'f', f:['minuta','minuty','minut']},
-  godzina:  {g:'f', f:['godzina','godziny','godzin']},
-  strona:   {g:'f', f:['strona','strony','stron']},
-  ksiazka:  {g:'f', f:['książka','książki','książek']},
-  jablko:   {g:'n', f:['jabłko','jabłka','jabłek']},
-  okno:     {g:'n', f:['okno','okna','okien']},
-  zdjecie:  {g:'n', f:['zdjęcie','zdjęcia','zdjęć']}
-};
-
-/* Все шаблоны — с переходным глаголом и винительным падежом.
-   У существительных женского рода винительный ед.ч. отличается от именительного
-   (jedną książkę), поэтому ровно «1» с ними не берём. */
-const N_FRAMES = {
-  jednosci: [
-    ['Mam ___ {n}.', 'jablko'], ['Mam ___ {n}.', 'bilet'], ['Mam ___ {n}.', 'ksiazka'],
-    ['To kosztuje ___ {n}.', 'zloty'], ['Kupiłem ___ {n}.', 'bilet'],
-    ['Widzę ___ {n}.', 'okno'], ['Zrobiłem ___ {n}.', 'zdjecie'],
-    ['Zdobyłem ___ {n}.', 'punkt'], ['Czekam ___ {n}.', 'minuta']
-  ],
-  dziesiatki: [
-    ['Mam ___ {n}.', 'rok'], ['To kosztuje ___ {n}.', 'zloty'],
-    ['Czekam ___ {n}.', 'minuta'], ['Hotel ma ___ {n}.', 'pokoj'],
-    ['Zdobyłem ___ {n}.', 'punkt'], ['Kupiłem ___ {n}.', 'bilet']
-  ],
-  setki: [
-    ['To kosztuje ___ {n}.', 'zloty'], ['Ta książka ma ___ {n}.', 'strona'],
-    ['Przejechałem ___ {n}.', 'kilometr'], ['Hotel ma ___ {n}.', 'pokoj'],
-    ['Zrobiłem ___ {n}.', 'zdjecie']
-  ],
-  tysiace: [
-    ['To kosztuje ___ {n}.', 'zloty'], ['Zapłaciłem ___ {n}.', 'zloty'],
-    ['Zarabiam ___ {n} miesięcznie.', 'zloty'], ['Przejechałem ___ {n}.', 'kilometr'],
-    ['Zdobyłem ___ {n}.', 'punkt']
-  ]
-};
-
-function fmtNum(n){
-  return n >= 10000 ? n.toLocaleString('ru-RU').replace(/ /g,' ') : String(n);
-}
-
-function numberQuestions(sub, numbers){
-  const out = [];
-  N_FRAMES[sub].forEach(([tpl, key]) => {
-    const noun = N_NOUNS[key];
-    numbers.forEach(n => {
-      if(n === 1 && noun.g === 'f') return;          // «jedną książkę» — винительный, пропускаем
-      if(n === 0 && key !== 'punkt') return;   // «Mam zero jabłek» — грамматично, но нелепо
-      out.push({
-        sub,
-        hint: fmtNum(n),
-        sentence: tpl.replace('{n}', nounForm(n, noun.f)),
-        answer: numToPl(n, noun.g)
-      });
-    });
-  });
-  return out;
-}
-
-function buildNumData(){
-  const out = [];
-  const range = (a, b, step) => { const r = []; for(let i = a; i <= b; i += step) r.push(i); return r; };
-
-  out.push(...numberQuestions('jednosci', range(0, 10, 1)));
-  out.push(...numberQuestions('dziesiatki', range(11, 99, 3)));
-  out.push(...numberQuestions('setki', range(100, 999, 23)));
-  out.push(...numberQuestions('tysiace', range(1000, 9900, 220).concat([10000,15000,20000,25000,50000,100000])));
-
-  /* даты: kiedy? — день в родительном + месяц в родительном */
-  const dayFrames = ['Urodziny mam ___.', 'Spotkanie jest ___.', 'Egzamin jest ___.',
-                     'Wracam do domu ___.', 'Koncert jest ___.'];
-  MONTH_GEN.forEach((month, mi) => {
-    const maxDay = MONTH_DAYS[mi];
-    for(let d = 1; d <= maxDay; d += 2){
-      const tpl = dayFrames[(mi + d) % dayFrames.length];
-      out.push({
-        sub:'daty',
-        hint:`kiedy? · ${String(d).padStart(2,'0')}.${String(mi+1).padStart(2,'0')}`,
-        sentence: tpl,
-        answer: `${DAY_GEN[d]} ${month}`
-      });
-    }
-  });
-
-  /* даты: w którym roku? — склоняется только последний элемент */
-  const yearFrames = ['Urodziłem się w ___ roku.', 'To było w ___ roku.',
-                      'Skończyłem szkołę w ___ roku.', 'Byłem w Polsce w ___ roku.'];
-  for(let y = 1901; y <= 2030; y += 2){
-    const loc = yearLoc(y);
-    if(!loc) continue;
-    out.push({sub:'daty', hint:`w którym roku? · ${y}`, sentence: yearFrames[y % yearFrames.length], answer: loc});
-  }
-
-  /* время: «Jest…» — именительный, «o…» — предложный */
-  const mins = [0,5,10,15,20,25,30,35,40,45,50,55];
-  const timeFramesNom = ['Jest ___.', 'Teraz jest ___.'];
-  const timeFramesLoc = ['Spotkanie jest o ___.', 'Film zaczyna się o ___.',
-                         'Zaczynam pracę o ___.', 'Wracam do domu o ___.'];
-  for(let h = 1; h <= 23; h++){
-    mins.forEach((m, mi) => {
-      const mw = MIN_WORD[m];
-      const hh = `${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}`;
-      if((h + mi) % 2 === 0){
-        out.push({sub:'czas', hint:`która godzina? · ${hh}`,
-                  sentence: timeFramesNom[(h+mi) % timeFramesNom.length],
-                  answer: (HOUR_NOM[h] + (mw ? ' ' + mw : '')).trim()});
-      } else {
-        out.push({sub:'czas', hint:`o której? · ${hh}`,
-                  sentence: timeFramesLoc[(h+mi) % timeFramesLoc.length],
-                  answer: (HOUR_LOC[h] + (mw ? ' ' + mw : '')).trim()});
-      }
-    });
-  }
-  return out;
-}
-
-
-/* руками написанные предложения + сгенерированные по правилам */
-const NUM_DATA = NUM_DATA_MANUAL.concat(buildNumData());
-/* ============ РЕЕСТР ТЕМ ============ */
 const SUB_EMOJI = {jednosci:'1️⃣', dziesiatki:'🔟', setki:'💯', tysiace:'💰', daty:'📅', czas:'🕐'};
 
 const TOPICS = {
   czasowniki: {
-    id:'czasowniki', title:'Глаголы', subtitle:'Спряжение в настоящем времени',
-    emoji:'🗣️', color:'green', level:'A1', subtopics:null,
-    note:'46 глаголов, 5 групп спряжения и исключения.',
+    id:'czasowniki',
+    title:'Глаголы',
+    subtitle:'Спряжение в настоящем времени',
+    emoji:'🗣️',
+    color:'green',
+    level:'A1',
+    subtopics:null,
+    note:'29 глаголов, 5 групп спряжения и исключения.',
+    hintNote:'Слово «спряжение» в разборе ошибки открывает таблицу всех форм.',
     blockInput:false,
+
     questions(){
       return VERB_DATA.map(q => {
         const isExc = EXCEPTIONS.has(q.v);
         const group = isExc ? null : getConjGroup(q.v);
-        return {g: isExc ? 'EXC' : (group ? group.key : 'OTHER'),
-                hint:q.v, sentence:q.sentence, answer:q.answer, ref:q.v, person:q.person, v:q.v};
+        return {
+          g: isExc ? 'EXC' : (group ? group.key : 'OTHER'),
+          hint: q.v,
+          sentence: q.sentence,
+          answer: q.answer,
+          ref: q.v,
+          person: q.person,
+          v: q.v
+        };
       });
     },
+
     groupLabel(key){
       if(key === 'EXC') return 'Исключения';
       return CONJ_GROUPS[key] ? CONJ_GROUPS[key].shortLabel : key;
     },
+
+    /* без ведущей иконки — её ставит движок, она зависит от того, насколько близок ответ */
     wrongHtml(q){
-      if(q.g === 'EXC') return `<button type="button" class="ref-link" data-ref="${q.ref}">Исключение</button>. Правильно: <b>${q.answer}</b>.`;
+      if(q.g === 'EXC'){
+        return `<button type="button" class="ref-link" data-ref="${q.ref}">Исключение</button>. Правильно: <b>${q.answer}</b>.`;
+      }
       const group = CONJ_GROUPS[q.g];
       if(!group) return `Правильно: <b>${q.answer}</b>.`;
       return `По <button type="button" class="ref-link" data-ref="${q.ref}">спряжению</button> — ${group.label}, ${PERSON_LABEL[q.person]}, окончание <b>${group.endings[q.person]}</b> → нужно <b>${q.answer}</b>.`;
     },
+
     adviceHtml(key){
-      if(key === 'EXC') return `<li><span class="a-ico">📌</span><span>Учи наизусть <button type="button" class="ref-link" data-ref="${EXC_BASE_VERB}">глаголы-исключения</button>: ${[...EXCEPTIONS].join(', ')} — их формы не подчиняются общим правилам.</span></li>`;
+      if(key === 'EXC'){
+        return `<li><span class="a-ico">📌</span><span>Учи наизусть <button type="button" class="ref-link" data-ref="${EXC_BASE_VERB}">глаголы-исключения</button>: być, mieć, iść, jechać, jeść, chcieć, móc, wiedzieć — их формы не подчиняются общим правилам.</span></li>`;
+      }
       const g = CONJ_GROUPS[key];
       if(!g) return '';
-      const ends = PERSON_ORDER.map(p => `${p} ${g.endings[p]}`).join(', ');
-      return `<li><span class="a-ico">📌</span><span>Подтяни <button type="button" class="ref-link" data-ref="${g.baseVerb}">${g.shortLabel}</button> — инфинитив на «<b>${g.infEnding}</b>» (например <i>${g.baseVerb}</i>). Окончания: ${ends}.</span></li>`;
+      const endsStr = PERSON_ORDER.map(p => `${p} ${g.endings[p]}`).join(', ');
+      return `<li><span class="a-ico">📌</span><span>Подтяни <button type="button" class="ref-link" data-ref="${g.baseVerb}">${g.shortLabel}</button> — инфинитив на «<b>${g.infEnding}</b>» (например <i>${g.baseVerb}</i>). Окончания: ${endsStr}.</span></li>`;
     },
+
     reference(refKey){
       const forms = PARADIGMS[refKey];
       if(!forms) return null;
       const isExc = EXCEPTIONS.has(refKey);
       const group = isExc ? null : getConjGroup(refKey);
-      return {title:refKey, tag:isExc ? 'Исключение' : (group ? group.shortLabel : ''),
-              sub:'Все формы, настоящее время.', cols:['Лицо','Окончание','Форма'],
-              rows:PERSON_ORDER.map((p,i) => [p, (!isExc && group) ? group.endings[p] : '—', forms[i]])};
+      return {
+        title: refKey,
+        tag: isExc ? 'Исключение' : (group ? group.shortLabel : ''),
+        sub: 'Все формы, настоящее время.',
+        cols: ['Лицо','Окончание','Форма'],
+        rows: PERSON_ORDER.map((p, i) => [p, (!isExc && group) ? group.endings[p] : '—', forms[i]])
+      };
     }
   },
 
   liczebniki: {
-    id:'liczebniki', title:'Числительные', subtitle:'Цифры, даты и время словами',
-    emoji:'🔢', color:'amber', level:'A1', subtopics:NUM_SUBTOPICS,
-    note:'Пиши словами: ą, ć, ę, ł, ń, ó, ś, ź, ż. Следи за родом: jeden/jedna/jedno, dwa/dwie.',
+    id:'liczebniki',
+    title:'Числительные',
+    subtitle:'Цифры, даты и время словами',
+    emoji:'🔢',
+    color:'amber',
+    level:'A1',
+    subtopics:NUM_SUBTOPICS,
+    note:'Пиши словами, польскими буквами: ą, ć, ę, ł, ń, ó, ś, ź, ż.',
+    hintNote:'Название подтемы в разборе ошибки открывает таблицу-подсказку.',
     blockInput:true,
+
     questions(subs){
-      return NUM_DATA.filter(q => !subs || subs.has(q.sub))
-        .map(q => ({g:q.sub, hint:q.hint, sentence:q.sentence, answer:q.answer, alt:q.alt || [], ref:q.sub}));
+      return NUM_DATA
+        .filter(q => !subs || subs.has(q.sub))
+        .map(q => ({
+          g: q.sub, hint: q.hint, sentence: q.sentence,
+          answer: q.answer, alt: q.alt || [], ref: q.sub
+        }));
     },
-    groupLabel(key){ const s = NUM_SUBTOPICS.find(s => s.id === key); return s ? s.label : key; },
+
+    groupLabel(key){
+      const s = NUM_SUBTOPICS.find(s => s.id === key);
+      return s ? s.label : key;
+    },
+
     wrongHtml(q){
       return `<button type="button" class="ref-link" data-ref="${q.ref}">${this.groupLabel(q.g)}</button> — правильно: <b>${q.answer}</b>.`;
     },
+
     adviceHtml(key){
-      const s = NUM_SUBTOPICS.find(s => s.id === key), ref = NUM_REF[key];
+      const s = NUM_SUBTOPICS.find(s => s.id === key);
+      const ref = NUM_REF[key];
       if(!s || !ref) return '';
       return `<li><span class="a-ico">📌</span><span>Подтяни <button type="button" class="ref-link" data-ref="${key}">${s.label.toLowerCase()}</button> (${s.caption}). ${ref.sub}</span></li>`;
     },
+
     reference(refKey){
       const r = NUM_REF[refKey];
-      return r ? {title:r.title, tag:'Подсказка', sub:r.sub, cols:r.cols, rows:r.rows} : null;
+      if(!r) return null;
+      return {title:r.title, tag:'Подсказка', sub:r.sub, cols:r.cols, rows:r.rows};
     }
   }
 };
+
 const TOPIC_ORDER = ['czasowniki','liczebniki'];
 
 /* ============ ОЧКИ ============
-   Точный ответ — 100. Иначе доля совпадения букв (расстояние Левенштейна). */
+   Точный ответ — 100 очков. Дальше — доля совпадения букв:
+   считаем расстояние Левенштейна (сколько правок нужно, чтобы получить верный ответ)
+   и переводим в проценты. Ни одной общей буквы → 0. */
 const POINTS_PER_Q = 100;
-const CLOSE_THRESHOLD = 0.6;
+const CLOSE_THRESHOLD = 0.6;   // от этого сходства ответ считается «почти»
 
 function levenshtein(a, b){
   if(a === b) return 0;
@@ -1265,12 +957,14 @@ function levenshtein(a, b){
   for(let i = 1; i <= a.length; i++){
     cur[0] = i;
     for(let j = 1; j <= b.length; j++){
-      cur[j] = Math.min(cur[j-1]+1, prev[j]+1, prev[j-1] + (a[i-1] === b[j-1] ? 0 : 1));
+      const cost = a[i-1] === b[j-1] ? 0 : 1;
+      cur[j] = Math.min(cur[j-1] + 1, prev[j] + 1, prev[j-1] + cost);
     }
     prev = cur.slice();
   }
   return prev[b.length];
 }
+
 function similarity(user, target){
   const a = normalize(user), b = normalize(target);
   if(!a && !b) return 1;
@@ -1278,57 +972,35 @@ function similarity(user, target){
   if(a === b) return 1;
   return Math.max(0, 1 - levenshtein(a, b) / Math.max(a.length, b.length));
 }
+
+/* лучшее совпадение среди основного ответа и допустимых вариантов */
 function gradeAnswer(q, value){
   let best = similarity(value, q.answer);
   (q.alt || []).forEach(a => { best = Math.max(best, similarity(value, a)); });
   const exact = best === 1;
-  return {sim:best, points:Math.round(POINTS_PER_Q * best), exact,
-          verdict: exact ? 'correct' : (best >= CLOSE_THRESHOLD ? 'close' : 'wrong')};
+  return {
+    sim: best,
+    points: Math.round(POINTS_PER_Q * best),
+    exact,
+    verdict: exact ? 'correct' : (best >= CLOSE_THRESHOLD ? 'close' : 'wrong')
+  };
 }
 
-/* ============ ПРОГРЕСС И УРОВЕНЬ ============ */
-const STORE_KEY = 'polski.progress.v1';
-const LEVELS = [
-  {min:95, name:'Мастер',   emoji:'👑'},
-  {min:80, name:'Знаток',   emoji:'🎓'},
-  {min:60, name:'Уверенно', emoji:'💪'},
-  {min:40, name:'Ученик',   emoji:'📗'},
-  {min:0,  name:'Новичок',  emoji:'🌱'}
-];
-function levelOf(best){
-  if(best === undefined || best === null) return {name:'Не начато', emoji:'✨', best:null};
-  const l = LEVELS.find(l => best >= l.min);
-  return {name:l.name, emoji:l.emoji, best};
+/* ============ РЕКОРДЫ ============ */
+function loadBest(){
+  try { return JSON.parse(localStorage.getItem('polski.best') || '{}'); }
+  catch(e){ return {}; }
 }
-function loadProg(){
-  try { return JSON.parse(localStorage.getItem(STORE_KEY) || '{}'); } catch(e){ return {}; }
+function saveBest(obj){
+  try { localStorage.setItem('polski.best', JSON.stringify(obj)); } catch(e){}
 }
-function saveProg(p){
-  try { localStorage.setItem(STORE_KEY, JSON.stringify(p)); } catch(e){}
-}
-function recKey(topicId, subId){ return subId ? topicId + ':' + subId : topicId + ':all'; }
-function getRec(key){
-  const r = loadProg()[key];
-  return r || {points:0, best:null, played:0};
-}
-function addRec(key, points, pct){
-  const p = loadProg();
-  const r = p[key] || {points:0, best:null, played:0};
-  r.points += points;
-  r.best = (r.best === null || pct > r.best) ? pct : r.best;
-  r.played++;
-  p[key] = r;
-  saveProg(p);
-  return r;
-}
-function fmtPts(n){ return n >= 1000 ? (n/1000).toFixed(n >= 10000 ? 0 : 1).replace('.0','') + 'k' : String(n); }
 
 /* ============ СОСТОЯНИЕ ============ */
 const BATCH_SIZE = 10;
-let state = 'topic';           // 'topic' | 'sub' | 'quiz' | 'summary'
-let topicIdx = 0;
+
+let state = 'setup';           // 'setup' | 'quiz' | 'summary'
 let topic = TOPICS[TOPIC_ORDER[0]];
-let selectedSub = null;
+let selectedSub = null;        // id подтемы или null = все подряд
 let selectedCount = 3;
 let sessionBatches = [];
 let currentIndex = 0;
@@ -1341,71 +1013,73 @@ const hudPoints = document.getElementById('hudPoints');
 const modalBackdrop = document.getElementById('modalBackdrop');
 const modalBox = document.getElementById('modalBox');
 
-const subsSet = () => selectedSub ? new Set([selectedSub]) : null;
-const currentPool = () => topic.questions(subsSet());
-const maxTests = () => Math.max(1, Math.floor(currentPool().length / BATCH_SIZE));
-
+function subsSet(){
+  return selectedSub ? new Set([selectedSub]) : null;
+}
+function currentPool(){
+  return topic.questions(subsSet());
+}
+function maxTests(){
+  return Math.max(1, Math.floor(currentPool().length / BATCH_SIZE));
+}
 function buildBatches(){
   const all = shuffle(currentPool());
-  const b = [];
-  for(let i = 0; i < all.length; i += BATCH_SIZE) b.push(all.slice(i, i + BATCH_SIZE));
-  return b.filter(x => x.length > 0);
+  const batches = [];
+  for(let i = 0; i < all.length; i += BATCH_SIZE) batches.push(all.slice(i, i + BATCH_SIZE));
+  return batches.filter(b => b.length > 0);
 }
-function resetStats(){ stats = {correct:0, wrong:0, total:0, points:0, maxPoints:0, byGroup:{}}; }
-function bumpStat(k, exact){
-  if(!stats.byGroup[k]) stats.byGroup[k] = {wrong:0, total:0};
-  stats.byGroup[k].total++;
-  if(!exact) stats.byGroup[k].wrong++;
+
+function resetStats(){
+  stats = {correct:0, wrong:0, total:0, points:0, maxPoints:0, byGroup:{}};
 }
+function bumpStat(key, exact){
+  if(!stats.byGroup[key]) stats.byGroup[key] = {wrong:0, total:0};
+  stats.byGroup[key].total++;
+  if(!exact) stats.byGroup[key].wrong++;
+}
+
 function plural(n, one, few, many){
-  const a = n % 10, b = n % 100;
-  if(a === 1 && b !== 11) return one;
-  if(a >= 2 && a <= 4 && (b < 12 || b > 14)) return few;
+  const n10 = n % 10, n100 = n % 100;
+  if(n10 === 1 && n100 !== 11) return one;
+  if(n10 >= 2 && n10 <= 4 && (n100 < 12 || n100 > 14)) return few;
   return many;
 }
+
 function syncHud(){
-  const r = getRec(recKey(topic.id, selectedSub));
-  const lv = levelOf(r.best);
-  hudBest.textContent = r.best === null ? '—' : r.best + '%';
-  hudPoints.textContent = stats ? stats.points : fmtPts(r.points);
+  const best = loadBest()[topic.id];
+  hudBest.textContent = (best === undefined) ? '—' : best + '%';
+  hudPoints.textContent = stats ? stats.points : 0;
 }
 
 /* ============ СВАЙПЕР ============
-   Лента во всю ширину экрана, карточка уезжает за край.
-   Активный слайд определяется по ближайшему к центру — надёжно при любых отступах. */
-function buildSwiper(slides, activeIndex, onChange){
-  const dots = slides.map((_, i) => `<div class="sw-dot${i === activeIndex ? ' active' : ''}"></div>`).join('');
+   Горизонтальная лента со scroll-snap: на телефоне листается пальцем,
+   на компьютере — стрелками по краям. */
+function buildSwiper(slidesHtml, activeIndex, onChange){
+  const dots = slidesHtml.map((_, i) =>
+    `<div class="sw-dot${i === activeIndex ? ' active' : ''}"></div>`).join('');
   return {
     html: `
       <div class="swiper">
-        <div class="swiper-track">${slides.map(s => `<div class="slide">${s}</div>`).join('')}</div>
-        ${slides.length > 1 ? `<div class="sw-dots">${dots}</div>` : ''}
+        ${slidesHtml.length > 1 ? '<button type="button" class="sw-arrow sw-prev">‹</button>' : ''}
+        <div class="swiper-track">
+          ${slidesHtml.map(s => `<div class="slide">${s}</div>`).join('')}
+        </div>
+        ${slidesHtml.length > 1 ? '<button type="button" class="sw-arrow sw-next">›</button>' : ''}
+        ${slidesHtml.length > 1 ? `<div class="sw-dots">${dots}</div>` : ''}
       </div>`,
     init(root){
       const track = root.querySelector('.swiper-track');
       const dotEls = [...root.querySelectorAll('.sw-dot')];
-      const kids = () => [...track.children];
       let idx = activeIndex;
 
-      const centerOf = el => el.offsetLeft + el.offsetWidth / 2;
-      const scrollTargetFor = i => centerOf(kids()[i]) - track.clientWidth / 2;
+      const width = () => track.clientWidth || 1;
+      track.scrollLeft = idx * width();
 
-      function jump(i, smooth){
-        track.scrollTo({left: scrollTargetFor(i), behavior: smooth ? 'smooth' : 'auto'});
-      }
-      function nearest(){
-        const mid = track.scrollLeft + track.clientWidth / 2;
-        let best = 0, bestD = Infinity;
-        kids().forEach((el, i) => {
-          const d = Math.abs(centerOf(el) - mid);
-          if(d < bestD){ bestD = d; best = i; }
-        });
-        return best;
-      }
+      /* пересчитать активный слайд по текущей прокрутке */
       function settle(){
-        if(!track.isConnected) return false;     // экран уже перерисован — не трогаем состояние
-        const i = nearest();
-        if(i !== idx){
+        if(!track.isConnected) return false;   // экран уже перерисован — не трогаем состояние
+        const i = Math.round(track.scrollLeft / width());
+        if(i !== idx && i >= 0 && i < slidesHtml.length){
           idx = i;
           dotEls.forEach((d, j) => d.classList.toggle('active', j === idx));
           onChange(idx);
@@ -1413,131 +1087,133 @@ function buildSwiper(slides, activeIndex, onChange){
         }
         return false;
       }
-      jump(idx, false);
-      /* точки кликабельны — на компьютере это единственный способ переключиться без перетаскивания */
-      dotEls.forEach((d, i) => d.addEventListener('click', () => jump(i, true)));
+
       let timer;
-      track.addEventListener('scroll', () => { clearTimeout(timer); timer = setTimeout(settle, 70); });
+      track.addEventListener('scroll', () => {
+        clearTimeout(timer);
+        timer = setTimeout(settle, 70);
+      });
+      /* где поддерживается — реагируем сразу по окончании прокрутки */
       if('onscrollend' in track) track.addEventListener('scrollend', settle);
-      window.addEventListener('resize', () => { if(track.isConnected) jump(idx, false); });
-      return {settle, jump: i => jump(i, true), get index(){ return idx; }};
+
+      function go(i){
+        i = Math.max(0, Math.min(slidesHtml.length - 1, i));
+        track.scrollTo({left: i * width(), behavior:'smooth'});
+      }
+      const prev = root.querySelector('.sw-prev');
+      const next = root.querySelector('.sw-next');
+      if(prev) prev.addEventListener('click', () => go(idx - 1));
+      if(next) next.addEventListener('click', () => go(idx + 1));
+      window.addEventListener('resize', () => { track.scrollLeft = idx * width(); });
+
+      return {settle};
     }
   };
 }
 
-/* карточка выбора: эмодзи, название, уровень, очки, сколько вопросов */
-function pickCard(kind, color, emoji, title, sub, total, key){
-  const r = getRec(key);
-  const lv = levelOf(r.best);
-  return `
-    <div class="pick pick-${kind} pick-c-${color}">
-      <div class="pick-emoji">${emoji}</div>
-      <h2>${title}</h2>
-      <p>${sub}</p>
-      <div class="pick-stats">
-        <span class="pk-chip">${lv.emoji} ${lv.name}${r.best !== null ? ' · ' + r.best + '%' : ''}</span>
-        <span class="pk-chip">⭐ ${fmtPts(r.points)}</span>
-        <span class="pk-chip">${total} ${plural(total,'вопрос','вопроса','вопросов')}</span>
-      </div>
-    </div>`;
-}
-
-/* ============ ЭКРАН 1: ТЕМА ============ */
-function renderTopicScreen(){
-  const slides = TOPIC_ORDER.map(id => {
+/* ============ ЭКРАН ВЫБОРА ============ */
+function renderSetup(){
+  const topicSlides = TOPIC_ORDER.map(id => {
     const t = TOPICS[id];
-    return pickCard('topic', t.color, t.emoji, t.title, t.subtitle, t.questions(null).length, recKey(id, null));
+    const n = t.questions(null).length;
+    return `
+      <div class="pick pick-topic pick-c-${t.color}">
+        <div class="pick-emoji">${t.emoji}</div>
+        <h2>${t.title}</h2>
+        <p>${t.subtitle}</p>
+        <div class="pick-count">${t.level} · ${n} ${plural(n,'вопрос','вопроса','вопросов')}</div>
+      </div>`;
   });
-  const sw = buildSwiper(slides, topicIdx, i => {
-    topicIdx = i;
+  const topicSwiper = buildSwiper(topicSlides, TOPIC_ORDER.indexOf(topic.id), i => {
     topic = TOPICS[TOPIC_ORDER[i]];
     selectedSub = null;
+    selectedCount = Math.min(3, maxTests());
+    rebuildSubs();
+    syncCount();
     syncHud();
   });
 
   app.innerHTML = `
-    <div class="screen-title">Выбери тему</div>
-    ${sw.html}
-    <div class="screen-pad">
-      <button type="button" class="gbtn g-green btn-xl" id="pickTopicBtn">ВЫБРАТЬ</button>
-    </div>`;
-  const ctl = sw.init(app.querySelector('.swiper'));
+    <div class="panel">
+      <div class="panel-title">Тема · листай вбок</div>
+      ${topicSwiper.html}
+    </div>
+    <div id="subsPanel"></div>
+    <div class="panel">
+      <div class="panel-title">Сколько тестов подряд</div>
+      <div class="stepper">
+        <button type="button" class="step-btn" id="stepDown">−</button>
+        <div class="step-val" id="stepValue">${selectedCount}</div>
+        <button type="button" class="step-btn" id="stepUp">+</button>
+      </div>
+      <div class="step-caption" id="stepCaption"></div>
+    </div>
+    <button type="button" class="gbtn g-green btn-xl" id="startBtn">ИГРАТЬ</button>
+    <div class="step-caption" id="topicNote" style="margin-top:12px"></div>
+  `;
 
-  document.getElementById('pickTopicBtn').addEventListener('click', () => {
-    ctl.settle();                       // палец могли отпустить только что
-    selectedCount = Math.min(3, maxTests());
-    state = 'sub';
-    render();
-    window.scrollTo({top:0, behavior:'smooth'});
-  });
-  syncHud();
-}
+  const topicCtl = topicSwiper.init(app.querySelector('.panel .swiper'));
+  let subCtl = null;
 
-/* ============ ЭКРАН 2: ПОДТЕМА И НАСТРОЙКИ ============ */
-function renderSubScreen(){
-  const items = topic.subtopics
-    ? [{id:null, label:'Всё подряд', caption:'вопросы из всех подтем', emoji:'🎲'}]
-        .concat(topic.subtopics.map(s => ({...s, emoji: SUB_EMOJI[s.id] || '•'})))
-    : null;
+  function rebuildSubs(){
+    const holder = document.getElementById('subsPanel');
+    if(!holder) return;
+    if(!topic.subtopics){ holder.innerHTML = ''; return; }
 
-  let swHtml = '', sw = null;
-  if(items){
-    const slides = items.map(s => pickCard('sub', 'blue', s.emoji, s.label, s.caption,
-      topic.questions(s.id ? new Set([s.id]) : null).length, recKey(topic.id, s.id)));
+    const items = [{id:null, label:'Всё подряд', caption:'вопросы из всех подтем', emoji:'🎲'}]
+      .concat(topic.subtopics.map(s => ({...s, emoji: SUB_EMOJI[s.id] || '•'})));
+
+    const slides = items.map(s => {
+      const n = topic.questions(s.id ? new Set([s.id]) : null).length;
+      return `
+        <div class="pick pick-sub pick-c-blue">
+          <div class="pick-emoji">${s.emoji}</div>
+          <h2>${s.label}</h2>
+          <p>${s.caption}</p>
+          <div class="pick-count">${n} ${plural(n,'вопрос','вопроса','вопросов')}</div>
+        </div>`;
+    });
+
     const active = Math.max(0, items.findIndex(s => s.id === selectedSub));
-    sw = buildSwiper(slides, active, i => {
+    const sw = buildSwiper(slides, active, i => {
       selectedSub = items[i].id;
       selectedCount = Math.min(selectedCount, maxTests());
       syncCount();
-      syncHud();
     });
-    swHtml = sw.html;
+    holder.innerHTML = `<div class="panel"><div class="panel-title">Подтема · листай вбок</div>${sw.html}</div>`;
+    subCtl = sw.init(holder.querySelector('.swiper'));
   }
-
-  app.innerHTML = `
-    <button type="button" class="back-link" id="backBtn">‹ другая тема</button>
-    <div class="screen-title">${topic.emoji} ${topic.title}</div>
-    ${items ? '<div class="screen-sub">Подтема · листай вбок</div>' + swHtml : ''}
-    <div class="screen-pad">
-      <div class="panel">
-        <div class="panel-title">Сколько тестов подряд</div>
-        <div class="stepper">
-          <button type="button" class="step-btn" id="stepDown">−</button>
-          <div class="step-val" id="stepValue">${selectedCount}</div>
-          <button type="button" class="step-btn" id="stepUp">+</button>
-        </div>
-        <div class="step-caption" id="stepCaption"></div>
-      </div>
-      <button type="button" class="gbtn g-green btn-xl" id="startBtn">СТАРТ</button>
-      <div class="step-caption" style="margin-top:12px">${topic.note}</div>
-    </div>`;
-
-  const ctl = sw ? sw.init(app.querySelector('.swiper')) : null;
 
   function syncCount(){
     if(!document.getElementById('stepValue')) return;
-    const pool = currentPool().length, max = maxTests();
+    const pool = currentPool().length;
+    const max = maxTests();
     selectedCount = Math.max(1, Math.min(selectedCount, max));
     document.getElementById('stepValue').textContent = selectedCount;
     document.getElementById('stepDown').disabled = selectedCount <= 1;
     document.getElementById('stepUp').disabled = selectedCount >= max;
     document.getElementById('stepCaption').textContent =
-      `по ${BATCH_SIZE} вопросов · максимум ${max} из ${pool}`;
+      `по ${BATCH_SIZE} вопросов · максимум ${max} из ${pool} ${plural(pool,'вопроса','вопросов','вопросов')}`;
+    document.getElementById('topicNote').textContent = topic.note;
   }
 
-  document.getElementById('backBtn').addEventListener('click', () => {
-    state = 'topic'; render(); window.scrollTo({top:0, behavior:'smooth'});
-  });
   document.getElementById('stepDown').addEventListener('click', () => { selectedCount--; syncCount(); });
   document.getElementById('stepUp').addEventListener('click', () => { selectedCount++; syncCount(); });
   document.getElementById('startBtn').addEventListener('click', () => {
-    if(ctl) ctl.settle();
+    /* если палец только что отпустили, событие скролла могло не успеть дойти —
+       досчитываем активные слайды прямо сейчас, чтобы стартовать то, что видно */
+    topicCtl.settle();              // сменилась тема — подтемы уже перестроились
+    if(subCtl) subCtl.settle();
     sessionBatches = buildBatches().slice(0, selectedCount);
     if(!sessionBatches.length) return;
-    currentIndex = 0; resetStats(); state = 'quiz';
-    render(); window.scrollTo({top:0, behavior:'smooth'});
+    currentIndex = 0;
+    resetStats();
+    state = 'quiz';
+    render();
+    window.scrollTo({top:0, behavior:'smooth'});
   });
 
+  rebuildSubs();
   syncCount();
   syncHud();
 }
@@ -1546,49 +1222,59 @@ function renderSubScreen(){
 function renderQuiz(){
   checked = false;
   const batch = sessionBatches[currentIndex];
+  const donePct = Math.round(currentIndex / sessionBatches.length * 100);
+
   app.innerHTML = `
-    <div class="screen-pad">
-      <div class="quizbar">
-        <div class="quizbar-label">Тест ${currentIndex+1}/${sessionBatches.length}</div>
-        <div class="pbar"><div class="pbar-fill" id="pbarFill" style="width:${Math.round(currentIndex/sessionBatches.length*100)}%"></div></div>
-        <div class="quizbar-label" id="scoreLabel">0/${batch.length}</div>
-      </div>
-      <div class="grid" id="quiz"></div>
-      <div class="result-banner" id="resultBanner"></div>
-      <div class="actions">
-        <button class="gbtn g-green" id="checkBtn">Проверить</button>
-        <button class="gbtn g-amber" id="nextBtn" style="display:none">Дальше →</button>
-        <button class="gbtn g-ghost" id="resetBtn" style="flex:0 0 42%">Выйти</button>
-      </div>
-    </div>`;
+    <div class="quizbar">
+      <div class="quizbar-label">Тест ${currentIndex+1}/${sessionBatches.length}</div>
+      <div class="pbar"><div class="pbar-fill" id="pbarFill" style="width:${donePct}%"></div></div>
+      <div class="quizbar-label" id="scoreLabel">0/${batch.length}</div>
+    </div>
+    <div class="grid" id="quiz"></div>
+    <div class="result-banner" id="resultBanner"></div>
+    <div class="actions">
+      <button class="gbtn g-green" id="checkBtn">Проверить</button>
+      <button class="gbtn g-amber" id="nextBtn" style="display:none">Дальше →</button>
+      <button class="gbtn g-ghost" id="resetBtn" style="flex:0 0 42%">Выйти</button>
+    </div>
+  `;
 
   const quizEl = document.getElementById('quiz');
   batch.forEach((q, i) => {
     const card = document.createElement('div');
     card.className = 'card' + (topic.blockInput ? ' block' : '');
     card.dataset.index = i;
+
     const parts = q.sentence.split('___');
     const field = `<input type="text" class="blank" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" data-i="${i}">`;
+
     card.innerHTML = `
       <div class="q-meta"><span>№${i+1}</span><span class="q-hint">${q.hint}</span></div>
-      <div class="q-sentence">${topic.blockInput
-        ? `${parts[0]}<span class="blank-gap"></span>${parts[1] || ''}${field}`
-        : `${parts[0]}${field}${parts[1] || ''}`}</div>
+      <div class="q-sentence">${
+        topic.blockInput
+          ? `${parts[0]}<span class="blank-gap"></span>${parts[1] || ''}${field}`
+          : `${parts[0]}${field}${parts[1] || ''}`
+      }</div>
       <div class="feedback" id="fb-${i}"></div>`;
     quizEl.appendChild(card);
   });
 
   quizEl.querySelectorAll('input.blank').forEach((inp, idx, arr) => {
     inp.addEventListener('keydown', e => {
-      if(e.key === 'Enter'){ e.preventDefault(); if(idx+1 < arr.length) arr[idx+1].focus(); else requestCheck(); }
+      if(e.key === 'Enter'){
+        e.preventDefault();
+        if(idx+1 < arr.length) arr[idx+1].focus();
+        else requestCheck();
+      }
     });
   });
   quizEl.addEventListener('input', updateCount);
-  updateCount(); syncHud();
+  updateCount();
+  syncHud();
 
   document.getElementById('checkBtn').addEventListener('click', requestCheck);
   document.getElementById('resetBtn').addEventListener('click', () => {
-    state = 'sub'; stats = null; render(); window.scrollTo({top:0, behavior:'smooth'});
+    state = 'setup'; stats = null; render(); window.scrollTo({top:0, behavior:'smooth'});
   });
 }
 
@@ -1597,15 +1283,18 @@ function updateCount(){
   const inputs = document.querySelectorAll('#quiz input.blank');
   const label = document.getElementById('scoreLabel');
   let filled = 0;
-  inputs.forEach(i => { if(i.value.trim() !== '') filled++; });
+  inputs.forEach(inp => { if(inp.value.trim() !== '') filled++; });
   if(label) label.textContent = `${filled}/${inputs.length}`;
 }
+
 function requestCheck(){
   const inputs = document.querySelectorAll('#quiz input.blank');
   let empty = 0;
-  inputs.forEach(i => { if(i.value.trim() === '') empty++; });
-  if(empty > 0) showConfirmModal(empty, inputs.length); else checkAnswers();
+  inputs.forEach(inp => { if(inp.value.trim() === '') empty++; });
+  if(empty > 0) showConfirmModal(empty, inputs.length);
+  else checkAnswers();
 }
+
 function showConfirmModal(empty, total){
   modalBox.innerHTML = `
     <button type="button" class="modal-close" id="modalCloseBtn">✕</button>
@@ -1623,8 +1312,8 @@ function showConfirmModal(empty, total){
 
 function checkAnswers(){
   const batch = sessionBatches[currentIndex];
-  let exact = 0, pts = 0;
-  const maxPts = batch.length * POINTS_PER_Q;
+  let exactCount = 0, batchPoints = 0;
+  const batchMax = batch.length * POINTS_PER_Q;
 
   batch.forEach((q, i) => {
     const card = document.querySelector(`#quiz .card[data-index="${i}"]`);
@@ -1635,7 +1324,8 @@ function checkAnswers(){
     const r = gradeAnswer(q, input.value);
     card.classList.add(r.verdict);
 
-    const given = document.createElement('div');   // длинный ответ должен переноситься
+    /* поле заменяем на блок с текстом: длинный ответ переносится и виден целиком */
+    const given = document.createElement('div');
     given.className = 'given';
     given.textContent = input.value.trim() || '—';
     input.replaceWith(given);
@@ -1645,26 +1335,34 @@ function checkAnswers(){
     badge.textContent = '+' + r.points;
     card.appendChild(badge);
 
-    stats.total++; stats.points += r.points; stats.maxPoints += POINTS_PER_Q;
-    pts += r.points;
+    stats.total++;
+    stats.points += r.points;
+    stats.maxPoints += POINTS_PER_Q;
+    batchPoints += r.points;
     bumpStat(q.g, r.exact);
-    if(r.exact){ exact++; stats.correct++; fb.innerHTML = ''; }
-    else {
+
+    if(r.exact){
+      exactCount++; stats.correct++;
+      fb.innerHTML = '';
+    } else {
       stats.wrong++;
-      fb.innerHTML = `<span class="icon">${r.verdict === 'close' ? '≈' : '✕'}</span>${r.verdict === 'close' ? '<b>Почти!</b> ' : ''}${topic.wrongHtml(q)}`;
+      const icon = r.verdict === 'close' ? '≈' : '✕';
+      const lead = r.verdict === 'close' ? '<b>Почти!</b> ' : '';
+      fb.innerHTML = `<span class="icon">${icon}</span>${lead}${topic.wrongHtml(q)}`;
     }
   });
 
   checked = true;
-  document.getElementById('scoreLabel').textContent = `${exact}/${batch.length}`;
-  document.getElementById('pbarFill').style.width = Math.round((currentIndex+1)/sessionBatches.length*100) + '%';
+  document.getElementById('scoreLabel').textContent = `${exactCount}/${batch.length}`;
+  document.getElementById('pbarFill').style.width =
+    Math.round((currentIndex + 1) / sessionBatches.length * 100) + '%';
   syncHud();
 
-  const pct = Math.round(pts / maxPts * 100);
+  const pct = Math.round(batchPoints / batchMax * 100);
   const banner = document.getElementById('resultBanner');
   banner.style.display = 'block';
   banner.className = 'result-banner ' + (pct >= 80 ? 'rb-great' : pct >= 50 ? 'rb-ok' : 'rb-low');
-  banner.innerHTML = `Тест ${currentIndex+1}: <b>${pts}</b> из ${maxPts} очков · точных <b>${exact}/${batch.length}</b>`;
+  banner.innerHTML = `Тест ${currentIndex+1}: <b>${batchPoints}</b> из ${batchMax} очков · точных ответов <b>${exactCount}/${batch.length}</b>`;
 
   document.getElementById('checkBtn').style.display = 'none';
   const nextBtn = document.getElementById('nextBtn');
@@ -1673,7 +1371,8 @@ function checkAnswers(){
   nextBtn.textContent = isLast ? 'Итоги →' : 'Дальше →';
   nextBtn.addEventListener('click', () => {
     if(isLast) state = 'summary'; else currentIndex++;
-    render(); window.scrollTo({top:0, behavior:'smooth'});
+    render();
+    window.scrollTo({top:0, behavior:'smooth'});
   }, {once:true});
 
   document.querySelector('.quizbar').scrollIntoView({behavior:'smooth', block:'start'});
@@ -1685,57 +1384,54 @@ function renderSummary(){
   const starCount = pct >= 90 ? 3 : pct >= 70 ? 2 : pct >= 40 ? 1 : 0;
   const stars = [0,1,2].map(i => `<span class="star${i < starCount ? ' on' : ''}">★</span>`).join('');
 
-  const subKey = recKey(topic.id, selectedSub);
-  const before = getRec(subKey).best;
-  const isRecord = before === null || pct > before;
-  addRec(subKey, stats.points, pct);
-  if(selectedSub) addRec(recKey(topic.id, null), stats.points, pct);   // общий счёт темы
-  const lv = levelOf(getRec(subKey).best);
-  const subName = selectedSub ? topic.groupLabel(selectedSub) : (topic.subtopics ? 'Всё подряд' : null);
+  const best = loadBest();
+  const isRecord = pct > (best[topic.id] ?? -1);
+  if(isRecord){ best[topic.id] = pct; saveBest(best); }
 
   const rows = Object.keys(stats.byGroup)
     .filter(k => stats.byGroup[k].wrong > 0)
     .map(k => ({key:k, label:topic.groupLabel(k), wrong:stats.byGroup[k].wrong}))
     .sort((a,b) => b.wrong - a.wrong);
   const maxWrong = rows.length ? rows[0].wrong : 1;
+
   const breakdown = rows.length ? rows.map(r => `
     <div class="breakdown-row">
       <div class="breakdown-label">${r.label}</div>
       <div class="breakdown-track"><div class="breakdown-fill" style="width:${Math.round(r.wrong/maxWrong*100)}%"></div></div>
       <div class="breakdown-count">${r.wrong}</div>
-    </div>`).join('') : `<div class="breakdown-row"><div class="breakdown-label">Ни одной ошибки 🎉</div></div>`;
+    </div>`).join('')
+    : `<div class="breakdown-row"><div class="breakdown-label">Ни одной ошибки 🎉</div></div>`;
 
   const advice = stats.wrong === 0
-    ? `<li><span class="a-ico">🎉</span><span>Идеально! Бери больше тестов за раз или другую подтему.</span></li>`
-    : rows.slice(0,2).map(r => topic.adviceHtml(r.key)).join('');
+    ? `<li><span class="a-ico">🎉</span><span>Идеально! Бери больше тестов за раз или другую тему.</span></li>`
+    : rows.slice(0, 2).map(r => topic.adviceHtml(r.key)).join('');
 
   app.innerHTML = `
-    <div class="screen-pad">
-      <div class="panel">
-        <div class="score-hero">
-          <div class="stars">${stars}</div>
-          <div class="big-points">${stats.points}</div>
-          <div class="big-points-cap">очков из ${stats.maxPoints}</div>
-          <div class="score-line">
-            <div class="score-chip">${topic.emoji} ${topic.title}${subName ? ' · ' + subName : ''}</div>
-          </div>
-          <div class="score-line">
-            <div class="score-chip">🎯 ${pct}%</div>
-            <div class="score-chip">✓ точных ${stats.correct}/${stats.total}</div>
-            <div class="score-chip">${lv.emoji} ${lv.name}</div>
-          </div>
-          ${isRecord ? '<div class="best-flag">🏆 Новый рекорд!</div>' : ''}
+    <div class="panel">
+      <div class="score-hero">
+        <div class="stars">${stars}</div>
+        <div class="big-points">${stats.points}</div>
+        <div class="big-points-cap">очков из ${stats.maxPoints}</div>
+        <div class="score-line">
+          <div class="score-chip">🎯 ${pct}%</div>
+          <div class="score-chip">✓ точных ${stats.correct}/${stats.total}</div>
         </div>
+        ${isRecord ? '<div class="best-flag">🏆 Новый рекорд!</div>' : ''}
       </div>
-      <div class="panel"><div class="panel-title">Ошибки по типам</div>${breakdown}</div>
-      <div class="panel"><div class="panel-title">Что подтянуть</div><ul class="advice-list">${advice}</ul></div>
-      <div class="btn-row">
-        <button type="button" class="gbtn g-green" id="againBtn">Ещё раз</button>
-        <button type="button" class="gbtn g-blue" id="homeBtn">К темам</button>
-      </div>
+    </div>
+    <div class="panel">
+      <div class="panel-title">Ошибки по типам</div>
+      ${breakdown}
+    </div>
+    <div class="panel">
+      <div class="panel-title">Что подтянуть</div>
+      <ul class="advice-list">${advice}</ul>
+    </div>
+    <div class="btn-row">
+      <button type="button" class="gbtn g-green" id="againBtn">Ещё раз</button>
+      <button type="button" class="gbtn g-blue" id="homeBtn">Сменить тему</button>
     </div>`;
 
-  stats = null;
   syncHud();
   document.getElementById('againBtn').addEventListener('click', () => {
     sessionBatches = buildBatches().slice(0, selectedCount);
@@ -1743,11 +1439,11 @@ function renderSummary(){
     render(); window.scrollTo({top:0, behavior:'smooth'});
   });
   document.getElementById('homeBtn').addEventListener('click', () => {
-    state = 'topic'; render(); window.scrollTo({top:0, behavior:'smooth'});
+    state = 'setup'; stats = null; render(); window.scrollTo({top:0, behavior:'smooth'});
   });
 }
 
-/* ============ МОДАЛ ============ */
+/* ============ МОДАЛ-ПОДСКАЗКА ============ */
 document.addEventListener('click', e => {
   const link = e.target.closest('.ref-link');
   if(link){ openRefModal(link.dataset.ref); return; }
@@ -1759,8 +1455,9 @@ function openRefModal(refKey){
   const r = topic.reference(refKey);
   if(!r) return;
   const head = `<tr>${r.cols.map(c => `<th>${c}</th>`).join('')}</tr>`;
-  const body = r.rows.map(row => `<tr>${row.map((c, i) =>
-    `<td${i === 1 && r.cols.length === 3 ? ' class="end-col"' : ''}>${c}</td>`).join('')}</tr>`).join('');
+  const body = r.rows.map(row =>
+    `<tr>${row.map((cell, i) => `<td${i === 1 && r.cols.length === 3 ? ' class="end-col"' : ''}>${cell}</td>`).join('')}</tr>`
+  ).join('');
   modalBox.innerHTML = `
     <button type="button" class="modal-close" id="modalCloseBtn">✕</button>
     <h3>${r.title} ${r.tag ? `<span class="modal-tag">${r.tag}</span>` : ''}</h3>
@@ -1774,21 +1471,24 @@ function closeModal(){ modalBackdrop.classList.remove('open'); }
 
 /* ============ РОУТЕР ============ */
 function render(){
-  if(state === 'topic') renderTopicScreen();
-  else if(state === 'sub') renderSubScreen();
+  if(state === 'setup') renderSetup();
   else if(state === 'quiz') renderQuiz();
   else if(state === 'summary') renderSummary();
 }
+
 render();
 
-/* ============ ЗАПРЕТ ЗУМА ============ */
+/* ============ ЗАПРЕТ ЗУМА ============
+   touch-action:manipulation в CSS убирает зум по двойному тапу, это — щипок в Safari. */
 ['gesturestart','gesturechange','gestureend'].forEach(ev => {
   document.addEventListener(ev, e => e.preventDefault(), {passive:false});
 });
 
-/* ============ PWA ============ */
+/* ============ PWA: офлайн-режим ============ */
 if('serviceWorker' in navigator){
-  window.addEventListener('load', () => { navigator.serviceWorker.register('sw.js').catch(() => {}); });
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('sw.js').catch(() => {});
+  });
 }
 </script>
 </body>

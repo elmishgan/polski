@@ -49,16 +49,21 @@
   ДВИЖОК              buildSwiper() → renderSetup / renderQuiz / renderSummary
 ```
 
-### Три экрана
+### Четыре экрана
 
-`setup` (тема + подтема свайпом, число тестов, «Играть») → `quiz` → `summary`.
-Отдельной главной нет — выбор темы и есть первый экран. Переключает `state` + `render()`.
+`topic` (свайп тем → «Выбрать») → `sub` (свайп подтем + число тестов → «Старт») → `quiz` → `summary`.
+Переключает `state` + `render()`. У темы без подтем экран `sub` показывает только настройки.
 
 ### Свайпер
 
-`buildSwiper(slidesHtml, activeIndex, onChange)` → `{html, init(root)}`, `init` возвращает `{settle}`.
-Лента на `overflow-x:auto` + `scroll-snap-type:x mandatory`: пальцем на телефоне,
-стрелками по краям на компьютере, точки-индикаторы снизу.
+`buildSwiper(slides, activeIndex, onChange)` → `{html, init(root)}`, `init` возвращает `{settle, jump}`.
+Лента на `overflow-x:auto` + `scroll-snap-type:x mandatory`, **во всю ширину экрана**:
+у `.swiper` отрицательные поля, равные горизонтальному отступу `body`, слайд 84% + `padding: 0 8%`
+у трека, чтобы крайние карточки центрировались. Соседняя карточка выглядывает и уезжает за край.
+Стрелок нет — на компьютере переключают кликабельные точки.
+
+Активный слайд ищется **по ближайшему к центру** (`nearest()`), а не делением на ширину:
+работает при любых отступах и процентных ширинах.
 
 Два места, где легко наступить на грабли:
 
@@ -82,6 +87,35 @@
 
 После проверки поле ввода **заменяется на `div.given`** — длинный ответ переносится
 и виден целиком, чего input не умеет.
+
+### Откуда берутся вопросы
+
+Большая часть **генерируется на лету при загрузке**, а не лежит списком — иначе файл раздулся бы
+до полумегабайта, а поддерживать 3000 строк вручную невозможно.
+
+- `VERB_DATA = VERB_DATA_MANUAL.concat(buildVerbData())` — 122 написанных руками + 1518 собранных
+  из `VERB_TAILS`: каждый глагол × 3 дополнения × 6 лиц, плюс вопрос «Czy …?» для всех лиц кроме `ja`
+  («Czy ja…» звучит неестественно). Дополнения подобраны так, чтобы подходить ко всем лицам без изменений.
+- `NUM_DATA = NUM_DATA_MANUAL.concat(buildNumData())` — 130 руками + 1231 по правилам.
+
+Числительные считаются, а не перечисляются: `numToPl(n, род)`, `nounForm(n, [ед, им.мн, род.мн])`,
+`yearLoc(год)`, таблицы часов. Три правила, на которых легко ошибиться:
+
+- **Форма существительного зависит от числа:** 1 → ед.ч., 2–4 → им.мн. (*dwa lata*),
+  остальное → род.мн. (*pięć lat*). Считает `nounForm`.
+- **Род работает на «2», но не на «1» в составных:** *dwadzieścia dwie książki*, но
+  *dwadzieścia jeden książek* — там `jeden` и родительный. Флаг `oneGender` в `under1000`.
+- **В годе склоняется только последний элемент:** *tysiąc dziewięćset osiemdziesiątym piątym*.
+
+Все шаблоны числительных — с переходным глаголом и винительным падежом, поэтому «1» с существительными
+женского рода пропускается: винительный там *jedną książkę*, а не *jedna książka*.
+
+### Рейтинг и прогресс
+
+`localStorage['polski.progress.v1']` — записи по ключу `тема` и `тема:подтема`
+(`recKey(topicId, subId)`, без подтемы → `тема:all`): `{points, best, played}`.
+Уровень считается от `best`: 🌱 Новичок < 40 · 📗 Ученик < 60 · 💪 Уверенно < 80 · 🎓 Знаток < 95 · 👑 Мастер.
+Показывается на карточках выбора (`pickCard`) и в итогах. Всё в try/catch.
 
 ### Контракт темы
 
@@ -157,59 +191,84 @@
 
 ## 4. Текущее состояние контента
 
-| Тема | Вопросов | Тестов | Разбито на |
-|---|---|---|---|
-| Глаголы | 122 | 12 | 5 групп спряжения + исключения, 29 глаголов |
-| Числительные | 130 | 13 | 6 подтем |
+| Тема | Вопросов | Тестов | Из них руками | Разбито на |
+|---|---|---|---|---|
+| Глаголы | 1640 | 164 | 122 | 5 групп спряжения + исключения, **46 глаголов** |
+| Числительные | 1361 | 136 | 130 | 6 подтем |
+| **Всего** | **3001** | | 252 | |
 
-**Глаголы.** Группы: A «I спряжение» (-ać, *czytać*), B «на -ować», C «II спряжение» (-ę/-esz, *pisać*), D «III спряжение» (-ę/-isz, *mówić*), E «тип на -mieć» (*rozumieć*), плюс `EXCEPTIONS`: być, mieć, iść, jechać, jeść, chcieć, móc, wiedzieć.
+**Глаголы.** Группы: A «I спряжение» (-ać, *czytać*), B «на -ować», C «II спряжение» (-ę/-esz, *pisać*),
+D «III спряжение» (-ę/-isz, *mówić*), E «тип на -mieć» (*rozumieć*), плюс `EXCEPTIONS`:
+być, mieć, iść, jechać, jeść, chcieć, móc, wiedzieć, brać.
 
-**Числительные.** Цифры 19 · Десятки 26 · Сотни 20 · Тысячи 18 · Даты 24 · Время 23.
+**Числительные.** Цифры 108 · Десятки 206 · Сотни 220 · Тысячи 253 · Даты 275 · Время 299.
 
 ### Известные шероховатости (не трогать без запроса)
 
 - **Нумерация спряжений не польская.** В польской традиции I = `-ę/-esz` (*pisać*), II = `-ę/-isz` (*mówić*), III = `-am/-asz` (*czytać*). В проекте I и III местами. Переименование сломает привычку — только по явной просьбе.
 - **`spać` в группе D** формально ок по окончаниям (śpię/śpisz), но чередование `a→ś` не объясняется.
-- Покрытие глаголов по лицам неровное: `ja` 29, `ty` 29, `on/ona/ono` 26, `oni/one` 21, `my` 10, `wy` 7.
-- Хвост вопросов после деления на десятки в сессию не попадает (122 % 10 = 2, 130 % 10 = 0).
+- Сгенерированные предложения однотипны по структуре («{Местоимение} ___ {дополнение}» и «Czy …?») — берут разнообразием словаря, а не синтаксиса. Руками написанные 252 предложения живее.
+- Хвост вопросов после деления на десятки в сессию не попадает (остаток от деления на 10).
 - Диакритика сверяется строго: `mowie` ≠ `mówię`. Регистр и лишние пробелы прощаются.
 
 ---
 
 ## 5. Проверка целостности данных
 
-После правки данных:
+Прогонять после любой правки данных или генераторов. Сверяет ответы с парадигмами,
+членство глаголов в группах, единственный пропуск в предложении и наполненность подтем.
 
 ```bash
 python3 - <<'EOF'
-import io,re,subprocess
+import io,subprocess
 s=io.open('index.html',encoding='utf-8').read()
-verbs=s[s.index('const PERSON_LABEL'):s.index('const NUM_SUBTOPICS')]
-nums=s[s.index('const NUM_SUBTOPICS'):s.index('/* ============ РЕЕСТР ТЕМ')]
-js=verbs+nums+'''
-let bad=0;
-const idx=p=>PERSON_ORDER.indexOf(p);
+js=s[s.index('/* ============ ОБЩЕЕ ============ */'):s.index('/* ============ РЕЕСТР ТЕМ')]+"""
+let bad=0; const idx=p=>PERSON_ORDER.indexOf(p); const seenV=new Set();
 VERB_DATA.forEach((q,i)=>{
-  const f=PARADIGMS[q.v];
+  seenV.add(q.v); const f=PARADIGMS[q.v];
   if(!f){console.log('нет парадигмы:',q.v);bad++;return;}
-  if(f[idx(q.person)]!==q.answer){console.log(i,q.v,q.person,'ожидалось',f[idx(q.person)]);bad++;}
-  if(!EXCEPTIONS.has(q.v)&&!Object.values(CONJ_GROUPS).some(G=>G.verbs.includes(q.v))){console.log('без группы:',q.v);bad++;}
+  if(f.length!==6){console.log('не 6 форм:',q.v);bad++;}
+  if(f[idx(q.person)]!==q.answer){console.log('форма≠ответ:',i,q.v,q.person);bad++;}
+  if(q.sentence.split('___').length-1!==1){console.log('пропуск:',i);bad++;}
+  const exc=EXCEPTIONS.has(q.v), grp=Object.values(CONJ_GROUPS).filter(G=>G.verbs.includes(q.v)).length;
+  if(exc&&grp){console.log('и исключение и группа:',q.v);bad++;}
+  if(!exc&&grp!==1){console.log('групп у глагола:',q.v,grp);bad++;}
 });
-const ids=new Set(NUM_SUBTOPICS.map(s=>s.id)), per={};
+Object.keys(VERB_TAILS).forEach(v=>{if(!PARADIGMS[v]){console.log('дополнения без парадигмы:',v);bad++;}});
+const ids=new Set(NUM_SUBTOPICS.map(x=>x.id)), per={};
 NUM_DATA.forEach((q,i)=>{
   per[q.sub]=(per[q.sub]||0)+1;
-  if(!ids.has(q.sub)){console.log('чужая подтема:',i,q.sub);bad++;}
-  if(!NUM_REF[q.sub]){console.log('нет справки:',q.sub);bad++;}
-  if(q.sentence.split('___').length-1!==1){console.log('пропуск не один:',i);bad++;}
+  if(!ids.has(q.sub)||!NUM_REF[q.sub]){console.log('подтема:',i,q.sub);bad++;}
+  if(q.sentence.split('___').length-1!==1){console.log('пропуск:',i);bad++;}
+  if(!q.answer||/undefined|  |^ | \$/.test(q.answer)){console.log('ответ:',i,JSON.stringify(q.answer));bad++;}
+  if(!q.hint){console.log('нет подсказки:',i);bad++;}
 });
-NUM_SUBTOPICS.forEach(s=>{if((per[s.id]||0)<10){console.log('меньше 10 вопросов:',s.id,per[s.id]||0);bad++;}});
-console.log(bad?bad+' ПРОБЛЕМ':'OK — глаголы '+VERB_DATA.length+', числительные '+NUM_DATA.length);
-'''
+NUM_SUBTOPICS.forEach(x=>{if((per[x.id]||0)<10){console.log('меньше 10:',x.id);bad++;}});
+console.log('глаголы',VERB_DATA.length,'('+seenV.size+' слов) · числительные',NUM_DATA.length,JSON.stringify(per));
+console.log(bad? bad+' ПРОБЛЕМ':'✓ все проверки прошли');
+"""
 subprocess.run(['node','-e',js])
 EOF
 ```
 
----
+Отдельно — генератор числительных (контрольные формы, которые легко испортить):
+
+```bash
+node -e "$(python3 -c "
+import io;s=io.open('index.html',encoding='utf-8').read()
+print(s[s.index('/* ===== числительные словами'):s.index('const N_NOUNS')])
+")
+let bad=0;
+[[1,'f','jedna'],[21,'f','dwadzieścia jeden'],[22,'f','dwadzieścia dwie'],[101,'m','sto jeden'],
+ [1000,'m','tysiąc'],[2024,'m','dwa tysiące dwadzieścia cztery'],[21000,'m','dwadzieścia jeden tysięcy']]
+ .forEach(([n,g,e])=>{const v=numToPl(n,g); if(v!==e){console.log('✗',n,g,v,'≠',e);bad++;}});
+[[1918,'tysiąc dziewięćset osiemnastym'],[2000,'dwutysięcznym'],[2010,'dwa tysiące dziesiątym']]
+ .forEach(([y,e])=>{const v=yearLoc(y); if(v!==e){console.log('✗',y,v,'≠',e);bad++;}});
+[[1,'rok'],[2,'lata'],[5,'lat'],[22,'lata'],[112,'lat']]
+ .forEach(([n,e])=>{const v=nounForm(n,['rok','lata','lat']); if(v!==e){console.log('✗',n,v,'≠',e);bad++;}});
+console.log(bad? bad+' ОШИБОК':'✓ генератор чисел OK');
+"
+```
 
 ## 6. Куда расширять
 
