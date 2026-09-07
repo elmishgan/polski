@@ -152,7 +152,8 @@ node -e "$(sed -n '/^const PERSON_LABEL/,/^];$/p' index.html); const idx=p=>PERS
 
 Приложение живёт на GitHub Pages и ставится на домашний экран как PWA.
 
-**URL сайта:** `<заполнить после создания репозитория>`
+**URL сайта:** https://elmishgan.github.io/polski/
+**Репозиторий:** https://github.com/elmishgan/polski (публичный — бесплатный Pages иначе не работает)
 
 ### Разовая установка на телефон
 
