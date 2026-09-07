@@ -7,335 +7,467 @@
 
 <!-- PWA: установка на домашний экран -->
 <link rel="manifest" href="manifest.webmanifest">
-<meta name="theme-color" content="#33459b">
+<meta name="theme-color" content="#f4f1ea">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
 <meta name="apple-mobile-web-app-title" content="Polski">
 <link rel="apple-touch-icon" href="icons/icon-180.png">
 <link rel="icon" href="icons/icon-192.png">
 <style>
   :root{
-    --bg-top:#33459b;
-    --bg-bot:#161e4d;
-    --panel:#3a52ad;
-    --panel-2:#2b3d8d;
-    --panel-line:#6d8dee;
-    --deep:#1b2559;
-    --ink:#ffffff;
-    --muted:#a9bcf2;
+    --bg1:#f4f1ea;
+    --bg2:#eef2f0;
     --card:#ffffff;
-    --card-ink:#1c2547;
-    --card-line:#d8e1ff;
-    --green:#5fd46f;      --green-2:#3fae4d;  --green-dark:#2a7a34;
-    --blue:#5ba3ff;       --blue-2:#2f7ae0;   --blue-dark:#1f56a8;
-    --amber:#ffc44d;      --amber-2:#f0a018;  --amber-dark:#b9760a;
-    --red:#ff7361;        --red-2:#e8442c;    --red-dark:#a82c1a;
-    --gold:#ffd23f;
-    --font:ui-rounded,"SF Pro Rounded",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+    --ink:#26241f;
+    --muted:#6b6558;
+    --accent:#b3452c;
+    --accent2:#2c6b52;
+    --line:#e4ddd0;
+    --green-bg:#e5f4ea;
+    --green-line:#3f9a5f;
+    --green-ink:#1e6b3c;
+    --red-bg:#fbe9e6;
+    --red-line:#c0492f;
+    --red-ink:#96331e;
+    --amber-bg:#fff3e0;
+    --amber-ink:#8a5a12;
+    --amber-line:#e0a94a;
   }
   *{box-sizing:border-box;}
   body{
     margin:0;
-    font-family:var(--font);
-    background:linear-gradient(180deg,var(--bg-top) 0%,var(--bg-bot) 70%) fixed;
-    background-color:var(--bg-bot);
+    font-family:'Georgia','Iowan Old Style',ui-serif,serif;
+    background:linear-gradient(160deg,var(--bg1),var(--bg2));
     color:var(--ink);
     min-height:100vh;
-    padding:calc(10px + env(safe-area-inset-top)) calc(12px + env(safe-area-inset-right))
-            calc(24px + env(safe-area-inset-bottom)) calc(12px + env(safe-area-inset-left));
+    padding:calc(24px + env(safe-area-inset-top)) calc(14px + env(safe-area-inset-right))
+            calc(50px + env(safe-area-inset-bottom)) calc(14px + env(safe-area-inset-left));
     -webkit-text-size-adjust:100%;
     -webkit-tap-highlight-color:transparent;
     overscroll-behavior-y:none;
-    touch-action:manipulation;
+    touch-action:manipulation;   /* убирает зум по двойному тапу */
   }
   html{touch-action:manipulation;}
-  .wrap{max-width:560px;margin:0 auto;}
-
-  /* ---------- HUD ---------- */
-  .hud{display:flex;align-items:center;gap:8px;margin-bottom:12px;}
-  .hud-pill{
-    display:flex;align-items:center;gap:7px;
-    background:var(--deep);border:2px solid #4d69c9;border-radius:999px;
-    padding:4px 13px 4px 4px;box-shadow:0 3px 0 rgba(0,0,0,.3);
-  }
-  .hud-ico{
-    width:26px;height:26px;border-radius:50%;
-    display:flex;align-items:center;justify-content:center;font-size:.85rem;
-    background:linear-gradient(180deg,#ffd964,#f0a51a);box-shadow:inset 0 -2px 0 rgba(0,0,0,.18);
-  }
-  .hud-ico.cup{background:linear-gradient(180deg,#8fd0ff,#3d8ede);}
-  .hud-val{font-weight:800;font-size:.95rem;letter-spacing:.01em;}
-  .hud-spacer{flex:1;}
-
-  /* ---------- панели ---------- */
-  .panel{
-    background:linear-gradient(180deg,var(--panel),var(--panel-2));
-    border:2px solid var(--panel-line);border-radius:22px;
-    padding:16px;margin-bottom:12px;
-    box-shadow:0 6px 0 rgba(0,0,0,.26), inset 0 2px 0 rgba(255,255,255,.16);
-  }
-  .panel-title{
-    font-size:.72rem;font-weight:800;text-transform:uppercase;letter-spacing:.09em;
-    color:var(--muted);margin-bottom:10px;text-align:center;
+  .wrap{max-width:820px;margin:0 auto;}
+  header{text-align:center;margin-bottom:16px;}
+  header h1{font-size:1.6rem;margin:0 0 6px;letter-spacing:.3px;}
+  header p{margin:0;color:var(--muted);font-family:ui-sans-serif,system-ui,sans-serif;font-size:.9rem;}
+  .badge{
+    display:inline-block;background:var(--accent);color:#fff;
+    font-family:ui-sans-serif,system-ui,sans-serif;font-size:.72rem;
+    letter-spacing:.08em;text-transform:uppercase;padding:3px 10px;
+    border-radius:20px;margin-bottom:8px;
   }
 
-  /* ---------- кнопки ---------- */
-  .gbtn{
-    border:none;border-radius:18px;cursor:pointer;font-family:var(--font);
-    font-weight:800;font-size:1.02rem;color:#fff;padding:15px 20px;width:100%;
-    text-shadow:0 2px 0 rgba(0,0,0,.22);
-    box-shadow:0 5px 0 var(--bd), 0 9px 14px rgba(0,0,0,.26), inset 0 2px 0 rgba(255,255,255,.3);
-    transition:transform .06s, box-shadow .06s, filter .15s;
+  /* ---------- start screen ---------- */
+  .start-card{
+    background:var(--card);
+    border:1px solid var(--line);
+    border-radius:18px;
+    padding:28px 24px;
+    text-align:center;
+    box-shadow:0 1px 3px rgba(0,0,0,.04);
   }
-  .gbtn:active{transform:translateY(4px);box-shadow:0 1px 0 var(--bd), inset 0 2px 0 rgba(255,255,255,.28);}
-  .gbtn:disabled{filter:grayscale(.7) brightness(.75);cursor:not-allowed;}
-  .gbtn:disabled:active{transform:none;box-shadow:0 5px 0 var(--bd), inset 0 2px 0 rgba(255,255,255,.3);}
-  .g-green{background:linear-gradient(180deg,var(--green),var(--green-2));--bd:var(--green-dark);}
-  .g-blue{background:linear-gradient(180deg,var(--blue),var(--blue-2));--bd:var(--blue-dark);}
-  .g-amber{background:linear-gradient(180deg,var(--amber),var(--amber-2));--bd:var(--amber-dark);}
-  .g-ghost{background:linear-gradient(180deg,#516cc8,#3a4da3);--bd:#26336e;}
-  .btn-row{display:flex;gap:10px;}
-  .btn-row .gbtn{flex:1;}
-  .btn-xl{font-size:1.18rem;padding:18px 20px;letter-spacing:.03em;}
+  .start-card h2{
+    margin:0 0 6px;
+    font-size:1.25rem;
+  }
+  .start-card .sub{
+    font-family:ui-sans-serif,system-ui,sans-serif;
+    color:var(--muted);
+    font-size:.88rem;
+    margin-bottom:22px;
+  }
+  .stepper{
+    display:flex;align-items:center;justify-content:center;gap:18px;
+    margin-bottom:8px;
+  }
+  .stepper button{
+    width:44px;height:44px;border-radius:50%;
+    background:var(--bg2);border:1px solid var(--line);
+    font-size:1.3rem;font-weight:700;color:var(--accent2);
+    display:flex;align-items:center;justify-content:center;
+    font-family:ui-sans-serif,system-ui,sans-serif;
+  }
+  .stepper button:hover{background:var(--line);}
+  .stepper-value{
+    min-width:90px;
+    font-size:2.1rem;
+    font-weight:700;
+    font-family:'Georgia',serif;
+    color:var(--ink);
+  }
+  .stepper-caption{
+    font-family:ui-sans-serif,system-ui,sans-serif;
+    font-size:.8rem;color:var(--muted);margin-bottom:22px;
+  }
+  .quick-chips{
+    display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-bottom:24px;
+  }
+  .chip{
+    font-family:ui-sans-serif,system-ui,sans-serif;
+    font-size:.82rem;font-weight:600;
+    padding:7px 14px;border-radius:20px;
+    background:var(--bg2);border:1px solid var(--line);color:var(--ink);
+    cursor:pointer;
+  }
+  .chip.active{
+    background:var(--accent2);border-color:var(--accent2);color:#fff;
+  }
+  .btn-start{
+    font-family:ui-sans-serif,system-ui,sans-serif;
+    font-size:1rem;font-weight:700;
+    padding:14px 28px;border-radius:12px;border:none;
+    background:var(--accent2);color:#fff;cursor:pointer;width:100%;
+  }
+  .btn-start:active{transform:scale(.98);}
 
-  /* ---------- свайпер ---------- */
-  .swiper{position:relative;}
-  .swiper-track{
-    display:flex;overflow-x:auto;scroll-snap-type:x mandatory;
-    scrollbar-width:none;-ms-overflow-style:none;
-    -webkit-overflow-scrolling:touch;touch-action:pan-x pan-y;
+  /* ---------- quiz screen ---------- */
+  .toolbar{
+    position:sticky;top:0;z-index:5;
+    background:rgba(244,241,234,.94);
+    backdrop-filter:blur(6px);
+    padding:10px 0 12px;
+    display:flex;gap:12px;align-items:center;justify-content:space-between;
+    font-family:ui-sans-serif,system-ui,sans-serif;
   }
-  .swiper-track::-webkit-scrollbar{display:none;}
-  .slide{flex:0 0 100%;scroll-snap-align:center;padding:0 2px;}
-  .sw-arrow{
-    position:absolute;top:50%;transform:translateY(-50%);z-index:2;
-    width:34px;height:34px;border-radius:50%;border:2px solid rgba(255,255,255,.45);
-    background:rgba(15,22,60,.55);color:#fff;font-size:1.1rem;font-weight:800;
-    display:flex;align-items:center;justify-content:center;cursor:pointer;font-family:var(--font);
-    padding:0;line-height:1;
-  }
-  .sw-arrow:active{background:rgba(15,22,60,.8);}
-  .sw-prev{left:-4px;} .sw-next{right:-4px;}
-  .sw-dots{display:flex;justify-content:center;gap:6px;margin-top:10px;}
-  .sw-dot{width:8px;height:8px;border-radius:50%;background:rgba(255,255,255,.28);transition:all .2s;}
-  .sw-dot.active{background:var(--gold);width:22px;border-radius:999px;}
+  .test-label{font-size:.9rem;font-weight:700;color:var(--accent2);white-space:nowrap;}
+  .score{font-size:.85rem;color:var(--muted);white-space:nowrap;}
 
-  /* ---------- карточка темы / подтемы ---------- */
-  .pick{
-    border-radius:20px;padding:20px 16px;text-align:center;
-    box-shadow:0 5px 0 rgba(0,0,0,.28), inset 0 2px 0 rgba(255,255,255,.25);
-    border:2px solid rgba(255,255,255,.28);
+  .grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:10px 14px;
+    margin-top:10px;
   }
-  .pick-topic{min-height:186px;display:flex;flex-direction:column;justify-content:center;}
-  .pick-sub{min-height:132px;display:flex;flex-direction:column;justify-content:center;}
-  .pick-c-green{background:linear-gradient(180deg,#57cc6a,#2f9440);}
-  .pick-c-amber{background:linear-gradient(180deg,#ffb445,#e8791f);}
-  .pick-c-blue{background:linear-gradient(180deg,#5ba3ff,#2f6fd0);}
-  .pick-emoji{
-    width:66px;height:66px;margin:0 auto 10px;border-radius:50%;
-    background:rgba(255,255,255,.24);border:2px solid rgba(255,255,255,.4);
-    display:flex;align-items:center;justify-content:center;font-size:2rem;
-    box-shadow:inset 0 -3px 0 rgba(0,0,0,.12);
-  }
-  .pick-sub .pick-emoji{width:52px;height:52px;font-size:1.55rem;margin-bottom:8px;}
-  .pick h2{margin:0 0 5px;font-size:1.35rem;font-weight:900;text-shadow:0 2px 0 rgba(0,0,0,.2);}
-  .pick-sub h2{font-size:1.15rem;}
-  .pick p{margin:0;font-size:.85rem;font-weight:600;color:rgba(255,255,255,.9);line-height:1.35;}
-  .pick-count{
-    display:inline-block;margin-top:10px;padding:4px 12px;border-radius:999px;
-    background:rgba(0,0,0,.22);font-size:.76rem;font-weight:800;letter-spacing:.02em;
+  @media (max-width:600px){
+    .grid{grid-template-columns:1fr;}
   }
 
-  /* ---------- степпер ---------- */
-  .stepper{display:flex;align-items:center;justify-content:center;gap:16px;}
-  .step-btn{
-    width:50px;height:50px;border-radius:50%;border:none;cursor:pointer;
-    background:linear-gradient(180deg,#5ba3ff,#2f7ae0);color:#fff;
-    font-size:1.7rem;font-weight:800;font-family:var(--font);line-height:1;
-    display:flex;align-items:center;justify-content:center;padding:0;
-    box-shadow:0 4px 0 var(--blue-dark), inset 0 2px 0 rgba(255,255,255,.3);
-  }
-  .step-btn:active{transform:translateY(3px);box-shadow:0 1px 0 var(--blue-dark);}
-  .step-btn:disabled{filter:grayscale(.7) brightness(.7);}
-  .step-val{
-    min-width:86px;text-align:center;font-size:2.4rem;font-weight:900;
-    text-shadow:0 3px 0 rgba(0,0,0,.25);
-  }
-  .step-caption{text-align:center;font-size:.8rem;font-weight:600;color:var(--muted);margin-top:8px;}
-
-  /* ---------- прогресс ---------- */
-  .pbar{
-    height:15px;background:var(--deep);border:2px solid #4d69c9;
-    border-radius:999px;overflow:hidden;flex:1;
-  }
-  .pbar-fill{
-    height:100%;border-radius:999px;transition:width .35s ease;
-    background:linear-gradient(180deg,#8ce6ff,#33b3ef);
-    box-shadow:inset 0 -3px 0 rgba(0,0,0,.15);
-  }
-  .quizbar{display:flex;align-items:center;gap:10px;margin-bottom:12px;}
-  .quizbar-label{font-size:.82rem;font-weight:800;white-space:nowrap;}
-
-  /* ---------- карточки вопросов ---------- */
-  .grid{display:grid;grid-template-columns:1fr 1fr;gap:11px;}
-  @media (max-width:620px){.grid{grid-template-columns:1fr;}}
   .card{
-    position:relative;background:var(--card);color:var(--card-ink);
-    border:2px solid var(--card-line);border-radius:18px;padding:13px 15px 15px;
-    box-shadow:0 4px 0 rgba(0,0,0,.2);
+    background:var(--card);
+    border:1px solid var(--line);
+    border-radius:14px;
+    padding:14px 16px;
+    box-shadow:0 1px 2px rgba(0,0,0,.03);
+    transition:border-color .2s, background .2s;
   }
-  .card.correct{background:#eefbf0;border-color:var(--green-2);box-shadow:0 4px 0 var(--green-dark);}
-  .card.close{background:#fff7e4;border-color:var(--amber-2);box-shadow:0 4px 0 var(--amber-dark);}
-  .card.wrong{background:#fff0ed;border-color:var(--red-2);box-shadow:0 4px 0 var(--red-dark);}
+  .card.correct{background:var(--green-bg);border-color:var(--green-line);}
+  .card.wrong{background:var(--red-bg);border-color:var(--red-line);}
   .q-meta{
-    display:flex;justify-content:space-between;align-items:center;gap:8px;
-    font-size:.68rem;font-weight:800;text-transform:uppercase;letter-spacing:.05em;
-    color:#7d89b8;margin-bottom:7px;
+    display:flex;justify-content:space-between;align-items:baseline;
+    font-family:ui-sans-serif,system-ui,sans-serif;font-size:.7rem;color:var(--muted);
+    margin-bottom:5px;text-transform:uppercase;letter-spacing:.05em;
   }
-  .q-hint{
-    color:#fff;background:linear-gradient(180deg,#7d8ec9,#5b6cae);
-    padding:3px 9px;border-radius:999px;font-size:.68rem;letter-spacing:.03em;
-    text-transform:none;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:62%;
-  }
-  .card.correct .q-hint{background:linear-gradient(180deg,var(--green),var(--green-2));}
-  .card.close .q-hint{background:linear-gradient(180deg,var(--amber),var(--amber-2));}
-  .card.wrong .q-hint{background:linear-gradient(180deg,var(--red),var(--red-2));}
-  .q-sentence{font-size:1rem;line-height:1.55;font-weight:600;}
+  .q-sentence{font-size:1.02rem;line-height:1.6;}
+  .verb-hint{color:var(--accent);font-style:italic;font-size:.9rem;}
   input.blank{
-    font-family:var(--font);font-size:16px;font-weight:800;
-    border:2px solid #ccd8ff;border-radius:11px;background:#f3f7ff;
-    padding:7px 10px;width:130px;text-align:center;color:var(--card-ink);
-    outline:none;transition:border-color .15s, background .15s;
+    font-family:'Georgia',serif;font-size:1rem;
+    border:none;border-bottom:2px solid var(--line);
+    background:transparent;padding:2px 4px;width:120px;text-align:center;
+    color:var(--ink);outline:none;transition:border-color .15s;
   }
-  input.blank:focus{border-color:var(--blue-2);background:#fff;}
-  input.blank:disabled{opacity:1;}
-  .card.correct input.blank{border-color:var(--green-2);background:#dff6e3;color:#1d6b2c;}
-  .card.close input.blank{border-color:var(--amber-2);background:#fff0d0;color:#8a5c05;}
-  .card.wrong input.blank{border-color:var(--red-2);background:#ffe2dd;color:#a3301b;}
-  .given{
-    font-family:var(--font);font-size:16px;font-weight:800;
-    border:2px solid #ccd8ff;border-radius:11px;background:#f3f7ff;
-    padding:7px 10px;color:var(--card-ink);
-    word-break:break-word;line-height:1.4;min-height:38px;
-  }
-  .card:not(.block) .given{display:inline-block;min-width:130px;text-align:center;vertical-align:middle;}
-  .card.correct .given{border-color:var(--green-2);background:#dff6e3;color:#1d6b2c;}
-  .card.close .given{border-color:var(--amber-2);background:#fff0d0;color:#8a5c05;}
-  .card.wrong .given{border-color:var(--red-2);background:#ffe2dd;color:#a3301b;}
-  .card.block .q-sentence{margin-bottom:8px;}
-  .card.block input.blank{display:block;width:100%;text-align:left;}
-  .blank-gap{
-    display:inline-block;min-width:62px;border-bottom:3px dotted #b9c6f2;vertical-align:baseline;
-  }
-  .card.correct .blank-gap{border-bottom-color:var(--green-2);}
-  .card.close .blank-gap{border-bottom-color:var(--amber-2);}
-  .card.wrong .blank-gap{border-bottom-color:var(--red-2);}
-  .pts{
-    position:absolute;top:-10px;left:12px;padding:3px 10px;border-radius:999px;
-    font-size:.76rem;font-weight:900;color:#fff;border:2px solid #fff;
-    box-shadow:0 2px 5px rgba(0,0,0,.28);
-  }
-  .pts.full{background:linear-gradient(180deg,var(--green),var(--green-2));}
-  .pts.part{background:linear-gradient(180deg,var(--amber),var(--amber-2));}
-  .pts.zero{background:linear-gradient(180deg,var(--red),var(--red-2));}
+  input.blank:focus{border-bottom-color:var(--accent2);}
+  .card.correct input.blank{border-bottom-color:var(--green-line);color:var(--green-ink);font-weight:600;}
+  .card.wrong input.blank{border-bottom-color:var(--red-line);color:var(--red-ink);text-decoration:line-through;}
   .feedback{
-    margin-top:8px;font-size:.8rem;font-weight:600;line-height:1.5;display:none;
-    color:#5c3226;background:rgba(0,0,0,.045);padding:7px 9px;border-radius:10px;
+    margin-top:7px;font-family:ui-sans-serif,system-ui,sans-serif;font-size:.8rem;display:none;
+    line-height:1.5;
   }
-  .card.close .feedback,.card.wrong .feedback{display:block;}
-  .icon{margin-right:4px;}
-  .ref-link{
-    color:var(--blue-dark);font-weight:900;text-decoration:underline;
-    cursor:pointer;border:none;background:none;padding:0;font:inherit;
+  .card.wrong .feedback{display:block;color:var(--red-ink);}
+  .feedback b{font-weight:700;}
+  .icon{display:inline-block;width:14px;text-align:center;margin-right:3px;}
+  .conj-link{
+    color:var(--accent2);
+    font-weight:700;
+    text-decoration:underline dotted;
+    cursor:pointer;
+    border:none;
+    background:none;
+    padding:0;
+    font:inherit;
   }
+  .conj-link:hover{color:var(--accent);}
 
-  /* ---------- баннер результата ---------- */
+  .actions{
+    display:flex;gap:10px;padding:16px 0 4px;
+  }
+  button{
+    font-family:ui-sans-serif,system-ui,sans-serif;font-size:.95rem;font-weight:600;
+    padding:12px 18px;border-radius:10px;border:none;cursor:pointer;
+    transition:transform .1s, opacity .15s;
+  }
+  button:active{transform:scale(.97);}
+  button:disabled{opacity:.4;cursor:not-allowed;}
+  .btn-primary{background:var(--accent2);color:#fff;flex:1;}
+  .btn-next{background:var(--accent);color:#fff;flex:1;display:none;}
+  .btn-secondary{background:transparent;color:var(--ink);border:1px solid var(--line);}
+
   .result-banner{
-    display:none;text-align:center;font-weight:800;font-size:.95rem;
-    padding:13px;border-radius:16px;margin-top:12px;border:2px solid;
+    text-align:center;font-family:ui-sans-serif,system-ui,sans-serif;
+    padding:14px;border-radius:12px;margin-top:14px;display:none;font-size:.95rem;
   }
-  .rb-great{background:#e6faea;color:#1d6b2c;border-color:var(--green-2);}
-  .rb-ok{background:#fff5e0;color:#8a5c05;border-color:var(--amber-2);}
-  .rb-low{background:#ffeeeb;color:#a3301b;border-color:var(--red-2);}
-  .actions{display:flex;gap:10px;margin-top:14px;}
-  .actions .gbtn{flex:1;}
+  .dots{
+    display:flex;justify-content:center;gap:6px;margin:14px 0 4px;
+    font-family:ui-sans-serif,system-ui,sans-serif;
+  }
+  .dot{
+    width:9px;height:9px;border-radius:50%;background:var(--line);
+    transition:background .2s;
+  }
+  .dot.active{background:var(--accent2);}
+  .dot.done{background:var(--accent);}
+  footer{
+    text-align:center;font-family:ui-sans-serif,system-ui,sans-serif;
+    color:var(--muted);font-size:.76rem;margin-top:18px;
+  }
 
-  /* ---------- итоги ---------- */
-  .score-hero{text-align:center;padding:6px 0 2px;}
-  .stars{font-size:2rem;letter-spacing:6px;margin-bottom:6px;}
-  .star{color:rgba(255,255,255,.22);}
-  .star.on{color:var(--gold);text-shadow:0 0 14px rgba(255,210,63,.65);}
-  .big-points{font-size:3.2rem;font-weight:900;line-height:1;text-shadow:0 4px 0 rgba(0,0,0,.28);}
-  .big-points-cap{font-size:.78rem;font-weight:800;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);margin-top:4px;}
-  .score-line{
-    display:flex;justify-content:center;gap:10px;margin-top:14px;flex-wrap:wrap;
+  /* ---------- summary screen ---------- */
+  .summary-card{
+    background:var(--card);
+    border:1px solid var(--line);
+    border-radius:18px;
+    padding:26px 24px;
+    box-shadow:0 1px 3px rgba(0,0,0,.04);
   }
-  .score-chip{
-    background:var(--deep);border:2px solid #4d69c9;border-radius:999px;
-    padding:6px 14px;font-size:.82rem;font-weight:800;
+  .summary-score{
+    text-align:center;
+    margin-bottom:8px;
   }
-  .best-flag{
-    display:inline-block;margin-top:10px;padding:5px 14px;border-radius:999px;
-    background:linear-gradient(180deg,var(--gold),#f0a51a);color:#4a3000;
-    font-weight:900;font-size:.8rem;box-shadow:0 3px 0 #b9760a;
+  .radial-wrap{
+    position:relative;
+    width:168px;height:168px;
+    margin:0 auto 6px;
   }
-  .breakdown-row{display:flex;align-items:center;gap:9px;margin-bottom:8px;font-size:.83rem;font-weight:700;}
-  .breakdown-label{flex:0 0 40%;}
-  .breakdown-track{flex:1;height:11px;background:var(--deep);border-radius:999px;overflow:hidden;border:1px solid #4d69c9;}
-  .breakdown-fill{height:100%;background:linear-gradient(180deg,var(--red),var(--red-2));border-radius:999px;}
-  .breakdown-count{flex:0 0 24px;text-align:right;font-weight:900;color:var(--red);}
-  .advice-list{list-style:none;padding:0;margin:0;}
+  .radial-wrap svg{
+    position:absolute;top:0;left:0;
+    transform:rotate(-90deg);
+  }
+  .radial-track{fill:none;stroke:var(--line);stroke-width:14;}
+  .radial-fill{
+    fill:none;stroke-width:14;stroke-linecap:round;
+    transition:stroke-dashoffset 1.15s cubic-bezier(.4,0,.2,1);
+  }
+  .radial-fill.great{stroke:var(--green-line);}
+  .radial-fill.ok{stroke:var(--amber-line);}
+  .radial-fill.low{stroke:var(--red-line);}
+  .radial-center{
+    position:absolute;inset:0;
+    display:flex;flex-direction:column;align-items:center;justify-content:center;
+  }
+  .radial-center .big-pct{
+    font-size:2.3rem;font-weight:700;font-family:'Georgia',serif;line-height:1;
+  }
+  .radial-center .big-pct.great{color:var(--green-ink);}
+  .radial-center .big-pct.ok{color:var(--amber-ink);}
+  .radial-center .big-pct.low{color:var(--red-ink);}
+  .summary-score .pct-caption{
+    font-family:ui-sans-serif,system-ui,sans-serif;
+    font-size:.85rem;color:var(--muted);margin-top:6px;
+  }
+    display:flex;justify-content:space-between;
+    font-family:ui-sans-serif,system-ui,sans-serif;font-size:.82rem;color:var(--muted);
+    margin-bottom:20px;
+  }
+  .summary-legend b{color:var(--ink);}
+  .summary-section-title{
+    font-family:ui-sans-serif,system-ui,sans-serif;
+    font-size:.75rem;text-transform:uppercase;letter-spacing:.06em;
+    color:var(--muted);margin:22px 0 10px;
+  }
+  .breakdown-row{
+    display:flex;align-items:center;gap:10px;
+    font-family:ui-sans-serif,system-ui,sans-serif;font-size:.88rem;
+    padding:7px 0;border-bottom:1px solid var(--line);
+  }
+  .breakdown-row:last-child{border-bottom:none;}
+  .breakdown-label{flex:1;color:var(--ink);}
+  .breakdown-track{
+    flex:1.4;height:8px;background:var(--bg2);border-radius:6px;overflow:hidden;
+  }
+  .breakdown-fill{height:100%;background:var(--red-line);}
+  .breakdown-count{
+    min-width:26px;text-align:right;font-weight:700;color:var(--red-ink);
+  }
+  .advice-list{
+    font-family:ui-sans-serif,system-ui,sans-serif;font-size:.9rem;
+    line-height:1.6;padding-left:0;list-style:none;margin:0;
+  }
   .advice-list li{
-    display:flex;gap:9px;background:rgba(0,0,0,.16);border-radius:14px;
-    padding:11px 13px;margin-bottom:8px;font-size:.83rem;font-weight:600;line-height:1.5;
+    display:flex;gap:8px;padding:8px 10px;margin-bottom:6px;
+    background:var(--amber-bg);border:1px solid var(--amber-line);
+    border-radius:10px;color:#5a4212;
   }
-  .advice-list .ref-link{color:var(--gold);}
-  .a-ico{flex:0 0 auto;}
+  .advice-list li.good{
+    background:var(--green-bg);border-color:var(--green-line);color:var(--green-ink);
+  }
+  .advice-list li .a-ico{flex-shrink:0;}
 
-  /* ---------- модал ---------- */
+  /* ---------- modal ---------- */
   .modal-backdrop{
-    position:fixed;inset:0;background:rgba(8,12,35,.72);backdrop-filter:blur(3px);
-    display:none;align-items:center;justify-content:center;padding:18px;z-index:50;
+    position:fixed;inset:0;background:rgba(38,36,31,.45);
+    display:none;align-items:center;justify-content:center;
+    z-index:50;padding:20px;
   }
   .modal-backdrop.open{display:flex;}
   .modal-box{
-    position:relative;width:100%;max-width:420px;max-height:82vh;overflow-y:auto;
-    background:linear-gradient(180deg,var(--panel),var(--panel-2));
-    border:2px solid var(--panel-line);border-radius:22px;padding:20px;
-    box-shadow:0 10px 0 rgba(0,0,0,.3), 0 20px 40px rgba(0,0,0,.5);
+    background:var(--card);
+    border-radius:16px;
+    padding:20px 22px 18px;
+    max-width:380px;
+    width:100%;
+    box-shadow:0 20px 50px rgba(0,0,0,.25);
+    font-family:ui-sans-serif,system-ui,sans-serif;
+    position:relative;
   }
-  .modal-box h3{margin:0 0 4px;font-size:1.2rem;font-weight:900;padding-right:34px;}
-  .modal-tag{font-size:.7rem;font-weight:800;background:rgba(0,0,0,.25);padding:3px 9px;border-radius:999px;vertical-align:middle;}
-  .modal-sub{font-size:.8rem;font-weight:600;color:var(--muted);line-height:1.5;margin-bottom:12px;}
+  .modal-box h3{
+    margin:0 0 4px;
+    font-family:'Georgia',serif;
+    font-size:1.15rem;
+    color:var(--ink);
+  }
+  .modal-tag{
+    font-family:ui-sans-serif,system-ui,sans-serif;
+    font-size:.72rem;
+    font-weight:600;
+    color:var(--accent2);
+    background:var(--green-bg);
+    padding:2px 8px;
+    border-radius:20px;
+    vertical-align:middle;
+    white-space:nowrap;
+  }
+  .modal-box .modal-sub{
+    font-size:.78rem;color:var(--muted);margin-bottom:12px;
+  }
   .modal-close{
-    position:absolute;top:12px;right:12px;width:32px;height:32px;border-radius:50%;
-    border:2px solid rgba(255,255,255,.35);background:rgba(0,0,0,.25);color:#fff;
-    font-size:.95rem;font-weight:800;cursor:pointer;padding:0;line-height:1;font-family:var(--font);
+    position:absolute;top:12px;right:14px;
+    background:none;border:none;font-size:1.1rem;color:var(--muted);
+    cursor:pointer;padding:2px 6px;
   }
-  .conj-table{width:100%;border-collapse:collapse;font-size:.85rem;}
+  .conj-table{
+    width:100%;border-collapse:collapse;font-size:.92rem;
+  }
+  .conj-table td{
+    padding:6px 4px;border-bottom:1px solid var(--line);
+  }
+  .conj-table td:first-child{
+    color:var(--muted);font-size:.82rem;white-space:nowrap;
+    font-family:'Georgia',serif;
+  }
+  .conj-table td.end-col{
+    text-align:center;color:var(--accent);font-size:.82rem;white-space:nowrap;
+  }
+  .conj-table td:last-child{
+    text-align:right;font-family:'Georgia',serif;font-weight:600;
+  }
+  .conj-table tr:last-child td{border-bottom:none;}
+
+  .confirm-text{
+    font-size:.92rem;line-height:1.5;margin-bottom:18px;color:var(--ink);
+  }
+  .confirm-actions{
+    display:flex;gap:10px;
+  }
+  .confirm-actions button{flex:1;}
+  .btn-warn{background:var(--accent);color:#fff;}
+  .btn-ghost{background:var(--bg2);color:var(--ink);border:1px solid var(--line);}
+
+  /* ---------- главная: выбор темы ---------- */
+  .topic-list{display:grid;gap:12px;}
+  .topic-card{
+    display:flex;align-items:center;gap:15px;width:100%;text-align:left;
+    background:var(--card);border:1px solid var(--line);border-radius:16px;
+    padding:16px 18px;cursor:pointer;box-shadow:0 1px 3px rgba(0,0,0,.04);
+    font:inherit;color:var(--ink);transition:border-color .18s, transform .1s;
+  }
+  .topic-card:hover{border-color:var(--accent2);}
+  .topic-card:active{transform:scale(.99);}
+  .topic-mark{
+    flex:0 0 auto;width:54px;height:54px;border-radius:15px;
+    display:flex;align-items:center;justify-content:center;
+    font-family:'Georgia',serif;font-size:1.6rem;color:#f4f1ea;line-height:1;
+  }
+  .topic-mark-czasowniki{background:var(--accent2);}
+  .topic-mark-liczebniki{background:var(--accent);}
+  .topic-body{flex:1;min-width:0;}
+  .topic-body h3{margin:0 0 3px;font-size:1.12rem;font-family:'Georgia',serif;}
+  .topic-sub{
+    font-family:ui-sans-serif,system-ui,sans-serif;font-size:.8rem;
+    color:var(--muted);line-height:1.4;
+  }
+  .topic-meta{
+    font-family:ui-sans-serif,system-ui,sans-serif;font-size:.72rem;
+    color:var(--accent2);margin-top:5px;letter-spacing:.03em;font-weight:600;
+  }
+  .topic-arrow{flex:0 0 auto;color:var(--muted);font-size:1.1rem;}
+
+  /* ---------- экран настройки ---------- */
+  .back-link{
+    background:none;border:none;padding:4px 0 12px;cursor:pointer;
+    font-family:ui-sans-serif,system-ui,sans-serif;font-size:.85rem;
+    font-weight:600;color:var(--muted);
+  }
+  .back-link:hover{color:var(--accent2);}
+  .setup-section-title{
+    font-family:ui-sans-serif,system-ui,sans-serif;font-size:.72rem;
+    text-transform:uppercase;letter-spacing:.08em;color:var(--muted);
+    margin:20px 0 10px;font-weight:700;
+  }
+  .sub-chips{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
+  @media (max-width:420px){.sub-chips{grid-template-columns:1fr;}}
+  .sub-chip{
+    display:flex;flex-direction:column;align-items:flex-start;gap:2px;
+    padding:9px 12px;border-radius:12px;cursor:pointer;text-align:left;
+    background:var(--bg2);border:1px solid var(--line);color:var(--ink);
+    font-family:ui-sans-serif,system-ui,sans-serif;transition:background .15s,border-color .15s;
+  }
+  .sub-chip-label{font-size:.88rem;font-weight:700;}
+  .sub-chip-caption{font-size:.72rem;color:var(--muted);}
+  .sub-chip.active{background:var(--accent2);border-color:var(--accent2);color:#fff;}
+  .sub-chip.active .sub-chip-caption{color:rgba(255,255,255,.8);}
+  .sub-actions{display:flex;gap:8px;justify-content:center;margin-top:10px;}
+  .mini-btn{
+    background:none;border:none;padding:4px 8px;cursor:pointer;
+    font-family:ui-sans-serif,system-ui,sans-serif;font-size:.78rem;
+    font-weight:600;color:var(--muted);text-decoration:underline dotted;
+  }
+  .mini-btn:hover{color:var(--accent2);}
+
+  /* ---------- карточка с длинным ответом (числительные) ---------- */
+  .card.block .q-sentence{margin-bottom:9px;}
+  .card.block input.blank{
+    display:block;width:100%;text-align:left;padding:5px 2px;margin-top:2px;
+  }
+  .blank-gap{
+    display:inline-block;min-width:64px;
+    border-bottom:2px dotted var(--line);vertical-align:baseline;
+  }
+  .card.block.correct .blank-gap{border-bottom-color:var(--green-line);}
+  .card.block.wrong .blank-gap{border-bottom-color:var(--red-line);}
+  .card.block.wrong input.blank{text-decoration:none;}
+
+  /* ---------- заголовки таблицы в модале ---------- */
   .conj-table th{
-    text-align:left;padding:6px 8px;font-size:.66rem;font-weight:800;
-    text-transform:uppercase;letter-spacing:.06em;color:var(--muted);
-    border-bottom:2px solid rgba(255,255,255,.18);
+    text-align:left;padding:5px 8px;
+    font-family:ui-sans-serif,system-ui,sans-serif;font-size:.68rem;
+    text-transform:uppercase;letter-spacing:.05em;color:var(--muted);
+    border-bottom:1px solid var(--line);font-weight:700;
   }
-  .conj-table td{padding:6px 8px;border-bottom:1px solid rgba(255,255,255,.1);font-weight:700;}
-  .conj-table td:first-child{color:var(--muted);font-weight:600;width:34%;}
-  .conj-table td:last-child{text-align:right;color:#fff;}
-  .conj-table .end-col{color:var(--gold);font-weight:800;text-align:center;}
-  .confirm-text{font-size:.88rem;font-weight:600;line-height:1.5;margin-bottom:16px;}
-  .confirm-actions{display:flex;gap:10px;}
-  .confirm-actions .gbtn{flex:1;font-size:.92rem;padding:13px 12px;}
 </style>
 </head>
 <body>
 <div class="wrap">
-  <div class="hud">
-    <div class="hud-pill"><span class="hud-ico cup">🏆</span><span class="hud-val" id="hudBest">—</span></div>
-    <div class="hud-spacer"></div>
-    <div class="hud-pill"><span class="hud-ico">⭐</span><span class="hud-val" id="hudPoints">0</span></div>
-  </div>
+  <header>
+    <span class="badge" id="headerBadge">Тренажёр</span>
+    <h1 id="headerTitle">Польский язык</h1>
+    <p id="headerSub">Выбери тему, которую хочешь потренировать.</p>
+  </header>
+
   <div id="app"></div>
+
+  <footer id="footerNote"></footer>
 </div>
 
 <div class="modal-backdrop" id="modalBackdrop">
@@ -820,22 +952,21 @@ const NUM_DATA = [
 ];
 
 /* ============ РЕЕСТР ТЕМ ============
-   Движок ничего не знает про глаголы и числительные — только про общий формат вопроса:
-   {g:'ключ группы', hint:'подпись', sentence:'... ___ ...', answer:'', alt:[], ref:'ключ справки'} */
-
-const SUB_EMOJI = {jednosci:'1️⃣', dziesiatki:'🔟', setki:'💯', tysiace:'💰', daty:'📅', czas:'🕐'};
+   Каждая тема отдаёт вопросы в общем формате:
+   {g:'ключ группы', hint:'подпись в карточке', sentence:'... ___ ...', answer:'', alt:[], ref:'ключ справки'}
+   Движок ниже ничего не знает про глаголы и числительные — только про этот формат. */
 
 const TOPICS = {
   czasowniki: {
     id:'czasowniki',
     title:'Глаголы',
     subtitle:'Спряжение в настоящем времени',
-    emoji:'🗣️',
-    color:'green',
+    quizTitle:'Спряжение глаголов — настоящее время',
+    mark:'cz',
     level:'A1',
     subtopics:null,
-    note:'29 глаголов, 5 групп спряжения и исключения.',
-    hintNote:'Слово «спряжение» в разборе ошибки открывает таблицу всех форм.',
+    footer:'Глаголы: być, mieć, mówić, czytać, pisać, robić, iść, jechać, jeść, pić, chcieć, móc, wiedzieć, znać, mieszkać, pracować, uczyć się, lubić, grać, słuchać, kupować, rozumieć, spać, widzieć, pomagać, jeździć, tańczyć, gotować, pływać.',
+    hintNote:'У ошибок слово «спряжение»/«Исключение» кликабельно — открывает таблицу всех форм.',
     blockInput:false,
 
     questions(){
@@ -859,14 +990,14 @@ const TOPICS = {
       return CONJ_GROUPS[key] ? CONJ_GROUPS[key].shortLabel : key;
     },
 
-    /* без ведущей иконки — её ставит движок, она зависит от того, насколько близок ответ */
     wrongHtml(q){
       if(q.g === 'EXC'){
-        return `<button type="button" class="ref-link" data-ref="${q.ref}">Исключение</button>. Правильно: <b>${q.answer}</b>.`;
+        return `<span class="icon">✕</span><button type="button" class="ref-link" data-ref="${q.ref}">Исключение</button>. Правильно: <b>${q.answer}</b>.`;
       }
       const group = CONJ_GROUPS[q.g];
-      if(!group) return `Правильно: <b>${q.answer}</b>.`;
-      return `По <button type="button" class="ref-link" data-ref="${q.ref}">спряжению</button> — ${group.label}, ${PERSON_LABEL[q.person]}, окончание <b>${group.endings[q.person]}</b> → нужно <b>${q.answer}</b>.`;
+      if(!group) return `<span class="icon">✕</span>Правильно: <b>${q.answer}</b>.`;
+      const ending = group.endings[q.person];
+      return `<span class="icon">✕</span>По <button type="button" class="ref-link" data-ref="${q.ref}">спряжению</button> — ${group.label}, ${PERSON_LABEL[q.person]}, окончание <b>${ending}</b> → нужно <b>${q.answer}</b>.`;
     },
 
     adviceHtml(key){
@@ -876,7 +1007,7 @@ const TOPICS = {
       const g = CONJ_GROUPS[key];
       if(!g) return '';
       const endsStr = PERSON_ORDER.map(p => `${p} ${g.endings[p]}`).join(', ');
-      return `<li><span class="a-ico">📌</span><span>Подтяни <button type="button" class="ref-link" data-ref="${g.baseVerb}">${g.shortLabel}</button> — инфинитив на «<b>${g.infEnding}</b>» (например <i>${g.baseVerb}</i>). Окончания: ${endsStr}.</span></li>`;
+      return `<li><span class="a-ico">📌</span><span>Подтяни <button type="button" class="ref-link" data-ref="${g.baseVerb}">${g.shortLabel}</button> — глаголы с окончанием инфинитива «<b>${g.infEnding}</b>» (например <i>${g.baseVerb}</i>). Личные окончания: ${endsStr}.</span></li>`;
     },
 
     reference(refKey){
@@ -886,8 +1017,8 @@ const TOPICS = {
       const group = isExc ? null : getConjGroup(refKey);
       return {
         title: refKey,
-        tag: isExc ? 'Исключение' : (group ? group.shortLabel : ''),
-        sub: 'Все формы, настоящее время.',
+        tag: isExc ? 'Искл.' : (group ? group.shortLabel : ''),
+        sub: 'Все формы, настоящее время',
         cols: ['Лицо','Окончание','Форма'],
         rows: PERSON_ORDER.map((p, i) => [p, (!isExc && group) ? group.endings[p] : '—', forms[i]])
       };
@@ -898,20 +1029,24 @@ const TOPICS = {
     id:'liczebniki',
     title:'Числительные',
     subtitle:'Цифры, даты и время словами',
-    emoji:'🔢',
-    color:'amber',
+    quizTitle:'Числительные — пиши словами',
+    mark:'7',
     level:'A1',
     subtopics:NUM_SUBTOPICS,
-    note:'Пиши словами, польскими буквами: ą, ć, ę, ł, ń, ó, ś, ź, ż.',
-    hintNote:'Название подтемы в разборе ошибки открывает таблицу-подсказку.',
+    footer:'Пиши числительное словами, польскими буквами: ą, ć, ę, ł, ń, ó, ś, ź, ż.',
+    hintNote:'У ошибок название подтемы кликабельно — открывает таблицу-подсказку.',
     blockInput:true,
 
     questions(subs){
       return NUM_DATA
         .filter(q => !subs || subs.has(q.sub))
         .map(q => ({
-          g: q.sub, hint: q.hint, sentence: q.sentence,
-          answer: q.answer, alt: q.alt || [], ref: q.sub
+          g: q.sub,
+          hint: q.hint,
+          sentence: q.sentence,
+          answer: q.answer,
+          alt: q.alt || [],
+          ref: q.sub
         }));
     },
 
@@ -921,7 +1056,7 @@ const TOPICS = {
     },
 
     wrongHtml(q){
-      return `<button type="button" class="ref-link" data-ref="${q.ref}">${this.groupLabel(q.g)}</button> — правильно: <b>${q.answer}</b>.`;
+      return `<span class="icon">✕</span><button type="button" class="ref-link" data-ref="${q.ref}">${this.groupLabel(q.g)}</button> — правильно: <b>${q.answer}</b>.`;
     },
 
     adviceHtml(key){
@@ -941,66 +1076,12 @@ const TOPICS = {
 
 const TOPIC_ORDER = ['czasowniki','liczebniki'];
 
-/* ============ ОЧКИ ============
-   Точный ответ — 100 очков. Дальше — доля совпадения букв:
-   считаем расстояние Левенштейна (сколько правок нужно, чтобы получить верный ответ)
-   и переводим в проценты. Ни одной общей буквы → 0. */
-const POINTS_PER_Q = 100;
-const CLOSE_THRESHOLD = 0.6;   // от этого сходства ответ считается «почти»
-
-function levenshtein(a, b){
-  if(a === b) return 0;
-  if(!a.length) return b.length;
-  if(!b.length) return a.length;
-  let prev = Array.from({length:b.length+1}, (_, i) => i);
-  const cur = new Array(b.length+1);
-  for(let i = 1; i <= a.length; i++){
-    cur[0] = i;
-    for(let j = 1; j <= b.length; j++){
-      const cost = a[i-1] === b[j-1] ? 0 : 1;
-      cur[j] = Math.min(cur[j-1] + 1, prev[j] + 1, prev[j-1] + cost);
-    }
-    prev = cur.slice();
-  }
-  return prev[b.length];
-}
-
-function similarity(user, target){
-  const a = normalize(user), b = normalize(target);
-  if(!a && !b) return 1;
-  if(!a || !b) return 0;
-  if(a === b) return 1;
-  return Math.max(0, 1 - levenshtein(a, b) / Math.max(a.length, b.length));
-}
-
-/* лучшее совпадение среди основного ответа и допустимых вариантов */
-function gradeAnswer(q, value){
-  let best = similarity(value, q.answer);
-  (q.alt || []).forEach(a => { best = Math.max(best, similarity(value, a)); });
-  const exact = best === 1;
-  return {
-    sim: best,
-    points: Math.round(POINTS_PER_Q * best),
-    exact,
-    verdict: exact ? 'correct' : (best >= CLOSE_THRESHOLD ? 'close' : 'wrong')
-  };
-}
-
-/* ============ РЕКОРДЫ ============ */
-function loadBest(){
-  try { return JSON.parse(localStorage.getItem('polski.best') || '{}'); }
-  catch(e){ return {}; }
-}
-function saveBest(obj){
-  try { localStorage.setItem('polski.best', JSON.stringify(obj)); } catch(e){}
-}
-
 /* ============ СОСТОЯНИЕ ============ */
 const BATCH_SIZE = 10;
 
-let state = 'setup';           // 'setup' | 'quiz' | 'summary'
-let topic = TOPICS[TOPIC_ORDER[0]];
-let selectedSub = null;        // id подтемы или null = все подряд
+let state = 'home';            // 'home' | 'setup' | 'quiz' | 'summary'
+let topic = null;              // текущая тема из TOPICS
+let selectedSubs = null;       // Set выбранных подтем (null, если у темы их нет)
 let selectedCount = 3;
 let sessionBatches = [];
 let currentIndex = 0;
@@ -1008,16 +1089,15 @@ let checked = false;
 let stats = null;
 
 const app = document.getElementById('app');
-const hudBest = document.getElementById('hudBest');
-const hudPoints = document.getElementById('hudPoints');
+const headerTitle = document.getElementById('headerTitle');
+const headerSub = document.getElementById('headerSub');
+const headerBadge = document.getElementById('headerBadge');
+const footerNote = document.getElementById('footerNote');
 const modalBackdrop = document.getElementById('modalBackdrop');
 const modalBox = document.getElementById('modalBox');
 
-function subsSet(){
-  return selectedSub ? new Set([selectedSub]) : null;
-}
 function currentPool(){
-  return topic.questions(subsSet());
+  return topic.questions(selectedSubs);
 }
 function maxTests(){
   return Math.max(1, Math.floor(currentPool().length / BATCH_SIZE));
@@ -1025,17 +1105,60 @@ function maxTests(){
 function buildBatches(){
   const all = shuffle(currentPool());
   const batches = [];
-  for(let i = 0; i < all.length; i += BATCH_SIZE) batches.push(all.slice(i, i + BATCH_SIZE));
+  for(let i = 0; i < all.length; i += BATCH_SIZE){
+    batches.push(all.slice(i, i + BATCH_SIZE));
+  }
   return batches.filter(b => b.length > 0);
 }
 
 function resetStats(){
-  stats = {correct:0, wrong:0, total:0, points:0, maxPoints:0, byGroup:{}};
+  stats = {correct:0, wrong:0, total:0, byGroup:{}};
 }
-function bumpStat(key, exact){
+function bumpStat(key, ok){
   if(!stats.byGroup[key]) stats.byGroup[key] = {wrong:0, total:0};
   stats.byGroup[key].total++;
-  if(!exact) stats.byGroup[key].wrong++;
+  if(!ok) stats.byGroup[key].wrong++;
+}
+
+function setHeader(badge, title, sub){
+  headerBadge.textContent = badge;
+  headerTitle.textContent = title;
+  headerSub.textContent = sub;
+}
+
+/* ============ ГЛАВНАЯ: ВЫБОР ТЕМЫ ============ */
+function renderHome(){
+  setHeader('Тренажёр', 'Польский язык', 'Выбери тему, которую хочешь потренировать.');
+  footerNote.style.display = 'none';
+
+  const cards = TOPIC_ORDER.map(id => {
+    const t = TOPICS[id];
+    const total = t.questions(null).length;
+    const subs = t.subtopics ? t.subtopics.map(s => s.label).join(' · ') : t.subtitle;
+    return `
+      <button type="button" class="topic-card" data-topic="${id}">
+        <div class="topic-mark topic-mark-${id}">${t.mark}</div>
+        <div class="topic-body">
+          <h3>${t.title}</h3>
+          <div class="topic-sub">${subs}</div>
+          <div class="topic-meta">${t.level} · ${total} ${plural(total,'вопрос','вопроса','вопросов')}</div>
+        </div>
+        <div class="topic-arrow">→</div>
+      </button>`;
+  }).join('');
+
+  app.innerHTML = `<div class="topic-list">${cards}</div>`;
+
+  app.querySelectorAll('.topic-card').forEach(c => {
+    c.addEventListener('click', () => {
+      topic = TOPICS[c.dataset.topic];
+      selectedSubs = topic.subtopics ? new Set(topic.subtopics.map(s => s.id)) : null;
+      selectedCount = Math.min(3, maxTests());
+      state = 'setup';
+      render();
+      window.scrollTo({top:0, behavior:'smooth'});
+    });
+  });
 }
 
 function plural(n, one, few, many){
@@ -1045,167 +1168,97 @@ function plural(n, one, few, many){
   return many;
 }
 
-function syncHud(){
-  const best = loadBest()[topic.id];
-  hudBest.textContent = (best === undefined) ? '—' : best + '%';
-  hudPoints.textContent = stats ? stats.points : 0;
-}
-
-/* ============ СВАЙПЕР ============
-   Горизонтальная лента со scroll-snap: на телефоне листается пальцем,
-   на компьютере — стрелками по краям. */
-function buildSwiper(slidesHtml, activeIndex, onChange){
-  const dots = slidesHtml.map((_, i) =>
-    `<div class="sw-dot${i === activeIndex ? ' active' : ''}"></div>`).join('');
-  return {
-    html: `
-      <div class="swiper">
-        ${slidesHtml.length > 1 ? '<button type="button" class="sw-arrow sw-prev">‹</button>' : ''}
-        <div class="swiper-track">
-          ${slidesHtml.map(s => `<div class="slide">${s}</div>`).join('')}
-        </div>
-        ${slidesHtml.length > 1 ? '<button type="button" class="sw-arrow sw-next">›</button>' : ''}
-        ${slidesHtml.length > 1 ? `<div class="sw-dots">${dots}</div>` : ''}
-      </div>`,
-    init(root){
-      const track = root.querySelector('.swiper-track');
-      const dotEls = [...root.querySelectorAll('.sw-dot')];
-      let idx = activeIndex;
-
-      const width = () => track.clientWidth || 1;
-      track.scrollLeft = idx * width();
-
-      /* пересчитать активный слайд по текущей прокрутке */
-      function settle(){
-        if(!track.isConnected) return false;   // экран уже перерисован — не трогаем состояние
-        const i = Math.round(track.scrollLeft / width());
-        if(i !== idx && i >= 0 && i < slidesHtml.length){
-          idx = i;
-          dotEls.forEach((d, j) => d.classList.toggle('active', j === idx));
-          onChange(idx);
-          return true;
-        }
-        return false;
-      }
-
-      let timer;
-      track.addEventListener('scroll', () => {
-        clearTimeout(timer);
-        timer = setTimeout(settle, 70);
-      });
-      /* где поддерживается — реагируем сразу по окончании прокрутки */
-      if('onscrollend' in track) track.addEventListener('scrollend', settle);
-
-      function go(i){
-        i = Math.max(0, Math.min(slidesHtml.length - 1, i));
-        track.scrollTo({left: i * width(), behavior:'smooth'});
-      }
-      const prev = root.querySelector('.sw-prev');
-      const next = root.querySelector('.sw-next');
-      if(prev) prev.addEventListener('click', () => go(idx - 1));
-      if(next) next.addEventListener('click', () => go(idx + 1));
-      window.addEventListener('resize', () => { track.scrollLeft = idx * width(); });
-
-      return {settle};
-    }
-  };
-}
-
-/* ============ ЭКРАН ВЫБОРА ============ */
+/* ============ НАСТРОЙКА ТЕСТА ============ */
 function renderSetup(){
-  const topicSlides = TOPIC_ORDER.map(id => {
-    const t = TOPICS[id];
-    const n = t.questions(null).length;
-    return `
-      <div class="pick pick-topic pick-c-${t.color}">
-        <div class="pick-emoji">${t.emoji}</div>
-        <h2>${t.title}</h2>
-        <p>${t.subtitle}</p>
-        <div class="pick-count">${t.level} · ${n} ${plural(n,'вопрос','вопроса','вопросов')}</div>
-      </div>`;
-  });
-  const topicSwiper = buildSwiper(topicSlides, TOPIC_ORDER.indexOf(topic.id), i => {
-    topic = TOPICS[TOPIC_ORDER[i]];
-    selectedSub = null;
-    selectedCount = Math.min(3, maxTests());
-    rebuildSubs();
-    syncCount();
-    syncHud();
-  });
+  setHeader(topic.level, topic.quizTitle, `По ${BATCH_SIZE} предложений в каждом тесте.`);
+  footerNote.textContent = topic.footer;
+  footerNote.style.display = 'block';
+
+  const subsHtml = topic.subtopics ? `
+    <div class="setup-section-title">Подтемы</div>
+    <div class="sub-chips" id="subChips">
+      ${topic.subtopics.map(s => `
+        <button type="button" class="sub-chip${selectedSubs.has(s.id) ? ' active' : ''}" data-sub="${s.id}">
+          <span class="sub-chip-label">${s.label}</span>
+          <span class="sub-chip-caption">${s.caption}</span>
+        </button>`).join('')}
+    </div>
+    <div class="sub-actions">
+      <button type="button" class="mini-btn" id="subAll">Все</button>
+      <button type="button" class="mini-btn" id="subNone">Снять все</button>
+    </div>` : '';
 
   app.innerHTML = `
-    <div class="panel">
-      <div class="panel-title">Тема · листай вбок</div>
-      ${topicSwiper.html}
-    </div>
-    <div id="subsPanel"></div>
-    <div class="panel">
-      <div class="panel-title">Сколько тестов подряд</div>
+    <button type="button" class="back-link" id="backHome">← Другая тема</button>
+    <div class="start-card">
+      <h2>${topic.title}</h2>
+      <div class="sub">${topic.subtitle}</div>
+      ${subsHtml}
+      <div class="setup-section-title">Сколько тестов</div>
       <div class="stepper">
-        <button type="button" class="step-btn" id="stepDown">−</button>
-        <div class="step-val" id="stepValue">${selectedCount}</div>
-        <button type="button" class="step-btn" id="stepUp">+</button>
+        <button type="button" id="stepDown">−</button>
+        <div class="stepper-value" id="stepValue">${selectedCount}</div>
+        <button type="button" id="stepUp">+</button>
       </div>
-      <div class="step-caption" id="stepCaption"></div>
+      <div class="stepper-caption" id="stepCaption"></div>
+      <div class="quick-chips" id="quickChips"></div>
+      <button type="button" class="btn-start" id="startBtn">Начать</button>
     </div>
-    <button type="button" class="gbtn g-green btn-xl" id="startBtn">ИГРАТЬ</button>
-    <div class="step-caption" id="topicNote" style="margin-top:12px"></div>
   `;
 
-  const topicCtl = topicSwiper.init(app.querySelector('.panel .swiper'));
-  let subCtl = null;
-
-  function rebuildSubs(){
-    const holder = document.getElementById('subsPanel');
-    if(!holder) return;
-    if(!topic.subtopics){ holder.innerHTML = ''; return; }
-
-    const items = [{id:null, label:'Всё подряд', caption:'вопросы из всех подтем', emoji:'🎲'}]
-      .concat(topic.subtopics.map(s => ({...s, emoji: SUB_EMOJI[s.id] || '•'})));
-
-    const slides = items.map(s => {
-      const n = topic.questions(s.id ? new Set([s.id]) : null).length;
-      return `
-        <div class="pick pick-sub pick-c-blue">
-          <div class="pick-emoji">${s.emoji}</div>
-          <h2>${s.label}</h2>
-          <p>${s.caption}</p>
-          <div class="pick-count">${n} ${plural(n,'вопрос','вопроса','вопросов')}</div>
-        </div>`;
-    });
-
-    const active = Math.max(0, items.findIndex(s => s.id === selectedSub));
-    const sw = buildSwiper(slides, active, i => {
-      selectedSub = items[i].id;
-      selectedCount = Math.min(selectedCount, maxTests());
-      syncCount();
-    });
-    holder.innerHTML = `<div class="panel"><div class="panel-title">Подтема · листай вбок</div>${sw.html}</div>`;
-    subCtl = sw.init(holder.querySelector('.swiper'));
-  }
-
-  function syncCount(){
-    if(!document.getElementById('stepValue')) return;
+  function syncAll(){
     const pool = currentPool().length;
     const max = maxTests();
-    selectedCount = Math.max(1, Math.min(selectedCount, max));
+    if(selectedCount > max) selectedCount = max;
+    if(selectedCount < 1) selectedCount = 1;
+
     document.getElementById('stepValue').textContent = selectedCount;
-    document.getElementById('stepDown').disabled = selectedCount <= 1;
-    document.getElementById('stepUp').disabled = selectedCount >= max;
     document.getElementById('stepCaption').textContent =
-      `по ${BATCH_SIZE} вопросов · максимум ${max} из ${pool} ${plural(pool,'вопроса','вопросов','вопросов')}`;
-    document.getElementById('topicNote').textContent = topic.note;
+      pool === 0
+        ? 'Выбери хотя бы одну подтему'
+        : `тестов подряд (максимум ${max} из ${pool} ${plural(pool,'вопроса','вопросов','вопросов')})`;
+
+    const chips = [...new Set([1, 3, 5, max])].filter(n => n >= 1 && n <= max).sort((a,b) => a-b);
+    document.getElementById('quickChips').innerHTML = chips.map(n =>
+      `<button type="button" class="chip${n === selectedCount ? ' active' : ''}" data-n="${n}">${n === max && max > 1 ? 'Все ('+max+')' : n}</button>`
+    ).join('');
+    document.querySelectorAll('#quickChips .chip').forEach(c => {
+      c.addEventListener('click', () => { selectedCount = Number(c.dataset.n); syncAll(); });
+    });
+
+    if(topic.subtopics){
+      document.querySelectorAll('#subChips .sub-chip').forEach(c => {
+        c.classList.toggle('active', selectedSubs.has(c.dataset.sub));
+      });
+    }
+    document.getElementById('startBtn').disabled = pool === 0;
   }
 
-  document.getElementById('stepDown').addEventListener('click', () => { selectedCount--; syncCount(); });
-  document.getElementById('stepUp').addEventListener('click', () => { selectedCount++; syncCount(); });
+  document.getElementById('backHome').addEventListener('click', () => {
+    state = 'home'; render(); window.scrollTo({top:0, behavior:'smooth'});
+  });
+  document.getElementById('stepDown').addEventListener('click', () => { selectedCount--; syncAll(); });
+  document.getElementById('stepUp').addEventListener('click', () => { selectedCount++; syncAll(); });
+
+  if(topic.subtopics){
+    document.querySelectorAll('#subChips .sub-chip').forEach(c => {
+      c.addEventListener('click', () => {
+        const id = c.dataset.sub;
+        if(selectedSubs.has(id)) selectedSubs.delete(id); else selectedSubs.add(id);
+        syncAll();
+      });
+    });
+    document.getElementById('subAll').addEventListener('click', () => {
+      topic.subtopics.forEach(s => selectedSubs.add(s.id)); syncAll();
+    });
+    document.getElementById('subNone').addEventListener('click', () => {
+      selectedSubs.clear(); syncAll();
+    });
+  }
+
   document.getElementById('startBtn').addEventListener('click', () => {
-    /* если палец только что отпустили, событие скролла могло не успеть дойти —
-       досчитываем активные слайды прямо сейчас, чтобы стартовать то, что видно */
-    topicCtl.settle();              // сменилась тема — подтемы уже перестроились
-    if(subCtl) subCtl.settle();
+    if(currentPool().length === 0) return;
     sessionBatches = buildBatches().slice(0, selectedCount);
-    if(!sessionBatches.length) return;
     currentIndex = 0;
     resetStats();
     state = 'quiz';
@@ -1213,30 +1266,31 @@ function renderSetup(){
     window.scrollTo({top:0, behavior:'smooth'});
   });
 
-  rebuildSubs();
-  syncCount();
-  syncHud();
+  syncAll();
 }
 
 /* ============ ЭКРАН ТЕСТА ============ */
 function renderQuiz(){
+  setHeader(topic.level, topic.quizTitle, topic.hintNote);
+  footerNote.textContent = topic.footer;
+  footerNote.style.display = 'block';
   checked = false;
+
   const batch = sessionBatches[currentIndex];
-  const donePct = Math.round(currentIndex / sessionBatches.length * 100);
 
   app.innerHTML = `
-    <div class="quizbar">
-      <div class="quizbar-label">Тест ${currentIndex+1}/${sessionBatches.length}</div>
-      <div class="pbar"><div class="pbar-fill" id="pbarFill" style="width:${donePct}%"></div></div>
-      <div class="quizbar-label" id="scoreLabel">0/${batch.length}</div>
+    <div class="toolbar">
+      <div class="test-label">Тест ${currentIndex+1} / ${sessionBatches.length}</div>
+      <div class="score" id="scoreLabel">0 / ${batch.length}</div>
     </div>
     <div class="grid" id="quiz"></div>
     <div class="result-banner" id="resultBanner"></div>
     <div class="actions">
-      <button class="gbtn g-green" id="checkBtn">Проверить</button>
-      <button class="gbtn g-amber" id="nextBtn" style="display:none">Дальше →</button>
-      <button class="gbtn g-ghost" id="resetBtn" style="flex:0 0 42%">Выйти</button>
+      <button class="btn-primary" id="checkBtn">Проверить ответы</button>
+      <button class="btn-next" id="nextBtn">Следующий тест →</button>
+      <button class="btn-secondary" id="resetBtn">В начало</button>
     </div>
+    <div class="dots" id="dots"></div>
   `;
 
   const quizEl = document.getElementById('quiz');
@@ -1246,16 +1300,24 @@ function renderQuiz(){
     card.dataset.index = i;
 
     const parts = q.sentence.split('___');
-    const field = `<input type="text" class="blank" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" data-i="${i}">`;
+    const meta = document.createElement('div');
+    meta.className = 'q-meta';
+    meta.innerHTML = `<span>Предложение ${i+1}</span><span class="verb-hint">${q.hint}</span>`;
 
-    card.innerHTML = `
-      <div class="q-meta"><span>№${i+1}</span><span class="q-hint">${q.hint}</span></div>
-      <div class="q-sentence">${
-        topic.blockInput
-          ? `${parts[0]}<span class="blank-gap"></span>${parts[1] || ''}${field}`
-          : `${parts[0]}${field}${parts[1] || ''}`
-      }</div>
-      <div class="feedback" id="fb-${i}"></div>`;
+    const sentence = document.createElement('div');
+    sentence.className = 'q-sentence';
+    const field = `<input type="text" class="blank" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" data-i="${i}">`;
+    sentence.innerHTML = topic.blockInput
+      ? `${parts[0]}<span class="blank-gap"></span>${parts[1] || ''}${field}`
+      : `${parts[0]}${field}${parts[1] || ''}`;
+
+    const feedback = document.createElement('div');
+    feedback.className = 'feedback';
+    feedback.id = `fb-${i}`;
+
+    card.appendChild(meta);
+    card.appendChild(sentence);
+    card.appendChild(feedback);
     quizEl.appendChild(card);
   });
 
@@ -1263,28 +1325,39 @@ function renderQuiz(){
     inp.addEventListener('keydown', e => {
       if(e.key === 'Enter'){
         e.preventDefault();
-        if(idx+1 < arr.length) arr[idx+1].focus();
-        else requestCheck();
+        if(idx+1 < arr.length){ arr[idx+1].focus(); }
+        else { requestCheck(); }
       }
     });
   });
   quizEl.addEventListener('input', updateCount);
   updateCount();
-  syncHud();
+  renderDots();
 
   document.getElementById('checkBtn').addEventListener('click', requestCheck);
   document.getElementById('resetBtn').addEventListener('click', () => {
-    state = 'setup'; stats = null; render(); window.scrollTo({top:0, behavior:'smooth'});
+    state = 'setup'; render(); window.scrollTo({top:0, behavior:'smooth'});
   });
 }
 
 function updateCount(){
   if(checked) return;
   const inputs = document.querySelectorAll('#quiz input.blank');
-  const label = document.getElementById('scoreLabel');
+  const scoreLabel = document.getElementById('scoreLabel');
   let filled = 0;
   inputs.forEach(inp => { if(inp.value.trim() !== '') filled++; });
-  if(label) label.textContent = `${filled}/${inputs.length}`;
+  if(scoreLabel) scoreLabel.textContent = `${filled} / ${inputs.length}`;
+}
+
+function renderDots(){
+  const dotsEl = document.getElementById('dots');
+  if(!dotsEl) return;
+  dotsEl.innerHTML = '';
+  sessionBatches.forEach((_, i) => {
+    const d = document.createElement('div');
+    d.className = 'dot' + (i === currentIndex ? ' active' : '') + (i < currentIndex ? ' done' : '');
+    dotsEl.appendChild(d);
+  });
 }
 
 function requestCheck(){
@@ -1298,180 +1371,190 @@ function requestCheck(){
 function showConfirmModal(empty, total){
   modalBox.innerHTML = `
     <button type="button" class="modal-close" id="modalCloseBtn">✕</button>
-    <h3>Не всё заполнено</h3>
-    <div class="confirm-text">Пусто: <b>${empty}</b> из <b>${total}</b>. Проверить сейчас? За пустые поля будет 0 очков.</div>
+    <h3>Не все поля заполнены</h3>
+    <div class="confirm-text">Пусто: <b>${empty}</b> из <b>${total}</b> предложений. Точно проверить сейчас? Пустые поля засчитаются как неправильные.</div>
     <div class="confirm-actions">
-      <button type="button" class="gbtn g-ghost" id="confirmBack">Вернуться</button>
-      <button type="button" class="gbtn g-amber" id="confirmGo">Проверить</button>
-    </div>`;
+      <button type="button" class="btn-ghost" id="confirmBack">Вернуться</button>
+      <button type="button" class="btn-warn" id="confirmGo">Всё равно проверить</button>
+    </div>
+  `;
   modalBackdrop.classList.add('open');
   document.getElementById('modalCloseBtn').addEventListener('click', closeModal);
   document.getElementById('confirmBack').addEventListener('click', closeModal);
   document.getElementById('confirmGo').addEventListener('click', () => { closeModal(); checkAnswers(); });
 }
 
+function isCorrect(q, value){
+  const user = normalize(value);
+  if(user === normalize(q.answer)) return true;
+  return (q.alt || []).some(a => normalize(a) === user);
+}
+
 function checkAnswers(){
   const batch = sessionBatches[currentIndex];
-  let exactCount = 0, batchPoints = 0;
-  const batchMax = batch.length * POINTS_PER_Q;
+  let correctCount = 0;
 
   batch.forEach((q, i) => {
     const card = document.querySelector(`#quiz .card[data-index="${i}"]`);
     const input = card.querySelector('input.blank');
     const fb = document.getElementById(`fb-${i}`);
-    card.classList.remove('correct','close','wrong');
+    card.classList.remove('correct','wrong');
+    input.disabled = true;
+    fb.innerHTML = '';
 
-    const r = gradeAnswer(q, input.value);
-    card.classList.add(r.verdict);
-
-    /* поле заменяем на блок с текстом: длинный ответ переносится и виден целиком */
-    const given = document.createElement('div');
-    given.className = 'given';
-    given.textContent = input.value.trim() || '—';
-    input.replaceWith(given);
-
-    const badge = document.createElement('div');
-    badge.className = 'pts ' + (r.exact ? 'full' : r.points > 0 ? 'part' : 'zero');
-    badge.textContent = '+' + r.points;
-    card.appendChild(badge);
-
+    const ok = isCorrect(q, input.value);
     stats.total++;
-    stats.points += r.points;
-    stats.maxPoints += POINTS_PER_Q;
-    batchPoints += r.points;
-    bumpStat(q.g, r.exact);
+    bumpStat(q.g, ok);
 
-    if(r.exact){
-      exactCount++; stats.correct++;
-      fb.innerHTML = '';
+    if(ok){
+      card.classList.add('correct');
+      correctCount++;
+      stats.correct++;
     } else {
+      card.classList.add('wrong');
       stats.wrong++;
-      const icon = r.verdict === 'close' ? '≈' : '✕';
-      const lead = r.verdict === 'close' ? '<b>Почти!</b> ' : '';
-      fb.innerHTML = `<span class="icon">${icon}</span>${lead}${topic.wrongHtml(q)}`;
+      fb.innerHTML = topic.wrongHtml(q);
     }
   });
 
   checked = true;
-  document.getElementById('scoreLabel').textContent = `${exactCount}/${batch.length}`;
-  document.getElementById('pbarFill').style.width =
-    Math.round((currentIndex + 1) / sessionBatches.length * 100) + '%';
-  syncHud();
+  document.getElementById('scoreLabel').textContent = `${correctCount} / ${batch.length}`;
 
-  const pct = Math.round(batchPoints / batchMax * 100);
-  const banner = document.getElementById('resultBanner');
-  banner.style.display = 'block';
-  banner.className = 'result-banner ' + (pct >= 80 ? 'rb-great' : pct >= 50 ? 'rb-ok' : 'rb-low');
-  banner.innerHTML = `Тест ${currentIndex+1}: <b>${batchPoints}</b> из ${batchMax} очков · точных ответов <b>${exactCount}/${batch.length}</b>`;
+  const pct = Math.round(correctCount/batch.length*100);
+  const resultBanner = document.getElementById('resultBanner');
+  resultBanner.style.display = 'block';
+  resultBanner.style.background = pct >= 80 ? 'var(--green-bg)' : pct >= 50 ? 'var(--amber-bg)' : 'var(--red-bg)';
+  resultBanner.style.color = pct >= 80 ? 'var(--green-ink)' : pct >= 50 ? 'var(--amber-ink)' : 'var(--red-ink)';
+  resultBanner.style.border = '1px solid ' + (pct >= 80 ? 'var(--green-line)' : pct >= 50 ? 'var(--amber-line)' : 'var(--red-line)');
+  resultBanner.innerHTML = `Результат теста ${currentIndex+1}: <b>${correctCount} / ${batch.length}</b> (${pct}%)`;
 
   document.getElementById('checkBtn').style.display = 'none';
   const nextBtn = document.getElementById('nextBtn');
   nextBtn.style.display = 'block';
   const isLast = currentIndex >= sessionBatches.length - 1;
-  nextBtn.textContent = isLast ? 'Итоги →' : 'Дальше →';
+  nextBtn.textContent = isLast ? 'Посмотреть итоги →' : 'Следующий тест →';
   nextBtn.addEventListener('click', () => {
-    if(isLast) state = 'summary'; else currentIndex++;
+    if(isLast){ state = 'summary'; } else { currentIndex++; }
     render();
     window.scrollTo({top:0, behavior:'smooth'});
   }, {once:true});
 
-  document.querySelector('.quizbar').scrollIntoView({behavior:'smooth', block:'start'});
+  renderDots();
+  document.querySelector('.toolbar').scrollIntoView({behavior:'smooth', block:'start'});
 }
 
 /* ============ ИТОГИ ============ */
-function renderSummary(){
-  const pct = stats.maxPoints ? Math.round(stats.points / stats.maxPoints * 100) : 0;
-  const starCount = pct >= 90 ? 3 : pct >= 70 ? 2 : pct >= 40 ? 1 : 0;
-  const stars = [0,1,2].map(i => `<span class="star${i < starCount ? ' on' : ''}">★</span>`).join('');
+const RADIAL_R = 66;
+const RADIAL_C = 2 * Math.PI * RADIAL_R;
 
-  const best = loadBest();
-  const isRecord = pct > (best[topic.id] ?? -1);
-  if(isRecord){ best[topic.id] = pct; saveBest(best); }
+function renderSummary(){
+  setHeader(topic.level, topic.quizTitle, 'Итоги сессии.');
+  footerNote.style.display = 'none';
+
+  const pct = stats.total ? Math.round(stats.correct/stats.total*100) : 0;
+  const pctClass = pct >= 80 ? 'great' : pct >= 50 ? 'ok' : 'low';
 
   const rows = Object.keys(stats.byGroup)
     .filter(k => stats.byGroup[k].wrong > 0)
-    .map(k => ({key:k, label:topic.groupLabel(k), wrong:stats.byGroup[k].wrong}))
+    .map(k => ({key:k, label:topic.groupLabel(k), wrong:stats.byGroup[k].wrong, total:stats.byGroup[k].total}))
     .sort((a,b) => b.wrong - a.wrong);
   const maxWrong = rows.length ? rows[0].wrong : 1;
 
-  const breakdown = rows.length ? rows.map(r => `
+  const breakdownHtml = rows.length ? rows.map(r => `
     <div class="breakdown-row">
       <div class="breakdown-label">${r.label}</div>
       <div class="breakdown-track"><div class="breakdown-fill" style="width:${Math.round(r.wrong/maxWrong*100)}%"></div></div>
       <div class="breakdown-count">${r.wrong}</div>
-    </div>`).join('')
-    : `<div class="breakdown-row"><div class="breakdown-label">Ни одной ошибки 🎉</div></div>`;
+    </div>
+  `).join('') : `<div class="breakdown-row"><div class="breakdown-label">Ошибок не было 🎉</div></div>`;
 
-  const advice = stats.wrong === 0
-    ? `<li><span class="a-ico">🎉</span><span>Идеально! Бери больше тестов за раз или другую тему.</span></li>`
+  const adviceHtml = stats.wrong === 0
+    ? `<li class="good"><span class="a-ico">🎉</span><span>Отлично! Все ответы верные — можно увеличить число тестов за сессию или взять другую тему.</span></li>`
     : rows.slice(0, 2).map(r => topic.adviceHtml(r.key)).join('');
 
   app.innerHTML = `
-    <div class="panel">
-      <div class="score-hero">
-        <div class="stars">${stars}</div>
-        <div class="big-points">${stats.points}</div>
-        <div class="big-points-cap">очков из ${stats.maxPoints}</div>
-        <div class="score-line">
-          <div class="score-chip">🎯 ${pct}%</div>
-          <div class="score-chip">✓ точных ${stats.correct}/${stats.total}</div>
+    <div class="summary-card">
+      <div class="summary-score">
+        <div class="radial-wrap">
+          <svg width="168" height="168" viewBox="0 0 168 168">
+            <circle class="radial-track" cx="84" cy="84" r="${RADIAL_R}"></circle>
+            <circle class="radial-fill ${pctClass}" id="radialFill" cx="84" cy="84" r="${RADIAL_R}"
+              stroke-dasharray="${RADIAL_C}" stroke-dashoffset="${RADIAL_C}"></circle>
+          </svg>
+          <div class="radial-center"><div class="big-pct ${pctClass}">${pct}%</div></div>
         </div>
-        ${isRecord ? '<div class="best-flag">🏆 Новый рекорд!</div>' : ''}
+        <div class="pct-caption">верно: <b>${stats.correct}</b> из <b>${stats.total}</b> (${sessionBatches.length} ${plural(sessionBatches.length,'тест','теста','тестов')})</div>
       </div>
-    </div>
-    <div class="panel">
-      <div class="panel-title">Ошибки по типам</div>
-      ${breakdown}
-    </div>
-    <div class="panel">
-      <div class="panel-title">Что подтянуть</div>
-      <ul class="advice-list">${advice}</ul>
-    </div>
-    <div class="btn-row">
-      <button type="button" class="gbtn g-green" id="againBtn">Ещё раз</button>
-      <button type="button" class="gbtn g-blue" id="homeBtn">Сменить тему</button>
-    </div>`;
+      <div class="summary-legend">
+        <span>✓ Правильно: <b>${stats.correct}</b></span>
+        <span>✕ Ошибок: <b>${stats.wrong}</b></span>
+      </div>
 
-  syncHud();
-  document.getElementById('againBtn').addEventListener('click', () => {
-    sessionBatches = buildBatches().slice(0, selectedCount);
-    currentIndex = 0; resetStats(); state = 'quiz';
-    render(); window.scrollTo({top:0, behavior:'smooth'});
+      <div class="summary-section-title">Ошибки по типам</div>
+      ${breakdownHtml}
+
+      <div class="summary-section-title">Что подтянуть</div>
+      <ul class="advice-list">${adviceHtml}</ul>
+    </div>
+    <div class="actions">
+      <button class="btn-primary" id="restartBtn">Пройти ещё раз</button>
+      <button class="btn-secondary" id="homeBtn">Другая тема</button>
+    </div>
+  `;
+
+  document.getElementById('restartBtn').addEventListener('click', () => {
+    state = 'setup'; render(); window.scrollTo({top:0, behavior:'smooth'});
   });
   document.getElementById('homeBtn').addEventListener('click', () => {
-    state = 'setup'; stats = null; render(); window.scrollTo({top:0, behavior:'smooth'});
+    state = 'home'; render(); window.scrollTo({top:0, behavior:'smooth'});
+  });
+
+  const fillEl = document.getElementById('radialFill');
+  const targetOffset = RADIAL_C * (1 - pct/100);
+  requestAnimationFrame(() => {
+    requestAnimationFrame(() => { fillEl.style.strokeDashoffset = String(targetOffset); });
   });
 }
 
 /* ============ МОДАЛ-ПОДСКАЗКА ============ */
-document.addEventListener('click', e => {
+document.addEventListener('click', (e) => {
   const link = e.target.closest('.ref-link');
   if(link){ openRefModal(link.dataset.ref); return; }
   if(e.target === modalBackdrop) closeModal();
 });
-document.addEventListener('keydown', e => { if(e.key === 'Escape') closeModal(); });
+document.addEventListener('keydown', (e) => {
+  if(e.key === 'Escape') closeModal();
+});
 
 function openRefModal(refKey){
+  if(!topic) return;
   const r = topic.reference(refKey);
   if(!r) return;
+
   const head = `<tr>${r.cols.map(c => `<th>${c}</th>`).join('')}</tr>`;
   const body = r.rows.map(row =>
     `<tr>${row.map((cell, i) => `<td${i === 1 && r.cols.length === 3 ? ' class="end-col"' : ''}>${cell}</td>`).join('')}</tr>`
   ).join('');
+
   modalBox.innerHTML = `
     <button type="button" class="modal-close" id="modalCloseBtn">✕</button>
-    <h3>${r.title} ${r.tag ? `<span class="modal-tag">${r.tag}</span>` : ''}</h3>
+    <h3>${r.title} ${r.tag ? `<span class="modal-tag">(${r.tag})</span>` : ''}</h3>
     <div class="modal-sub">${r.sub}</div>
-    <table class="conj-table">${head}${body}</table>`;
+    <table class="conj-table">${head}${body}</table>
+  `;
   modalBackdrop.classList.add('open');
   document.getElementById('modalCloseBtn').addEventListener('click', closeModal);
   modalBox.scrollTop = 0;
 }
-function closeModal(){ modalBackdrop.classList.remove('open'); }
+
+function closeModal(){
+  modalBackdrop.classList.remove('open');
+}
 
 /* ============ РОУТЕР ============ */
 function render(){
-  if(state === 'setup') renderSetup();
+  if(state === 'home') renderHome();
+  else if(state === 'setup') renderSetup();
   else if(state === 'quiz') renderQuiz();
   else if(state === 'summary') renderSummary();
 }
@@ -1479,7 +1562,8 @@ function render(){
 render();
 
 /* ============ ЗАПРЕТ ЗУМА ============
-   touch-action:manipulation в CSS убирает зум по двойному тапу, это — щипок в Safari. */
+   touch-action:manipulation в CSS убирает зум по двойному тапу,
+   а это — щипок двумя пальцами в Safari. */
 ['gesturestart','gesturechange','gestureend'].forEach(ev => {
   document.addEventListener(ev, e => e.preventDefault(), {passive:false});
 });
