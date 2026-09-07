@@ -1,0 +1,1095 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Польский A1 — Спряжение глаголов</title>
+
+<!-- PWA: установка на домашний экран -->
+<link rel="manifest" href="manifest.webmanifest">
+<meta name="theme-color" content="#f4f1ea">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="Polski">
+<link rel="apple-touch-icon" href="icons/icon-180.png">
+<link rel="icon" href="icons/icon-192.png">
+<style>
+  :root{
+    --bg1:#f4f1ea;
+    --bg2:#eef2f0;
+    --card:#ffffff;
+    --ink:#26241f;
+    --muted:#6b6558;
+    --accent:#b3452c;
+    --accent2:#2c6b52;
+    --line:#e4ddd0;
+    --green-bg:#e5f4ea;
+    --green-line:#3f9a5f;
+    --green-ink:#1e6b3c;
+    --red-bg:#fbe9e6;
+    --red-line:#c0492f;
+    --red-ink:#96331e;
+    --amber-bg:#fff3e0;
+    --amber-ink:#8a5a12;
+    --amber-line:#e0a94a;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    font-family:'Georgia','Iowan Old Style',ui-serif,serif;
+    background:linear-gradient(160deg,var(--bg1),var(--bg2));
+    color:var(--ink);
+    min-height:100vh;
+    padding:calc(24px + env(safe-area-inset-top)) calc(14px + env(safe-area-inset-right))
+            calc(50px + env(safe-area-inset-bottom)) calc(14px + env(safe-area-inset-left));
+    -webkit-text-size-adjust:100%;
+    -webkit-tap-highlight-color:transparent;
+    overscroll-behavior-y:none;
+  }
+  .wrap{max-width:820px;margin:0 auto;}
+  header{text-align:center;margin-bottom:16px;}
+  header h1{font-size:1.6rem;margin:0 0 6px;letter-spacing:.3px;}
+  header p{margin:0;color:var(--muted);font-family:ui-sans-serif,system-ui,sans-serif;font-size:.9rem;}
+  .badge{
+    display:inline-block;background:var(--accent);color:#fff;
+    font-family:ui-sans-serif,system-ui,sans-serif;font-size:.72rem;
+    letter-spacing:.08em;text-transform:uppercase;padding:3px 10px;
+    border-radius:20px;margin-bottom:8px;
+  }
+
+  /* ---------- start screen ---------- */
+  .start-card{
+    background:var(--card);
+    border:1px solid var(--line);
+    border-radius:18px;
+    padding:28px 24px;
+    text-align:center;
+    box-shadow:0 1px 3px rgba(0,0,0,.04);
+  }
+  .start-card h2{
+    margin:0 0 6px;
+    font-size:1.25rem;
+  }
+  .start-card .sub{
+    font-family:ui-sans-serif,system-ui,sans-serif;
+    color:var(--muted);
+    font-size:.88rem;
+    margin-bottom:22px;
+  }
+  .stepper{
+    display:flex;align-items:center;justify-content:center;gap:18px;
+    margin-bottom:8px;
+  }
+  .stepper button{
+    width:44px;height:44px;border-radius:50%;
+    background:var(--bg2);border:1px solid var(--line);
+    font-size:1.3rem;font-weight:700;color:var(--accent2);
+    display:flex;align-items:center;justify-content:center;
+    font-family:ui-sans-serif,system-ui,sans-serif;
+  }
+  .stepper button:hover{background:var(--line);}
+  .stepper-value{
+    min-width:90px;
+    font-size:2.1rem;
+    font-weight:700;
+    font-family:'Georgia',serif;
+    color:var(--ink);
+  }
+  .stepper-caption{
+    font-family:ui-sans-serif,system-ui,sans-serif;
+    font-size:.8rem;color:var(--muted);margin-bottom:22px;
+  }
+  .quick-chips{
+    display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-bottom:24px;
+  }
+  .chip{
+    font-family:ui-sans-serif,system-ui,sans-serif;
+    font-size:.82rem;font-weight:600;
+    padding:7px 14px;border-radius:20px;
+    background:var(--bg2);border:1px solid var(--line);color:var(--ink);
+    cursor:pointer;
+  }
+  .chip.active{
+    background:var(--accent2);border-color:var(--accent2);color:#fff;
+  }
+  .btn-start{
+    font-family:ui-sans-serif,system-ui,sans-serif;
+    font-size:1rem;font-weight:700;
+    padding:14px 28px;border-radius:12px;border:none;
+    background:var(--accent2);color:#fff;cursor:pointer;width:100%;
+  }
+  .btn-start:active{transform:scale(.98);}
+
+  /* ---------- quiz screen ---------- */
+  .toolbar{
+    position:sticky;top:0;z-index:5;
+    background:rgba(244,241,234,.94);
+    backdrop-filter:blur(6px);
+    padding:10px 0 12px;
+    display:flex;gap:12px;align-items:center;justify-content:space-between;
+    font-family:ui-sans-serif,system-ui,sans-serif;
+  }
+  .test-label{font-size:.9rem;font-weight:700;color:var(--accent2);white-space:nowrap;}
+  .score{font-size:.85rem;color:var(--muted);white-space:nowrap;}
+
+  .grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:10px 14px;
+    margin-top:10px;
+  }
+  @media (max-width:600px){
+    .grid{grid-template-columns:1fr;}
+  }
+
+  .card{
+    background:var(--card);
+    border:1px solid var(--line);
+    border-radius:14px;
+    padding:14px 16px;
+    box-shadow:0 1px 2px rgba(0,0,0,.03);
+    transition:border-color .2s, background .2s;
+  }
+  .card.correct{background:var(--green-bg);border-color:var(--green-line);}
+  .card.wrong{background:var(--red-bg);border-color:var(--red-line);}
+  .q-meta{
+    display:flex;justify-content:space-between;align-items:baseline;
+    font-family:ui-sans-serif,system-ui,sans-serif;font-size:.7rem;color:var(--muted);
+    margin-bottom:5px;text-transform:uppercase;letter-spacing:.05em;
+  }
+  .q-sentence{font-size:1.02rem;line-height:1.6;}
+  .verb-hint{color:var(--accent);font-style:italic;font-size:.9rem;}
+  input.blank{
+    font-family:'Georgia',serif;font-size:1rem;
+    border:none;border-bottom:2px solid var(--line);
+    background:transparent;padding:2px 4px;width:120px;text-align:center;
+    color:var(--ink);outline:none;transition:border-color .15s;
+  }
+  input.blank:focus{border-bottom-color:var(--accent2);}
+  .card.correct input.blank{border-bottom-color:var(--green-line);color:var(--green-ink);font-weight:600;}
+  .card.wrong input.blank{border-bottom-color:var(--red-line);color:var(--red-ink);text-decoration:line-through;}
+  .feedback{
+    margin-top:7px;font-family:ui-sans-serif,system-ui,sans-serif;font-size:.8rem;display:none;
+    line-height:1.5;
+  }
+  .card.wrong .feedback{display:block;color:var(--red-ink);}
+  .feedback b{font-weight:700;}
+  .icon{display:inline-block;width:14px;text-align:center;margin-right:3px;}
+  .conj-link{
+    color:var(--accent2);
+    font-weight:700;
+    text-decoration:underline dotted;
+    cursor:pointer;
+    border:none;
+    background:none;
+    padding:0;
+    font:inherit;
+  }
+  .conj-link:hover{color:var(--accent);}
+
+  .actions{
+    display:flex;gap:10px;padding:16px 0 4px;
+  }
+  button{
+    font-family:ui-sans-serif,system-ui,sans-serif;font-size:.95rem;font-weight:600;
+    padding:12px 18px;border-radius:10px;border:none;cursor:pointer;
+    transition:transform .1s, opacity .15s;
+  }
+  button:active{transform:scale(.97);}
+  button:disabled{opacity:.4;cursor:not-allowed;}
+  .btn-primary{background:var(--accent2);color:#fff;flex:1;}
+  .btn-next{background:var(--accent);color:#fff;flex:1;display:none;}
+  .btn-secondary{background:transparent;color:var(--ink);border:1px solid var(--line);}
+
+  .result-banner{
+    text-align:center;font-family:ui-sans-serif,system-ui,sans-serif;
+    padding:14px;border-radius:12px;margin-top:14px;display:none;font-size:.95rem;
+  }
+  .dots{
+    display:flex;justify-content:center;gap:6px;margin:14px 0 4px;
+    font-family:ui-sans-serif,system-ui,sans-serif;
+  }
+  .dot{
+    width:9px;height:9px;border-radius:50%;background:var(--line);
+    transition:background .2s;
+  }
+  .dot.active{background:var(--accent2);}
+  .dot.done{background:var(--accent);}
+  footer{
+    text-align:center;font-family:ui-sans-serif,system-ui,sans-serif;
+    color:var(--muted);font-size:.76rem;margin-top:18px;
+  }
+
+  /* ---------- summary screen ---------- */
+  .summary-card{
+    background:var(--card);
+    border:1px solid var(--line);
+    border-radius:18px;
+    padding:26px 24px;
+    box-shadow:0 1px 3px rgba(0,0,0,.04);
+  }
+  .summary-score{
+    text-align:center;
+    margin-bottom:8px;
+  }
+  .radial-wrap{
+    position:relative;
+    width:168px;height:168px;
+    margin:0 auto 6px;
+  }
+  .radial-wrap svg{
+    position:absolute;top:0;left:0;
+    transform:rotate(-90deg);
+  }
+  .radial-track{fill:none;stroke:var(--line);stroke-width:14;}
+  .radial-fill{
+    fill:none;stroke-width:14;stroke-linecap:round;
+    transition:stroke-dashoffset 1.15s cubic-bezier(.4,0,.2,1);
+  }
+  .radial-fill.great{stroke:var(--green-line);}
+  .radial-fill.ok{stroke:var(--amber-line);}
+  .radial-fill.low{stroke:var(--red-line);}
+  .radial-center{
+    position:absolute;inset:0;
+    display:flex;flex-direction:column;align-items:center;justify-content:center;
+  }
+  .radial-center .big-pct{
+    font-size:2.3rem;font-weight:700;font-family:'Georgia',serif;line-height:1;
+  }
+  .radial-center .big-pct.great{color:var(--green-ink);}
+  .radial-center .big-pct.ok{color:var(--amber-ink);}
+  .radial-center .big-pct.low{color:var(--red-ink);}
+  .summary-score .pct-caption{
+    font-family:ui-sans-serif,system-ui,sans-serif;
+    font-size:.85rem;color:var(--muted);margin-top:6px;
+  }
+    display:flex;justify-content:space-between;
+    font-family:ui-sans-serif,system-ui,sans-serif;font-size:.82rem;color:var(--muted);
+    margin-bottom:20px;
+  }
+  .summary-legend b{color:var(--ink);}
+  .summary-section-title{
+    font-family:ui-sans-serif,system-ui,sans-serif;
+    font-size:.75rem;text-transform:uppercase;letter-spacing:.06em;
+    color:var(--muted);margin:22px 0 10px;
+  }
+  .breakdown-row{
+    display:flex;align-items:center;gap:10px;
+    font-family:ui-sans-serif,system-ui,sans-serif;font-size:.88rem;
+    padding:7px 0;border-bottom:1px solid var(--line);
+  }
+  .breakdown-row:last-child{border-bottom:none;}
+  .breakdown-label{flex:1;color:var(--ink);}
+  .breakdown-track{
+    flex:1.4;height:8px;background:var(--bg2);border-radius:6px;overflow:hidden;
+  }
+  .breakdown-fill{height:100%;background:var(--red-line);}
+  .breakdown-count{
+    min-width:26px;text-align:right;font-weight:700;color:var(--red-ink);
+  }
+  .advice-list{
+    font-family:ui-sans-serif,system-ui,sans-serif;font-size:.9rem;
+    line-height:1.6;padding-left:0;list-style:none;margin:0;
+  }
+  .advice-list li{
+    display:flex;gap:8px;padding:8px 10px;margin-bottom:6px;
+    background:var(--amber-bg);border:1px solid var(--amber-line);
+    border-radius:10px;color:#5a4212;
+  }
+  .advice-list li.good{
+    background:var(--green-bg);border-color:var(--green-line);color:var(--green-ink);
+  }
+  .advice-list li .a-ico{flex-shrink:0;}
+
+  /* ---------- modal ---------- */
+  .modal-backdrop{
+    position:fixed;inset:0;background:rgba(38,36,31,.45);
+    display:none;align-items:center;justify-content:center;
+    z-index:50;padding:20px;
+  }
+  .modal-backdrop.open{display:flex;}
+  .modal-box{
+    background:var(--card);
+    border-radius:16px;
+    padding:20px 22px 18px;
+    max-width:380px;
+    width:100%;
+    box-shadow:0 20px 50px rgba(0,0,0,.25);
+    font-family:ui-sans-serif,system-ui,sans-serif;
+    position:relative;
+  }
+  .modal-box h3{
+    margin:0 0 4px;
+    font-family:'Georgia',serif;
+    font-size:1.15rem;
+    color:var(--ink);
+  }
+  .modal-tag{
+    font-family:ui-sans-serif,system-ui,sans-serif;
+    font-size:.72rem;
+    font-weight:600;
+    color:var(--accent2);
+    background:var(--green-bg);
+    padding:2px 8px;
+    border-radius:20px;
+    vertical-align:middle;
+    white-space:nowrap;
+  }
+  .modal-box .modal-sub{
+    font-size:.78rem;color:var(--muted);margin-bottom:12px;
+  }
+  .modal-close{
+    position:absolute;top:12px;right:14px;
+    background:none;border:none;font-size:1.1rem;color:var(--muted);
+    cursor:pointer;padding:2px 6px;
+  }
+  .conj-table{
+    width:100%;border-collapse:collapse;font-size:.92rem;
+  }
+  .conj-table td{
+    padding:6px 4px;border-bottom:1px solid var(--line);
+  }
+  .conj-table td:first-child{
+    color:var(--muted);font-size:.82rem;white-space:nowrap;
+    font-family:'Georgia',serif;
+  }
+  .conj-table td.end-col{
+    text-align:center;color:var(--accent);font-size:.82rem;white-space:nowrap;
+  }
+  .conj-table td:last-child{
+    text-align:right;font-family:'Georgia',serif;font-weight:600;
+  }
+  .conj-table tr:last-child td{border-bottom:none;}
+
+  .confirm-text{
+    font-size:.92rem;line-height:1.5;margin-bottom:18px;color:var(--ink);
+  }
+  .confirm-actions{
+    display:flex;gap:10px;
+  }
+  .confirm-actions button{flex:1;}
+  .btn-warn{background:var(--accent);color:#fff;}
+  .btn-ghost{background:var(--bg2);color:var(--ink);border:1px solid var(--line);}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <span class="badge">Уровень A1</span>
+    <h1>Спряжение глаголов — настоящее время</h1>
+    <p id="headerSub">По 10 предложений в каждом тесте. У ошибок слово «спряжение»/«Исключение» кликабельно — открывает таблицу всех форм.</p>
+  </header>
+
+  <div id="app"></div>
+
+  <footer id="footerNote">Глаголы: być, mieć, mówić, czytać, pisać, robić, iść, jechać, jeść, pić, chcieć, móc, wiedzieć, znać, mieszkać, pracować, uczyć się, lubić, grać, słuchać, kupować, rozumieć, spać, widzieć, pomagać, jeździć, tańczyć, gotować, pływać.</footer>
+</div>
+
+<div class="modal-backdrop" id="modalBackdrop">
+  <div class="modal-box" id="modalBox"></div>
+</div>
+
+<script>
+const PERSON_LABEL = {
+  "ja":"1 лицо ед.ч. (ja)",
+  "ty":"2 лицо ед.ч. (ty)",
+  "on/ona/ono":"3 лицо ед.ч. (on/ona/ono)",
+  "my":"1 лицо мн.ч. (my)",
+  "wy":"2 лицо мн.ч. (wy)",
+  "oni/one":"3 лицо мн.ч. (oni/one)"
+};
+const PERSON_ORDER = ["ja","ty","on/ona/ono","my","wy","oni/one"];
+
+const PARADIGMS = {
+  "być":       ["jestem","jesteś","jest","jesteśmy","jesteście","są"],
+  "mieć":      ["mam","masz","ma","mamy","macie","mają"],
+  "mówić":     ["mówię","mówisz","mówi","mówimy","mówicie","mówią"],
+  "czytać":    ["czytam","czytasz","czyta","czytamy","czytacie","czytają"],
+  "pisać":     ["piszę","piszesz","pisze","piszemy","piszecie","piszą"],
+  "robić":     ["robię","robisz","robi","robimy","robicie","robią"],
+  "iść":       ["idę","idziesz","idzie","idziemy","idziecie","idą"],
+  "jechać":    ["jadę","jedziesz","jedzie","jedziemy","jedziecie","jadą"],
+  "jeść":      ["jem","jesz","je","jemy","jecie","jedzą"],
+  "pić":       ["piję","pijesz","pije","pijemy","pijecie","piją"],
+  "chcieć":    ["chcę","chcesz","chce","chcemy","chcecie","chcą"],
+  "móc":       ["mogę","możesz","może","możemy","możecie","mogą"],
+  "wiedzieć":  ["wiem","wiesz","wie","wiemy","wiecie","wiedzą"],
+  "znać":      ["znam","znasz","zna","znamy","znacie","znają"],
+  "mieszkać":  ["mieszkam","mieszkasz","mieszka","mieszkamy","mieszkacie","mieszkają"],
+  "pracować":  ["pracuję","pracujesz","pracuje","pracujemy","pracujecie","pracują"],
+  "uczyć się": ["uczę się","uczysz się","uczy się","uczymy się","uczycie się","uczą się"],
+  "lubić":     ["lubię","lubisz","lubi","lubimy","lubicie","lubią"],
+  "grać":      ["gram","grasz","gra","gramy","gracie","grają"],
+  "słuchać":   ["słucham","słuchasz","słucha","słuchamy","słuchacie","słuchają"],
+  "kupować":   ["kupuję","kupujesz","kupuje","kupujemy","kupujecie","kupują"],
+  "rozumieć":  ["rozumiem","rozumiesz","rozumie","rozumiemy","rozumiecie","rozumieją"],
+  "spać":      ["śpię","śpisz","śpi","śpimy","śpicie","śpią"],
+  "widzieć":   ["widzę","widzisz","widzi","widzimy","widzicie","widzą"],
+  "pomagać":   ["pomagam","pomagasz","pomaga","pomagamy","pomagacie","pomagają"],
+  "jeździć":   ["jeżdżę","jeździsz","jeździ","jeździmy","jeździcie","jeżdżą"],
+  "tańczyć":   ["tańczę","tańczysz","tańczy","tańczymy","tańczycie","tańczą"],
+  "gotować":   ["gotuję","gotujesz","gotuje","gotujemy","gotujecie","gotują"],
+  "pływać":    ["pływam","pływasz","pływa","pływamy","pływacie","pływają"]
+};
+
+const EXCEPTIONS = new Set(["być","mieć","iść","jechać","jeść","chcieć","móc","wiedzieć"]);
+
+const CONJ_GROUPS = {
+  A: {
+    label: "I спряжение (тип czytać, -am/-asz)",
+    shortLabel: "I спряжение",
+    infEnding: "-ać",
+    baseVerb: "czytać",
+    verbs: ["czytać","mieszkać","słuchać","znać","grać","pomagać","pływać"],
+    endings: {"ja":"-am","ty":"-asz","on/ona/ono":"-a","my":"-amy","wy":"-acie","oni/one":"-ają"}
+  },
+  B: {
+    label: "спряжение на -ować (тип pracować, -uję/-ujesz)",
+    shortLabel: "спряжение на -ować",
+    infEnding: "-ować",
+    baseVerb: "pracować",
+    verbs: ["pracować","kupować","gotować"],
+    endings: {"ja":"-uję","ty":"-ujesz","on/ona/ono":"-uje","my":"-ujemy","wy":"-ujecie","oni/one":"-ują"}
+  },
+  C: {
+    label: "II спряжение (тип pisać, -ę/-esz)",
+    shortLabel: "II спряжение",
+    infEnding: "-ać / -ić",
+    baseVerb: "pisać",
+    verbs: ["pisać","pić"],
+    endings: {"ja":"-ę","ty":"-esz","on/ona/ono":"-e","my":"-emy","wy":"-ecie","oni/one":"-ą"}
+  },
+  D: {
+    label: "III спряжение (тип mówić, -ę/-isz)",
+    shortLabel: "III спряжение",
+    infEnding: "-ić / -yć",
+    baseVerb: "mówić",
+    verbs: ["mówić","robić","lubić","widzieć","tańczyć","uczyć się","jeździć","spać"],
+    endings: {"ja":"-ę","ty":"-isz/-ysz","on/ona/ono":"-i/-y","my":"-imy/-ymy","wy":"-icie/-ycie","oni/one":"-ą"}
+  },
+  E: {
+    label: "особый тип на -mieć (тип rozumieć, -em/-esz)",
+    shortLabel: "тип на -mieć",
+    infEnding: "-mieć",
+    baseVerb: "rozumieć",
+    verbs: ["rozumieć"],
+    endings: {"ja":"-em","ty":"-esz","on/ona/ono":"-e","my":"-emy","wy":"-ecie","oni/one":"-eją"}
+  }
+};
+const EXC_BASE_VERB = "być";
+
+function getConjGroup(verb){
+  for(const key in CONJ_GROUPS){
+    if(CONJ_GROUPS[key].verbs.includes(verb)) return {key, ...CONJ_GROUPS[key]};
+  }
+  return null;
+}
+
+const DATA = [
+  {v:"być", person:"ja", sentence:"Ja ___ studentem z Ukrainy.", answer:"jestem"},
+  {v:"być", person:"ty", sentence:"Czy ty ___ lekarzem?", answer:"jesteś"},
+  {v:"być", person:"on/ona/ono", sentence:"Ona ___ bardzo miła.", answer:"jest"},
+  {v:"być", person:"my", sentence:"My ___ w domu.", answer:"jesteśmy"},
+  {v:"być", person:"wy", sentence:"Wy ___ moimi przyjaciółmi.", answer:"jesteście"},
+  {v:"być", person:"oni/one", sentence:"Oni ___ w pracy.", answer:"są"},
+
+  {v:"mieć", person:"ja", sentence:"Ja ___ psa i kota.", answer:"mam"},
+  {v:"mieć", person:"ty", sentence:"Czy ty ___ czas jutro?", answer:"masz"},
+  {v:"mieć", person:"on/ona/ono", sentence:"On ___ nowy telefon.", answer:"ma"},
+  {v:"mieć", person:"my", sentence:"My ___ dużo pracy.", answer:"mamy"},
+  {v:"mieć", person:"wy", sentence:"Wy ___ piękny dom.", answer:"macie"},
+  {v:"mieć", person:"oni/one", sentence:"One ___ dwoje dzieci.", answer:"mają"},
+
+  {v:"mówić", person:"ja", sentence:"Ja ___ trochę po polsku.", answer:"mówię"},
+  {v:"mówić", person:"ty", sentence:"Ty dobrze ___ po angielsku.", answer:"mówisz"},
+  {v:"mówić", person:"on/ona/ono", sentence:"Ona ___ po niemiecku.", answer:"mówi"},
+  {v:"mówić", person:"wy", sentence:"Wy zawsze ___ prawdę.", answer:"mówicie"},
+  {v:"mówić", person:"oni/one", sentence:"Oni ___ po rosyjsku.", answer:"mówią"},
+
+  {v:"czytać", person:"ja", sentence:"Ja ___ książkę wieczorem.", answer:"czytam"},
+  {v:"czytać", person:"ty", sentence:"Co ty ___ teraz?", answer:"czytasz"},
+  {v:"czytać", person:"on/ona/ono", sentence:"On ___ gazetę codziennie.", answer:"czyta"},
+  {v:"czytać", person:"my", sentence:"My ___ razem tę powieść.", answer:"czytamy"},
+  {v:"czytać", person:"oni/one", sentence:"Oni ___ dużo książek.", answer:"czytają"},
+
+  {v:"pisać", person:"ja", sentence:"Ja ___ list do mamy.", answer:"piszę"},
+  {v:"pisać", person:"ty", sentence:"Ty ___ bardzo ładnie.", answer:"piszesz"},
+  {v:"pisać", person:"on/ona/ono", sentence:"Ona ___ e-mail do szefa.", answer:"pisze"},
+  {v:"pisać", person:"wy", sentence:"Wy ___ zadanie domowe.", answer:"piszecie"},
+  {v:"pisać", person:"oni/one", sentence:"Oni ___ test z gramatyki.", answer:"piszą"},
+
+  {v:"robić", person:"ja", sentence:"Co ja dzisiaj ___?", answer:"robię"},
+  {v:"robić", person:"ty", sentence:"Co ty ___ w weekend?", answer:"robisz"},
+  {v:"robić", person:"on/ona/ono", sentence:"On ___ obiad.", answer:"robi"},
+  {v:"robić", person:"my", sentence:"My ___ zakupy w sobotę.", answer:"robimy"},
+  {v:"robić", person:"oni/one", sentence:"Oni ___ dużo błędów.", answer:"robią"},
+
+  {v:"iść", person:"ja", sentence:"Ja teraz ___ do sklepu.", answer:"idę"},
+  {v:"iść", person:"ty", sentence:"Dokąd ty ___?", answer:"idziesz"},
+  {v:"iść", person:"on/ona/ono", sentence:"On ___ do pracy pieszo.", answer:"idzie"},
+  {v:"iść", person:"my", sentence:"My ___ na spacer.", answer:"idziemy"},
+  {v:"iść", person:"oni/one", sentence:"Oni ___ do kina.", answer:"idą"},
+
+  {v:"jechać", person:"ja", sentence:"Ja ___ do Warszawy pociągiem.", answer:"jadę"},
+  {v:"jechać", person:"ty", sentence:"Ty ___ samochodem czy autobusem?", answer:"jedziesz"},
+  {v:"jechać", person:"on/ona/ono", sentence:"Ona ___ na wakacje w lipcu.", answer:"jedzie"},
+  {v:"jechać", person:"wy", sentence:"Wy ___ razem na koncert?", answer:"jedziecie"},
+  {v:"jechać", person:"oni/one", sentence:"Oni ___ do Krakowa.", answer:"jadą"},
+
+  {v:"jeść", person:"ja", sentence:"Ja ___ śniadanie o ósmej.", answer:"jem"},
+  {v:"jeść", person:"ty", sentence:"Co ty ___ na obiad?", answer:"jesz"},
+  {v:"jeść", person:"on/ona/ono", sentence:"On ___ mało mięsa.", answer:"je"},
+  {v:"jeść", person:"my", sentence:"My ___ kolację razem.", answer:"jemy"},
+  {v:"jeść", person:"oni/one", sentence:"Oni ___ tylko warzywa.", answer:"jedzą"},
+
+  {v:"pić", person:"ja", sentence:"Ja ___ herbatę rano.", answer:"piję"},
+  {v:"pić", person:"ty", sentence:"Ty ___ za dużo kawy.", answer:"pijesz"},
+  {v:"pić", person:"on/ona/ono", sentence:"Ona ___ wodę mineralną.", answer:"pije"},
+  {v:"pić", person:"oni/one", sentence:"Oni ___ sok pomarańczowy.", answer:"piją"},
+
+  {v:"chcieć", person:"ja", sentence:"Ja ___ nauczyć się polskiego.", answer:"chcę"},
+  {v:"chcieć", person:"ty", sentence:"Czy ty ___ iść do kina?", answer:"chcesz"},
+  {v:"chcieć", person:"on/ona/ono", sentence:"On ___ kupić nowy rower.", answer:"chce"},
+  {v:"chcieć", person:"my", sentence:"My ___ zwiedzić Kraków.", answer:"chcemy"},
+  {v:"chcieć", person:"oni/one", sentence:"Oni ___ odpocząć.", answer:"chcą"},
+
+  {v:"móc", person:"ja", sentence:"Ja nie ___ przyjść jutro.", answer:"mogę"},
+  {v:"móc", person:"ty", sentence:"Czy ty ___ mi pomóc?", answer:"możesz"},
+  {v:"móc", person:"on/ona/ono", sentence:"Ona nie ___ dzisiaj pracować.", answer:"może"},
+  {v:"móc", person:"wy", sentence:"Wy ___ zostać na noc.", answer:"możecie"},
+  {v:"móc", person:"oni/one", sentence:"Oni ___ przyjechać w piątek.", answer:"mogą"},
+
+  {v:"wiedzieć", person:"ja", sentence:"Ja nie ___, gdzie on jest.", answer:"wiem"},
+  {v:"wiedzieć", person:"ty", sentence:"Czy ty ___, która godzina?", answer:"wiesz"},
+  {v:"wiedzieć", person:"on/ona/ono", sentence:"On ___ dużo o historii.", answer:"wie"},
+  {v:"wiedzieć", person:"oni/one", sentence:"Oni ___, co się stało.", answer:"wiedzą"},
+
+  {v:"znać", person:"ja", sentence:"Ja ___ tę piosenkę.", answer:"znam"},
+  {v:"znać", person:"ty", sentence:"Czy ty ___ tego pana?", answer:"znasz"},
+  {v:"znać", person:"on/ona/ono", sentence:"Ona ___ dobrze to miasto.", answer:"zna"},
+  {v:"znać", person:"my", sentence:"My ___ się od dziecka.", answer:"znamy"},
+
+  {v:"mieszkać", person:"ja", sentence:"Ja ___ w Warszawie.", answer:"mieszkam"},
+  {v:"mieszkać", person:"ty", sentence:"Gdzie ty ___?", answer:"mieszkasz"},
+  {v:"mieszkać", person:"on/ona/ono", sentence:"On ___ na wsi.", answer:"mieszka"},
+  {v:"mieszkać", person:"my", sentence:"My ___ razem od roku.", answer:"mieszkamy"},
+  {v:"mieszkać", person:"oni/one", sentence:"Oni ___ w centrum miasta.", answer:"mieszkają"},
+
+  {v:"pracować", person:"ja", sentence:"Ja ___ w banku.", answer:"pracuję"},
+  {v:"pracować", person:"ty", sentence:"Gdzie ty ___?", answer:"pracujesz"},
+  {v:"pracować", person:"on/ona/ono", sentence:"Ona ___ jako nauczycielka.", answer:"pracuje"},
+  {v:"pracować", person:"wy", sentence:"Wy ___ razem w tej firmie.", answer:"pracujecie"},
+  {v:"pracować", person:"oni/one", sentence:"Oni ___ zbyt dużo.", answer:"pracują"},
+
+  {v:"uczyć się", person:"ja", sentence:"Ja ___ polskiego od miesiąca.", answer:"uczę się"},
+  {v:"uczyć się", person:"ty", sentence:"Ty ___ szybko.", answer:"uczysz się"},
+  {v:"uczyć się", person:"on/ona/ono", sentence:"On ___ do egzaminu.", answer:"uczy się"},
+  {v:"uczyć się", person:"my", sentence:"My ___ razem w bibliotece.", answer:"uczymy się"},
+
+  {v:"lubić", person:"ja", sentence:"Ja bardzo ___ czekoladę.", answer:"lubię"},
+  {v:"lubić", person:"ty", sentence:"Czy ty ___ sport?", answer:"lubisz"},
+  {v:"lubić", person:"on/ona/ono", sentence:"Ona ___ czytać książki.", answer:"lubi"},
+  {v:"lubić", person:"oni/one", sentence:"Oni ___ podróżować.", answer:"lubią"},
+
+  {v:"grać", person:"ja", sentence:"Ja ___ na gitarze.", answer:"gram"},
+  {v:"grać", person:"ty", sentence:"Ty ___ w piłkę nożną?", answer:"grasz"},
+  {v:"grać", person:"on/ona/ono", sentence:"On ___ w tenisa.", answer:"gra"},
+  {v:"grać", person:"oni/one", sentence:"Oni ___ w karty.", answer:"grają"},
+
+  {v:"słuchać", person:"ja", sentence:"Ja ___ muzyki w słuchawkach.", answer:"słucham"},
+  {v:"słuchać", person:"ty", sentence:"Ty ___ radia rano?", answer:"słuchasz"},
+  {v:"słuchać", person:"on/ona/ono", sentence:"Ona ___ podcastów.", answer:"słucha"},
+
+  {v:"kupować", person:"ja", sentence:"Ja ___ owoce na targu.", answer:"kupuję"},
+  {v:"kupować", person:"ty", sentence:"Co ty zwykle ___?", answer:"kupujesz"},
+  {v:"kupować", person:"on/ona/ono", sentence:"On ___ chleb codziennie.", answer:"kupuje"},
+  {v:"kupować", person:"oni/one", sentence:"Oni ___ nowe mieszkanie.", answer:"kupują"},
+
+  {v:"rozumieć", person:"ja", sentence:"Ja nie ___ tego słowa.", answer:"rozumiem"},
+  {v:"rozumieć", person:"ty", sentence:"Czy ty ___ po polsku?", answer:"rozumiesz"},
+  {v:"rozumieć", person:"on/ona/ono", sentence:"On ___ wszystko.", answer:"rozumie"},
+
+  {v:"spać", person:"ja", sentence:"Ja ___ osiem godzin.", answer:"śpię"},
+  {v:"spać", person:"ty", sentence:"Ty jeszcze ___?", answer:"śpisz"},
+  {v:"spać", person:"on/ona/ono", sentence:"Dziecko ___ spokojnie.", answer:"śpi"},
+
+  {v:"widzieć", person:"ja", sentence:"Ja ___ go rzadko.", answer:"widzę"},
+  {v:"widzieć", person:"ty", sentence:"Czy ty ___ tamten dom?", answer:"widzisz"},
+  {v:"widzieć", person:"on/ona/ono", sentence:"Ona ___ swoją siostrę.", answer:"widzi"},
+
+  {v:"pomagać", person:"ja", sentence:"Ja ___ mamie w kuchni.", answer:"pomagam"},
+  {v:"pomagać", person:"ty", sentence:"Czy ty ___ rodzicom?", answer:"pomagasz"},
+  {v:"pomagać", person:"on/ona/ono", sentence:"On ___ kolegom w pracy.", answer:"pomaga"},
+
+  {v:"jeździć", person:"ja", sentence:"Ja ___ na rowerze co tydzień.", answer:"jeżdżę"},
+  {v:"jeździć", person:"ty", sentence:"Czy ty ___ na nartach?", answer:"jeździsz"},
+  {v:"jeździć", person:"oni/one", sentence:"Oni ___ do pracy metrem.", answer:"jeżdżą"},
+
+  {v:"tańczyć", person:"ja", sentence:"Ja ___ na weselu.", answer:"tańczę"},
+  {v:"tańczyć", person:"ty", sentence:"Ty ładnie ___.", answer:"tańczysz"},
+  {v:"tańczyć", person:"oni/one", sentence:"Oni ___ walca.", answer:"tańczą"},
+
+  {v:"gotować", person:"ja", sentence:"Ja ___ obiad co niedzielę.", answer:"gotuję"},
+  {v:"gotować", person:"ty", sentence:"Ty dobrze ___?", answer:"gotujesz"},
+  {v:"gotować", person:"on/ona/ono", sentence:"On ___ pyszną zupę.", answer:"gotuje"},
+
+  {v:"pływać", person:"ja", sentence:"Ja ___ na basenie.", answer:"pływam"},
+  {v:"pływać", person:"ty", sentence:"Czy ty ___ dobrze?", answer:"pływasz"},
+  {v:"pływać", person:"oni/one", sentence:"Oni ___ w jeziorze.", answer:"pływają"}
+];
+
+function shuffle(arr){
+  for(let i=arr.length-1;i>0;i--){
+    const j=Math.floor(Math.random()*(i+1));
+    [arr[i],arr[j]]=[arr[j],arr[i]];
+  }
+  return arr;
+}
+
+const BATCH_SIZE = 10;
+function buildBatches(){
+  const all = shuffle(DATA.slice());
+  const batches = [];
+  for(let i=0;i<all.length;i+=BATCH_SIZE){
+    batches.push(all.slice(i, i+BATCH_SIZE));
+  }
+  return batches;
+}
+const MAX_TESTS = Math.floor(DATA.length / BATCH_SIZE); // 9
+
+// ---------------- app state ----------------
+let state = 'start'; // 'start' | 'quiz' | 'summary'
+let selectedCount = 3;
+let sessionBatches = [];
+let currentIndex = 0;
+let checked = false;
+
+let stats = {
+  correct:0, wrong:0, total:0,
+  groupWrong:{A:0,B:0,C:0,D:0,E:0},
+  groupTotal:{A:0,B:0,C:0,D:0,E:0},
+  excWrong:0, excTotal:0
+};
+
+const app = document.getElementById('app');
+const headerSub = document.getElementById('headerSub');
+const footerNote = document.getElementById('footerNote');
+const modalBackdrop = document.getElementById('modalBackdrop');
+const modalBox = document.getElementById('modalBox');
+
+function normalize(s){
+  return (s || '').trim().toLowerCase().replace(/\s+/g,' ');
+}
+
+function resetStats(){
+  stats = {
+    correct:0, wrong:0, total:0,
+    groupWrong:{A:0,B:0,C:0,D:0,E:0},
+    groupTotal:{A:0,B:0,C:0,D:0,E:0},
+    excWrong:0, excTotal:0
+  };
+}
+
+/* ============ START SCREEN ============ */
+function renderStart(){
+  headerSub.textContent = 'Выбери, сколько тестов по 10 предложений хочешь пройти за раз.';
+  footerNote.style.display = 'block';
+
+  app.innerHTML = `
+    <div class="start-card">
+      <h2>Сколько тестов пройти?</h2>
+      <div class="sub">В каждом тесте — 10 предложений на разные глаголы и лица</div>
+      <div class="stepper">
+        <button type="button" id="stepDown">−</button>
+        <div class="stepper-value" id="stepValue">${selectedCount}</div>
+        <button type="button" id="stepUp">+</button>
+      </div>
+      <div class="stepper-caption">тестов подряд (максимум ${MAX_TESTS} из ${MAX_TESTS*BATCH_SIZE} слов)</div>
+      <div class="quick-chips" id="quickChips">
+        ${[1,3,5,MAX_TESTS].map(n => `<button type="button" class="chip${n===selectedCount?' active':''}" data-n="${n}">${n === MAX_TESTS ? 'Все ('+MAX_TESTS+')' : n}</button>`).join('')}
+      </div>
+      <button type="button" class="btn-start" id="startBtn">Начать</button>
+    </div>
+  `;
+
+  const stepValue = document.getElementById('stepValue');
+  function syncChips(){
+    document.querySelectorAll('#quickChips .chip').forEach(c => {
+      c.classList.toggle('active', Number(c.dataset.n) === selectedCount);
+    });
+    stepValue.textContent = selectedCount;
+  }
+  document.getElementById('stepDown').addEventListener('click', () => {
+    selectedCount = Math.max(1, selectedCount - 1);
+    syncChips();
+  });
+  document.getElementById('stepUp').addEventListener('click', () => {
+    selectedCount = Math.min(MAX_TESTS, selectedCount + 1);
+    syncChips();
+  });
+  document.querySelectorAll('#quickChips .chip').forEach(c => {
+    c.addEventListener('click', () => {
+      selectedCount = Number(c.dataset.n);
+      syncChips();
+    });
+  });
+  document.getElementById('startBtn').addEventListener('click', () => {
+    sessionBatches = buildBatches().slice(0, selectedCount);
+    currentIndex = 0;
+    resetStats();
+    state = 'quiz';
+    render();
+    window.scrollTo({top:0, behavior:'smooth'});
+  });
+}
+
+/* ============ QUIZ SCREEN ============ */
+function renderQuiz(){
+  headerSub.textContent = 'У ошибок слово «спряжение»/«Исключение» кликабельно — открывает таблицу всех форм.';
+  footerNote.style.display = 'block';
+  checked = false;
+
+  const batch = sessionBatches[currentIndex];
+
+  app.innerHTML = `
+    <div class="toolbar">
+      <div class="test-label">Тест ${currentIndex+1} / ${sessionBatches.length}</div>
+      <div class="score" id="scoreLabel">0 / ${batch.length}</div>
+    </div>
+    <div class="grid" id="quiz"></div>
+    <div class="result-banner" id="resultBanner"></div>
+    <div class="actions">
+      <button class="btn-primary" id="checkBtn">Проверить ответы</button>
+      <button class="btn-next" id="nextBtn">Следующий тест →</button>
+      <button class="btn-secondary" id="resetBtn">В начало</button>
+    </div>
+    <div class="dots" id="dots"></div>
+  `;
+
+  const quizEl = document.getElementById('quiz');
+  batch.forEach((q, i) => {
+    const card = document.createElement('div');
+    card.className = 'card';
+    card.dataset.index = i;
+
+    const parts = q.sentence.split('___');
+    const meta = document.createElement('div');
+    meta.className = 'q-meta';
+    meta.innerHTML = `<span>Предложение ${i+1}</span><span class="verb-hint">${q.v}</span>`;
+
+    const sentence = document.createElement('div');
+    sentence.className = 'q-sentence';
+    sentence.innerHTML = `${parts[0]}<input type="text" class="blank" autocomplete="off" autocapitalize="off" spellcheck="false" data-i="${i}">${parts[1] || ''}`;
+
+    const feedback = document.createElement('div');
+    feedback.className = 'feedback';
+    feedback.id = `fb-${i}`;
+
+    card.appendChild(meta);
+    card.appendChild(sentence);
+    card.appendChild(feedback);
+    quizEl.appendChild(card);
+  });
+
+  quizEl.querySelectorAll('input.blank').forEach((inp, idx, arr) => {
+    inp.addEventListener('keydown', e => {
+      if(e.key === 'Enter'){
+        e.preventDefault();
+        if(idx+1 < arr.length){ arr[idx+1].focus(); }
+        else { requestCheck(); }
+      }
+    });
+  });
+  quizEl.addEventListener('input', updateCount);
+  updateCount();
+  renderDots();
+
+  document.getElementById('checkBtn').addEventListener('click', requestCheck);
+  document.getElementById('resetBtn').addEventListener('click', () => {
+    state = 'start';
+    render();
+    window.scrollTo({top:0, behavior:'smooth'});
+  });
+}
+
+function updateCount(){
+  if(checked) return;
+  const inputs = document.querySelectorAll('#quiz input.blank');
+  const scoreLabel = document.getElementById('scoreLabel');
+  let filled = 0;
+  inputs.forEach(inp => { if(inp.value.trim() !== '') filled++; });
+  if(scoreLabel) scoreLabel.textContent = `${filled} / ${inputs.length}`;
+}
+
+function renderDots(){
+  const dotsEl = document.getElementById('dots');
+  if(!dotsEl) return;
+  dotsEl.innerHTML = '';
+  sessionBatches.forEach((_, i) => {
+    const d = document.createElement('div');
+    d.className = 'dot' + (i === currentIndex ? ' active' : '') + (i < currentIndex ? ' done' : '');
+    dotsEl.appendChild(d);
+  });
+}
+
+function requestCheck(){
+  const inputs = document.querySelectorAll('#quiz input.blank');
+  let empty = 0;
+  inputs.forEach(inp => { if(inp.value.trim() === '') empty++; });
+  if(empty > 0){
+    showConfirmModal(empty, inputs.length);
+  } else {
+    checkAnswers();
+  }
+}
+
+function showConfirmModal(empty, total){
+  modalBox.innerHTML = `
+    <button type="button" class="modal-close" id="modalCloseBtn">✕</button>
+    <h3>Не все поля заполнены</h3>
+    <div class="confirm-text">Пусто: <b>${empty}</b> из <b>${total}</b> предложений. Точно проверить сейчас? Пустые поля засчитаются как неправильные.</div>
+    <div class="confirm-actions">
+      <button type="button" class="btn-ghost" id="confirmBack">Вернуться</button>
+      <button type="button" class="btn-warn" id="confirmGo">Всё равно проверить</button>
+    </div>
+  `;
+  modalBackdrop.classList.add('open');
+  document.getElementById('modalCloseBtn').addEventListener('click', closeConjModal);
+  document.getElementById('confirmBack').addEventListener('click', closeConjModal);
+  document.getElementById('confirmGo').addEventListener('click', () => {
+    closeConjModal();
+    checkAnswers();
+  });
+}
+
+function checkAnswers(){
+  const batch = sessionBatches[currentIndex];
+  let correctCount = 0;
+
+  batch.forEach((q, i) => {
+    const card = document.querySelector(`#quiz .card[data-index="${i}"]`);
+    const input = card.querySelector('input.blank');
+    const fb = document.getElementById(`fb-${i}`);
+    const userVal = normalize(input.value);
+    const correctVal = normalize(q.answer);
+    card.classList.remove('correct','wrong');
+    input.disabled = true;
+    fb.innerHTML = '';
+
+    const isExc = EXCEPTIONS.has(q.v);
+    const group = isExc ? null : getConjGroup(q.v);
+
+    stats.total++;
+    if(isExc) stats.excTotal++;
+    if(group) stats.groupTotal[group.key]++;
+
+    if(userVal === correctVal){
+      card.classList.add('correct');
+      correctCount++;
+      stats.correct++;
+    } else {
+      card.classList.add('wrong');
+      stats.wrong++;
+      if(isExc){
+        stats.excWrong++;
+        fb.innerHTML = `<span class="icon">✕</span><button type="button" class="conj-link" data-verb="${q.v}">Исключение</button>. Правильно: <b>${q.answer}</b>.`;
+      } else if(group){
+        stats.groupWrong[group.key]++;
+        const ending = group.endings[q.person];
+        fb.innerHTML = `<span class="icon">✕</span>По <button type="button" class="conj-link" data-verb="${q.v}">спряжению</button> — ${group.label}, ${PERSON_LABEL[q.person]}, окончание <b>${ending}</b> → нужно <b>${q.answer}</b>.`;
+      } else {
+        fb.innerHTML = `<span class="icon">✕</span>Правильно: <b>${q.answer}</b>.`;
+      }
+    }
+  });
+
+  checked = true;
+  document.getElementById('scoreLabel').textContent = `${correctCount} / ${batch.length}`;
+
+  const pct = Math.round(correctCount/batch.length*100);
+  const resultBanner = document.getElementById('resultBanner');
+  resultBanner.style.display = 'block';
+  resultBanner.style.background = pct >= 80 ? 'var(--green-bg)' : pct >= 50 ? 'var(--amber-bg)' : 'var(--red-bg)';
+  resultBanner.style.color = pct >= 80 ? 'var(--green-ink)' : pct >= 50 ? 'var(--amber-ink)' : 'var(--red-ink)';
+  resultBanner.style.border = '1px solid ' + (pct >= 80 ? 'var(--green-line)' : pct >= 50 ? 'var(--amber-line)' : 'var(--red-line)');
+  resultBanner.innerHTML = `Результат теста ${currentIndex+1}: <b>${correctCount} / ${batch.length}</b> (${pct}%)`;
+
+  document.getElementById('checkBtn').style.display = 'none';
+  const nextBtn = document.getElementById('nextBtn');
+  nextBtn.style.display = 'block';
+  const isLast = currentIndex >= sessionBatches.length - 1;
+  nextBtn.textContent = isLast ? 'Посмотреть итоги →' : 'Следующий тест →';
+  nextBtn.addEventListener('click', () => {
+    if(isLast){
+      state = 'summary';
+      render();
+    } else {
+      currentIndex++;
+      render();
+    }
+    window.scrollTo({top:0, behavior:'smooth'});
+  }, {once:true});
+
+  renderDots();
+  document.querySelector('.toolbar').scrollIntoView({behavior:'smooth', block:'start'});
+}
+
+const RADIAL_R = 66;
+const RADIAL_C = 2 * Math.PI * RADIAL_R;
+
+function groupAdviceHtml(key){
+  const g = CONJ_GROUPS[key];
+  const endsStr = PERSON_ORDER.map(p => `${p} ${g.endings[p]}`).join(', ');
+  return `<li><span class="a-ico">📌</span><span>Подтяни <button type="button" class="conj-link" data-verb="${g.baseVerb}">${g.shortLabel}</button> — глаголы с окончанием инфинитива «<b>${g.infEnding}</b>» (например <i>${g.baseVerb}</i>). Личные окончания: ${endsStr}.</span></li>`;
+}
+
+function excAdviceHtml(){
+  return `<li><span class="a-ico">📌</span><span>Учи наизусть <button type="button" class="conj-link" data-verb="${EXC_BASE_VERB}">глаголы-исключения</button>: być, mieć, iść, jechać, jeść, chcieć, móc, wiedzieć — их формы не подчиняются общим правилам.</span></li>`;
+}
+
+/* ============ SUMMARY SCREEN ============ */
+function renderSummary(){
+  headerSub.textContent = 'Итоги сессии.';
+  footerNote.style.display = 'none';
+
+  const pct = stats.total ? Math.round(stats.correct/stats.total*100) : 0;
+  const pctClass = pct >= 80 ? 'great' : pct >= 50 ? 'ok' : 'low';
+
+  // breakdown rows: groups + exceptions, sorted by wrong count desc, only show if wrong>0
+  const rows = [];
+  Object.keys(CONJ_GROUPS).forEach(key => {
+    const w = stats.groupWrong[key];
+    if(w > 0){
+      rows.push({key, label: CONJ_GROUPS[key].shortLabel, wrong: w, total: stats.groupTotal[key]});
+    }
+  });
+  if(stats.excWrong > 0){
+    rows.push({key:'EXC', label: 'Исключения', wrong: stats.excWrong, total: stats.excTotal});
+  }
+  rows.sort((a,b) => b.wrong - a.wrong);
+  const maxWrong = rows.length ? rows[0].wrong : 1;
+
+  const breakdownHtml = rows.length ? rows.map(r => `
+    <div class="breakdown-row">
+      <div class="breakdown-label">${r.label}</div>
+      <div class="breakdown-track"><div class="breakdown-fill" style="width:${Math.round(r.wrong/maxWrong*100)}%"></div></div>
+      <div class="breakdown-count">${r.wrong}</div>
+    </div>
+  `).join('') : `<div class="breakdown-row"><div class="breakdown-label">Ошибок не было 🎉</div></div>`;
+
+  // advice: top 2 problem areas, with concrete conjugation + infinitive ending + clickable table link
+  let adviceHtml = '';
+  if(stats.wrong === 0){
+    adviceHtml = `<li class="good"><span class="a-ico">🎉</span><span>Отлично! Все ответы верные — можно переходить к следующему уровню или увеличивать число тестов за сессию.</span></li>`;
+  } else {
+    adviceHtml = rows.slice(0, 2).map(r => r.key === 'EXC' ? excAdviceHtml() : groupAdviceHtml(r.key)).join('');
+  }
+
+  app.innerHTML = `
+    <div class="summary-card">
+      <div class="summary-score">
+        <div class="radial-wrap">
+          <svg width="168" height="168" viewBox="0 0 168 168">
+            <circle class="radial-track" cx="84" cy="84" r="${RADIAL_R}"></circle>
+            <circle class="radial-fill ${pctClass}" id="radialFill" cx="84" cy="84" r="${RADIAL_R}"
+              stroke-dasharray="${RADIAL_C}" stroke-dashoffset="${RADIAL_C}"></circle>
+          </svg>
+          <div class="radial-center">
+            <div class="big-pct ${pctClass}">${pct}%</div>
+          </div>
+        </div>
+        <div class="pct-caption">верно: <b>${stats.correct}</b> из <b>${stats.total}</b> (${sessionBatches.length} ${sessionBatches.length===1?'тест':'тестов'})</div>
+      </div>
+      <div class="summary-legend">
+        <span>✓ Правильно: <b>${stats.correct}</b></span>
+        <span>✕ Ошибок: <b>${stats.wrong}</b></span>
+      </div>
+
+      <div class="summary-section-title">Ошибки по типам</div>
+      ${breakdownHtml}
+
+      <div class="summary-section-title">Что подтянуть</div>
+      <ul class="advice-list">${adviceHtml}</ul>
+    </div>
+    <div class="actions">
+      <button class="btn-primary" id="restartBtn">Пройти ещё раз</button>
+    </div>
+  `;
+
+  document.getElementById('restartBtn').addEventListener('click', () => {
+    state = 'start';
+    render();
+    window.scrollTo({top:0, behavior:'smooth'});
+  });
+
+  // animate the radial fill from 0 to the target percentage
+  const fillEl = document.getElementById('radialFill');
+  const targetOffset = RADIAL_C * (1 - pct/100);
+  requestAnimationFrame(() => {
+    requestAnimationFrame(() => {
+      fillEl.style.strokeDashoffset = String(targetOffset);
+    });
+  });
+}
+
+/* ============ MODAL (conjugation table, shared) ============ */
+document.addEventListener('click', (e) => {
+  const link = e.target.closest('.conj-link');
+  if(link){
+    openConjModal(link.dataset.verb);
+    return;
+  }
+  if(e.target === modalBackdrop){
+    closeConjModal();
+  }
+});
+document.addEventListener('keydown', (e) => {
+  if(e.key === 'Escape') closeConjModal();
+});
+
+function openConjModal(verb){
+  const forms = PARADIGMS[verb];
+  if(!forms) return;
+
+  const isExc = EXCEPTIONS.has(verb);
+  const group = isExc ? null : getConjGroup(verb);
+  const headerTag = isExc ? "Искл." : (group ? group.shortLabel : "");
+
+  const rows = PERSON_ORDER.map((p, idx) => {
+    const ending = (!isExc && group) ? group.endings[p] : "—";
+    return `<tr><td>${p}</td><td class="end-col">${ending}</td><td>${forms[idx]}</td></tr>`;
+  }).join('');
+
+  modalBox.innerHTML = `
+    <button type="button" class="modal-close" id="modalCloseBtn">✕</button>
+    <h3>${verb} <span class="modal-tag">(${headerTag})</span></h3>
+    <div class="modal-sub">Все формы, настоящее время</div>
+    <table class="conj-table">${rows}</table>
+  `;
+  modalBackdrop.classList.add('open');
+  document.getElementById('modalCloseBtn').addEventListener('click', closeConjModal);
+}
+
+function closeConjModal(){
+  modalBackdrop.classList.remove('open');
+}
+
+/* ============ router ============ */
+function render(){
+  if(state === 'start') renderStart();
+  else if(state === 'quiz') renderQuiz();
+  else if(state === 'summary') renderSummary();
+}
+
+render();
+
+/* ============ PWA: офлайн-режим ============ */
+if('serviceWorker' in navigator){
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('sw.js').catch(() => {});
+  });
+}
+</script>
+</body>
+</html>
