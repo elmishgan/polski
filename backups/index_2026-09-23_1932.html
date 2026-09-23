@@ -135,7 +135,7 @@
     border:2px solid rgba(255,255,255,.28);
   }
   .pick-topic{min-height:230px;display:flex;flex-direction:column;justify-content:center;}
-  .pick-sub{min-height:250px;display:flex;flex-direction:column;justify-content:center;}
+  .pick-sub{min-height:206px;display:flex;flex-direction:column;justify-content:center;}
   .pick-c-green{background:linear-gradient(180deg,#57cc6a,#2f9440);}
   .pick-c-amber{background:linear-gradient(180deg,#ffb445,#e8791f);}
   .pick-c-blue{background:linear-gradient(180deg,#5ba3ff,#2f6fd0);}
@@ -149,25 +149,6 @@
   .pick h2{margin:0 0 5px;font-size:1.35rem;font-weight:900;text-shadow:0 2px 0 rgba(0,0,0,.2);}
   .pick-sub h2{font-size:1.15rem;}
   .pick p{margin:0;font-size:.85rem;font-weight:600;color:rgba(255,255,255,.9);line-height:1.35;}
-  .mix-toggle{
-    margin-top:11px;align-self:center;
-    border:2px solid rgba(255,255,255,.5);background:rgba(0,0,0,.22);color:#fff;
-    border-radius:999px;padding:7px 16px;cursor:pointer;
-    font-family:var(--font);font-weight:800;font-size:.76rem;
-  }
-  .mix-toggle.on{
-    background:linear-gradient(180deg,var(--gold),#f0a51a);color:#4a3000;
-    border-color:#fff;box-shadow:0 3px 0 #b9760a;
-  }
-  .mix-bar{
-    display:flex;align-items:center;justify-content:center;gap:12px;flex-wrap:wrap;
-    background:rgba(0,0,0,.26);border:2px solid var(--gold);border-radius:16px;
-    padding:11px 14px;margin-bottom:12px;font-size:.82rem;font-weight:800;text-align:center;
-  }
-  .mini-btn{
-    background:none;border:none;padding:0;cursor:pointer;color:var(--gold);
-    font-family:var(--font);font-weight:800;font-size:.78rem;text-decoration:underline;
-  }
   .pick-stats{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;margin-top:12px;}
   .pk-chip{
     background:rgba(0,0,0,.24);border-radius:999px;padding:4px 10px;
@@ -403,106 +384,81 @@ const PERSON_LABEL = {
 const PERSON_ORDER = ["ja","ty","on/ona/ono","my","wy","oni/one"];
 
 const PARADIGMS = {
-  /* --- спряжение -m, -sz --- */
-  "czytać":      ["czytam","czytasz","czyta","czytamy","czytacie","czytają"],
-  "mieszkać":    ["mieszkam","mieszkasz","mieszka","mieszkamy","mieszkacie","mieszkają"],
-  "słuchać":     ["słucham","słuchasz","słucha","słuchamy","słuchacie","słuchają"],
-  "znać":        ["znam","znasz","zna","znamy","znacie","znają"],
-  "grać":        ["gram","grasz","gra","gramy","gracie","grają"],
-  "pomagać":     ["pomagam","pomagasz","pomaga","pomagamy","pomagacie","pomagają"],
-  "pływać":      ["pływam","pływasz","pływa","pływamy","pływacie","pływają"],
-  "wracać":      ["wracam","wracasz","wraca","wracamy","wracacie","wracają"],
-  "oglądać":     ["oglądam","oglądasz","ogląda","oglądamy","oglądacie","oglądają"],
-  "sprzątać":    ["sprzątam","sprzątasz","sprząta","sprzątamy","sprzątacie","sprzątają"],
-  "nazywać się": ["nazywam się","nazywasz się","nazywa się","nazywamy się","nazywacie się","nazywają się"],
-  "zaczynać":    ["zaczynam","zaczynasz","zaczyna","zaczynamy","zaczynacie","zaczynają"],
-  "pamiętać":    ["pamiętam","pamiętasz","pamięta","pamiętamy","pamiętacie","pamiętają"],
-  "czekać":      ["czekam","czekasz","czeka","czekamy","czekacie","czekają"],
-  "szukać":      ["szukam","szukasz","szuka","szukamy","szukacie","szukają"],
-  "odpoczywać":  ["odpoczywam","odpoczywasz","odpoczywa","odpoczywamy","odpoczywacie","odpoczywają"],
-  "pytać":       ["pytam","pytasz","pyta","pytamy","pytacie","pytają"],
-  "mieć":        ["mam","masz","ma","mamy","macie","mają"],
-  "jeść":        ["jem","jesz","je","jemy","jecie","jedzą"],
-  "wiedzieć":    ["wiem","wiesz","wie","wiemy","wiecie","wiedzą"],
-  "rozumieć":    ["rozumiem","rozumiesz","rozumie","rozumiemy","rozumiecie","rozumieją"],
-  "umieć":       ["umiem","umiesz","umie","umiemy","umiecie","umieją"],
-
-  /* --- спряжение -ę, -isz/-ysz --- */
-  "mówić":       ["mówię","mówisz","mówi","mówimy","mówicie","mówią"],
-  "robić":       ["robię","robisz","robi","robimy","robicie","robią"],
-  "lubić":       ["lubię","lubisz","lubi","lubimy","lubicie","lubią"],
-  "widzieć":     ["widzę","widzisz","widzi","widzimy","widzicie","widzą"],
-  "tańczyć":     ["tańczę","tańczysz","tańczy","tańczymy","tańczycie","tańczą"],
-  "uczyć się":   ["uczę się","uczysz się","uczy się","uczymy się","uczycie się","uczą się"],
-  "jeździć":     ["jeżdżę","jeździsz","jeździ","jeździmy","jeździcie","jeżdżą"],
-  "spać":        ["śpię","śpisz","śpi","śpimy","śpicie","śpią"],
-  "dzwonić":     ["dzwonię","dzwonisz","dzwoni","dzwonimy","dzwonicie","dzwonią"],
-  "kończyć":     ["kończę","kończysz","kończy","kończymy","kończycie","kończą"],
-  "płacić":      ["płacę","płacisz","płaci","płacimy","płacicie","płacą"],
-  "prosić":      ["proszę","prosisz","prosi","prosimy","prosicie","proszą"],
-  "musieć":      ["muszę","musisz","musi","musimy","musicie","muszą"],
-  "chodzić":     ["chodzę","chodzisz","chodzi","chodzimy","chodzicie","chodzą"],
-  "słyszeć":     ["słyszę","słyszysz","słyszy","słyszymy","słyszycie","słyszą"],
-  "siedzieć":    ["siedzę","siedzisz","siedzi","siedzimy","siedzicie","siedzą"],
-  "myśleć":      ["myślę","myślisz","myśli","myślimy","myślicie","myślą"],
-
-  /* --- спряжение -ę, -esz --- */
-  "pisać":       ["piszę","piszesz","pisze","piszemy","piszecie","piszą"],
-  "pić":         ["piję","pijesz","pije","pijemy","pijecie","piją"],
-  "dawać":       ["daję","dajesz","daje","dajemy","dajecie","dają"],
-  "wstawać":     ["wstaję","wstajesz","wstaje","wstajemy","wstajecie","wstają"],
-  "pracować":    ["pracuję","pracujesz","pracuje","pracujemy","pracujecie","pracują"],
-  "kupować":     ["kupuję","kupujesz","kupuje","kupujemy","kupujecie","kupują"],
-  "gotować":     ["gotuję","gotujesz","gotuje","gotujemy","gotujecie","gotują"],
-  "studiować":   ["studiuję","studiujesz","studiuje","studiujemy","studiujecie","studiują"],
-  "dziękować":   ["dziękuję","dziękujesz","dziękuje","dziękujemy","dziękujecie","dziękują"],
-  "malować":     ["maluję","malujesz","maluje","malujemy","malujecie","malują"],
-  "iść":         ["idę","idziesz","idzie","idziemy","idziecie","idą"],
-  "jechać":      ["jadę","jedziesz","jedzie","jedziemy","jedziecie","jadą"],
-  "chcieć":      ["chcę","chcesz","chce","chcemy","chcecie","chcą"],
-  "móc":         ["mogę","możesz","może","możemy","możecie","mogą"],
-  "brać":        ["biorę","bierzesz","bierze","bierzemy","bierzecie","biorą"],
-
-  /* --- нерегулярный --- */
-  "być":         ["jestem","jesteś","jest","jesteśmy","jesteście","są"]
+  "być":       ["jestem","jesteś","jest","jesteśmy","jesteście","są"],
+  "mieć":      ["mam","masz","ma","mamy","macie","mają"],
+  "mówić":     ["mówię","mówisz","mówi","mówimy","mówicie","mówią"],
+  "czytać":    ["czytam","czytasz","czyta","czytamy","czytacie","czytają"],
+  "pisać":     ["piszę","piszesz","pisze","piszemy","piszecie","piszą"],
+  "robić":     ["robię","robisz","robi","robimy","robicie","robią"],
+  "iść":       ["idę","idziesz","idzie","idziemy","idziecie","idą"],
+  "jechać":    ["jadę","jedziesz","jedzie","jedziemy","jedziecie","jadą"],
+  "jeść":      ["jem","jesz","je","jemy","jecie","jedzą"],
+  "pić":       ["piję","pijesz","pije","pijemy","pijecie","piją"],
+  "chcieć":    ["chcę","chcesz","chce","chcemy","chcecie","chcą"],
+  "móc":       ["mogę","możesz","może","możemy","możecie","mogą"],
+  "wiedzieć":  ["wiem","wiesz","wie","wiemy","wiecie","wiedzą"],
+  "znać":      ["znam","znasz","zna","znamy","znacie","znają"],
+  "mieszkać":  ["mieszkam","mieszkasz","mieszka","mieszkamy","mieszkacie","mieszkają"],
+  "pracować":  ["pracuję","pracujesz","pracuje","pracujemy","pracujecie","pracują"],
+  "uczyć się": ["uczę się","uczysz się","uczy się","uczymy się","uczycie się","uczą się"],
+  "lubić":     ["lubię","lubisz","lubi","lubimy","lubicie","lubią"],
+  "grać":      ["gram","grasz","gra","gramy","gracie","grają"],
+  "słuchać":   ["słucham","słuchasz","słucha","słuchamy","słuchacie","słuchają"],
+  "kupować":   ["kupuję","kupujesz","kupuje","kupujemy","kupujecie","kupują"],
+  "rozumieć":  ["rozumiem","rozumiesz","rozumie","rozumiemy","rozumiecie","rozumieją"],
+  "spać":      ["śpię","śpisz","śpi","śpimy","śpicie","śpią"],
+  "widzieć":   ["widzę","widzisz","widzi","widzimy","widzicie","widzą"],
+  "pomagać":   ["pomagam","pomagasz","pomaga","pomagamy","pomagacie","pomagają"],
+  "jeździć":   ["jeżdżę","jeździsz","jeździ","jeździmy","jeździcie","jeżdżą"],
+  "tańczyć":   ["tańczę","tańczysz","tańczy","tańczymy","tańczycie","tańczą"],
+  "gotować":   ["gotuję","gotujesz","gotuje","gotujemy","gotujecie","gotują"],
+  "pływać":    ["pływam","pływasz","pływa","pływamy","pływacie","pływają"]
 };
 
-/* Спряжения по учебнику «Polski krok po kroku 1» (Glossa):
-   группы называются не римскими цифрами, а окончаниями ja/ty. */
+const EXCEPTIONS = new Set(["być","mieć","iść","jechać","jeść","chcieć","móc","wiedzieć"]);
+
 const CONJ_GROUPS = {
-  M: {
-    label: "спряжение -m, -sz (тип czytać / rozumieć)",
-    shortLabel: "-m, -sz",
-    infEnding: "-ać, -eć",
+  A: {
+    label: "I спряжение (тип czytać, -am/-asz)",
+    shortLabel: "I спряжение",
+    infEnding: "-ać",
     baseVerb: "czytać",
-    verbs: ["czytać","mieszkać","słuchać","znać","grać","pomagać","pływać","wracać","oglądać",
-            "sprzątać","nazywać się","zaczynać","pamiętać","czekać","szukać","odpoczywać","pytać",
-            "mieć","jeść","wiedzieć","rozumieć","umieć"],
-    endings: {"ja":"-am / -em","ty":"-asz / -esz","on/ona/ono":"-a / -e",
-              "my":"-amy / -emy","wy":"-acie / -ecie","oni/one":"-ają / -dzą / -eją"}
+    verbs: ["czytać","mieszkać","słuchać","znać","grać","pomagać","pływać"],
+    endings: {"ja":"-am","ty":"-asz","on/ona/ono":"-a","my":"-amy","wy":"-acie","oni/one":"-ają"}
   },
-  ISZ: {
-    label: "спряжение -ę, -isz/-ysz (тип robić / tańczyć)",
-    shortLabel: "-ę, -isz/-ysz",
-    infEnding: "-ić, -yć, -eć",
-    baseVerb: "robić",
-    verbs: ["mówić","robić","lubić","widzieć","tańczyć","uczyć się","jeździć","spać","dzwonić",
-            "kończyć","płacić","prosić","musieć","chodzić","słyszeć","siedzieć","myśleć"],
-    endings: {"ja":"-ę","ty":"-isz / -ysz","on/ona/ono":"-i / -y",
-              "my":"-imy / -ymy","wy":"-icie / -ycie","oni/one":"-ą"}
+  B: {
+    label: "спряжение на -ować (тип pracować, -uję/-ujesz)",
+    shortLabel: "спряжение на -ować",
+    infEnding: "-ować",
+    baseVerb: "pracować",
+    verbs: ["pracować","kupować","gotować"],
+    endings: {"ja":"-uję","ty":"-ujesz","on/ona/ono":"-uje","my":"-ujemy","wy":"-ujecie","oni/one":"-ują"}
   },
-  ESZ: {
-    label: "спряжение -ę, -esz (тип pisać / gotować)",
-    shortLabel: "-ę, -esz",
-    infEnding: "-ać, -ować, -ić",
+  C: {
+    label: "II спряжение (тип pisać, -ę/-esz)",
+    shortLabel: "II спряжение",
+    infEnding: "-ać / -ić",
     baseVerb: "pisać",
-    verbs: ["pisać","pić","dawać","wstawać","pracować","kupować","gotować","studiować","dziękować",
-            "malować","iść","jechać","chcieć","móc","brać"],
-    endings: {"ja":"-ę","ty":"-esz","on/ona/ono":"-e",
-              "my":"-emy","wy":"-ecie","oni/one":"-ą"}
+    verbs: ["pisać","pić"],
+    endings: {"ja":"-ę","ty":"-esz","on/ona/ono":"-e","my":"-emy","wy":"-ecie","oni/one":"-ą"}
+  },
+  D: {
+    label: "III спряжение (тип mówić, -ę/-isz)",
+    shortLabel: "III спряжение",
+    infEnding: "-ić / -yć",
+    baseVerb: "mówić",
+    verbs: ["mówić","robić","lubić","widzieć","tańczyć","uczyć się","jeździć","spać"],
+    endings: {"ja":"-ę","ty":"-isz/-ysz","on/ona/ono":"-i/-y","my":"-imy/-ymy","wy":"-icie/-ycie","oni/one":"-ą"}
+  },
+  E: {
+    label: "особый тип на -mieć (тип rozumieć, -em/-esz)",
+    shortLabel: "тип на -mieć",
+    infEnding: "-mieć",
+    baseVerb: "rozumieć",
+    verbs: ["rozumieć"],
+    endings: {"ja":"-em","ty":"-esz","on/ona/ono":"-e","my":"-emy","wy":"-ecie","oni/one":"-eją"}
   }
 };
-const EXCEPTIONS = new Set(["być"]);
 const EXC_BASE_VERB = "być";
 
 function getConjGroup(verb){
@@ -511,124 +467,6 @@ function getConjGroup(verb){
   }
   return null;
 }
-
-/* Подтемы темы «Глаголы» — ровно как группы в учебнике */
-const VERB_SUBTOPICS = [
-  {id:'M',   label:'-m, -sz',       caption:'тип czytam / czytasz'},
-  {id:'ISZ', label:'-ę, -isz/-ysz', caption:'тип robię / robisz'},
-  {id:'ESZ', label:'-ę, -esz',      caption:'тип piszę / piszesz'},
-  {id:'EXC', label:'być',           caption:'нерегулярный глагол'}
-];
-
-/* Наборы наречий: вставляются перед глаголом. Подобраны так, чтобы не врать по смыслу —
-   «często idę» было бы ошибкой (для повторяющегося движения нужен chodzić). */
-const ADV_FREQ = ["często","zawsze","dzisiaj"];   // обычные динамические глаголы
-const ADV_NOW  = ["teraz","już","dzisiaj"];       // однократное действие и состояния
-const ADV_WELL = ["dobrze","już","naprawdę"];     // знание и умение
-
-/* Дополнения подобраны так, чтобы подходить ко всем шести лицам без изменений.
-   adv: null — глагол идёт без наречной модели. */
-const VERB_DEF = {
-  "czytać":      {adv:ADV_FREQ, tails:["książkę","gazetę","wiadomości"]},
-  "mieszkać":    {adv:ADV_NOW,  tails:["w Warszawie","w centrum","blisko parku"]},
-  "słuchać":     {adv:ADV_FREQ, tails:["muzyki","radia","podcastu"]},
-  "znać":        {adv:ADV_WELL, tails:["to miejsce","tę piosenkę","jego brata"]},
-  "grać":        {adv:ADV_FREQ, tails:["w piłkę","na gitarze","w szachy"]},
-  "pomagać":     {adv:ADV_FREQ, tails:["mamie","koledze","w kuchni"]},
-  "pływać":      {adv:ADV_FREQ, tails:["w basenie","w jeziorze","w morzu"]},
-  "wracać":      {adv:ADV_FREQ, tails:["do domu","z pracy","późno wieczorem"]},
-  "oglądać":     {adv:ADV_FREQ, tails:["film","telewizję","mecz"]},
-  "sprzątać":    {adv:ADV_FREQ, tails:["pokój","w kuchni","w sobotę"]},
-  "nazywać się": {adv:null,     tails:["jak mój dziadek","inaczej","tak samo"]},
-  "zaczynać":    {adv:ADV_FREQ, tails:["pracę o ósmej","nowy kurs","od początku"]},
-  "pamiętać":    {adv:ADV_WELL, tails:["o spotkaniu","ten dzień","jego imię"]},
-  "czekać":      {adv:ADV_FREQ, tails:["na autobus","na wyniki","przed kinem"]},
-  "szukać":      {adv:ADV_FREQ, tails:["pracy","kluczy","mieszkania"]},
-  "odpoczywać":  {adv:ADV_FREQ, tails:["w weekend","po pracy","nad morzem"]},
-  "pytać":       {adv:ADV_FREQ, tails:["o drogę","o cenę","o godzinę"]},
-  "mieć":        {adv:ADV_NOW,  tails:["psa i kota","dużo pracy","nowy telefon"]},
-  "jeść":        {adv:ADV_FREQ, tails:["śniadanie","zupę","kolację","obiad","owoce","warzywa","chleb z masłem","coś słodkiego"]},
-  "wiedzieć":    {adv:ADV_WELL, tails:["wszystko","gdzie to jest","o tym","jak to zrobić","kiedy jest spotkanie","kto to jest","co robić","dlaczego tak"]},
-  "rozumieć":    {adv:ADV_WELL, tails:["po polsku","to pytanie","wszystko","ten tekst","o co chodzi","instrukcję","tę zasadę"]},
-  "umieć":       {adv:ADV_WELL, tails:["pływać","gotować","tańczyć","jeździć na rowerze","mówić po polsku","grać na gitarze","prowadzić samochód"]},
-
-  "mówić":       {adv:ADV_FREQ, tails:["po polsku","po angielsku","prawdę"]},
-  "robić":       {adv:ADV_FREQ, tails:["obiad","zadanie domowe","zakupy"]},
-  "lubić":       {adv:["naprawdę","bardzo","też"], tails:["kawę","polskie filmy","muzykę"]},
-  "widzieć":     {adv:ADV_NOW,  tails:["ten dom","coś dziwnego","morze z okna"]},
-  "tańczyć":     {adv:ADV_FREQ, tails:["w klubie","na weselu","do późna"]},
-  "uczyć się":   {adv:ADV_FREQ, tails:["polskiego","matematyki","nowych słów"]},
-  "jeździć":     {adv:ADV_FREQ, tails:["rowerem","samochodem","do pracy autobusem"]},
-  "spać":        {adv:ADV_FREQ, tails:["osiem godzin","do południa","w hotelu"]},
-  "dzwonić":     {adv:ADV_FREQ, tails:["do mamy","do lekarza","wieczorem"]},
-  "kończyć":     {adv:ADV_FREQ, tails:["pracę o piątej","studia w czerwcu","lekcję"]},
-  "płacić":      {adv:ADV_FREQ, tails:["kartą","gotówką","za obiad"]},
-  "prosić":      {adv:ADV_FREQ, tails:["o pomoc","o kawę","o rachunek"]},
-  "musieć":      {adv:ADV_NOW,  tails:["iść do pracy","to zrobić","wcześnie wstawać"]},
-  "chodzić":     {adv:ADV_FREQ, tails:["do szkoły","na spacery","do kina w weekend"]},
-  "słyszeć":     {adv:ADV_WELL, tails:["muzykę","ten hałas","wszystko"]},
-  "siedzieć":    {adv:ADV_FREQ, tails:["w domu","przy stole","w ogrodzie"]},
-  "myśleć":      {adv:ADV_FREQ, tails:["o wakacjach","o tym","inaczej"]},
-
-  "pisać":       {adv:ADV_FREQ, tails:["e-mail","list do babci","wiadomość"]},
-  "pić":         {adv:ADV_FREQ, tails:["kawę","herbatę","wodę"]},
-  "dawać":       {adv:ADV_FREQ, tails:["prezenty","dobre rady","drugą szansę"]},
-  "wstawać":     {adv:ADV_FREQ, tails:["wcześnie","o siódmej","bardzo późno"]},
-  "pracować":    {adv:ADV_FREQ, tails:["w biurze","od rana","w weekend"]},
-  "kupować":     {adv:ADV_FREQ, tails:["chleb","bilety","prezenty"]},
-  "gotować":     {adv:ADV_FREQ, tails:["obiad","zupę","coś pysznego"]},
-  "studiować":   {adv:ADV_NOW,  tails:["medycynę","na uniwersytecie","informatykę"]},
-  "dziękować":   {adv:null,     tails:["za pomoc","za prezent","za wszystko"]},
-  "malować":     {adv:ADV_FREQ, tails:["obrazy","ścianę","ładne pejzaże"]},
-  "iść":         {adv:ADV_NOW,  tails:["do domu","do sklepu","na spacer"]},
-  "jechać":      {adv:ADV_NOW,  tails:["do Krakowa","na wakacje","autobusem"]},
-  "chcieć":      {adv:ADV_NOW,  tails:["kawy","spać","iść do kina"]},
-  "móc":         {adv:ADV_NOW,  tails:["przyjść jutro","to zrobić","poczekać chwilę"]},
-  "brać":        {adv:ADV_FREQ, tails:["parasol","taksówkę","urlop w lipcu"]},
-
-  "być":         {adv:ADV_NOW, tails:[
-    "w domu","w pracy","w szkole","w sklepie","w kinie","w teatrze","w parku","w restauracji",
-    "w kawiarni","w hotelu","w bibliotece","w banku","w biurze","w aptece","w Polsce",
-    "w Warszawie","w Krakowie","na uniwersytecie","na dworcu","na lotnisku","na poczcie",
-    "na plaży","na wakacjach","na spotkaniu","na koncercie","na basenie","u lekarza",
-    "u babci","w centrum miasta","za granicą"]}
-};
-
-const PRONOUN = {
-  "ja":         ["Ja","ja"],
-  "ty":         ["Ty","ty"],
-  "on/ona/ono": ["On","on"],
-  "my":         ["My","my"],
-  "wy":         ["Wy","wy"],
-  "oni/one":    ["Oni","oni"]
-};
-const PRONOUN_ALT = {"on/ona/ono":["Ona","ona"], "oni/one":["One","one"]};
-
-function buildVerbData(){
-  const out = [];
-  Object.keys(VERB_DEF).forEach(v => {
-    const forms = PARADIGMS[v];
-    const def = VERB_DEF[v];
-    if(!forms) return;
-    def.tails.forEach((tail, ti) => {
-      PERSON_ORDER.forEach((person, pi) => {
-        const alt = PRONOUN_ALT[person] && (ti + pi) % 2 === 1;
-        const [Cap, low] = alt ? PRONOUN_ALT[person] : PRONOUN[person];
-        const answer = forms[pi];
-        out.push({v, person, sentence:`${Cap} ___ ${tail}.`, answer});
-        /* вопрос — для всех лиц кроме «ja»: «Czy ja…» звучит неестественно */
-        if(person !== 'ja') out.push({v, person, sentence:`Czy ${low} ___ ${tail}?`, answer});
-        /* наречная модель — только там, где наречие не ломает смысл */
-        if(def.adv){
-          const adv = def.adv[(ti + pi) % def.adv.length];
-          out.push({v, person, sentence:`${Cap} ${adv} ___ ${tail}.`, answer});
-        }
-      });
-    });
-  });
-  return out;
-}
-
 
 const VERB_DATA_MANUAL = [
   {v:"być", person:"ja", sentence:"Ja ___ studentem z Ukrainy.", answer:"jestem"},
@@ -783,6 +621,130 @@ const VERB_DATA_MANUAL = [
   {v:"pływać", person:"oni/one", sentence:"Oni ___ w jeziorze.", answer:"pływają"}
 ];
 
+/* ============ ТЕМА: ЧИСЛИТЕЛЬНЫЕ ============ */
+
+/* ---- новые глаголы: дописываются к парадигмам и группам выше ---- */
+/* Новые глаголы (к 29 существующим) */
+const NEW_PARADIGMS = {
+  "wracać":      ["wracam","wracasz","wraca","wracamy","wracacie","wracają"],
+  "oglądać":     ["oglądam","oglądasz","ogląda","oglądamy","oglądacie","oglądają"],
+  "sprzątać":    ["sprzątam","sprzątasz","sprząta","sprzątamy","sprzątacie","sprzątają"],
+  "nazywać się": ["nazywam się","nazywasz się","nazywa się","nazywamy się","nazywacie się","nazywają się"],
+  "zaczynać":    ["zaczynam","zaczynasz","zaczyna","zaczynamy","zaczynacie","zaczynają"],
+  "pamiętać":    ["pamiętam","pamiętasz","pamięta","pamiętamy","pamiętacie","pamiętają"],
+  "czekać":      ["czekam","czekasz","czeka","czekamy","czekacie","czekają"],
+  "szukać":      ["szukam","szukasz","szuka","szukamy","szukacie","szukają"],
+  "odpoczywać":  ["odpoczywam","odpoczywasz","odpoczywa","odpoczywamy","odpoczywacie","odpoczywają"],
+  "pytać":       ["pytam","pytasz","pyta","pytamy","pytacie","pytają"],
+  "dzwonić":     ["dzwonię","dzwonisz","dzwoni","dzwonimy","dzwonicie","dzwonią"],
+  "kończyć":     ["kończę","kończysz","kończy","kończymy","kończycie","kończą"],
+  "płacić":      ["płacę","płacisz","płaci","płacimy","płacicie","płacą"],
+  "prosić":      ["proszę","prosisz","prosi","prosimy","prosicie","proszą"],
+  "dawać":       ["daję","dajesz","daje","dajemy","dajecie","dają"],
+  "wstawać":     ["wstaję","wstajesz","wstaje","wstajemy","wstajecie","wstają"],
+  "brać":        ["biorę","bierzesz","bierze","bierzemy","bierzecie","biorą"]
+};
+
+/* куда какой глагол дописать: A -ać(-am), B -ować, C -ę/-esz, D -ę/-isz, EXC исключения */
+const NEW_GROUPS = {
+  A: ["wracać","oglądać","sprzątać","nazywać się","zaczynać","pamiętać","czekać","szukać","odpoczywać","pytać"],
+  C: ["dawać","wstawać"],
+  D: ["dzwonić","kończyć","płacić","prosić"],
+  EXC: ["brać"]
+};
+
+/* Дополнения подобраны так, чтобы подходить ко всем шести лицам без изменений.
+   Точку/вопрос ставит генератор. */
+const VERB_TAILS = {
+  "być":         ["w domu","w pracy","w Polsce"],
+  "mieć":        ["psa i kota","dużo pracy","nowy telefon"],
+  "mówić":       ["po polsku","po angielsku","prawdę"],
+  "czytać":      ["książkę","gazetę","wiadomości"],
+  "pisać":       ["e-mail","list do babci","wiadomość"],
+  "robić":       ["obiad","zadanie domowe","zakupy"],
+  "iść":         ["do domu","do sklepu","na spacer"],
+  "jechać":      ["do Krakowa","na wakacje","autobusem"],
+  "jeść":        ["śniadanie","zupę","kolację"],
+  "pić":         ["kawę","herbatę","wodę"],
+  "chcieć":      ["kawy","spać","iść do kina"],
+  "móc":         ["przyjść jutro","to zrobić","poczekać chwilę"],
+  "wiedzieć":    ["wszystko","gdzie to jest","o tym"],
+  "znać":        ["to miejsce","tę piosenkę","jego brata"],
+  "mieszkać":    ["w Warszawie","w centrum","blisko parku"],
+  "pracować":    ["w biurze","od rana","w weekend"],
+  "uczyć się":   ["polskiego","matematyki","nowych słów"],
+  "lubić":       ["kawę","polskie filmy","muzykę"],
+  "grać":        ["w piłkę","na gitarze","w szachy"],
+  "słuchać":     ["muzyki","radia","podcastu"],
+  "kupować":     ["chleb","bilety","prezenty"],
+  "rozumieć":    ["po polsku","to pytanie","wszystko"],
+  "spać":        ["osiem godzin","do południa","w hotelu"],
+  "widzieć":     ["ten dom","coś dziwnego","morze z okna"],
+  "pomagać":     ["mamie","koledze","w kuchni"],
+  "jeździć":     ["rowerem","samochodem","do pracy autobusem"],
+  "tańczyć":     ["bardzo dobrze","w klubie","na weselu"],
+  "gotować":     ["obiad","zupę","coś pysznego"],
+  "pływać":      ["w basenie","bardzo dobrze","w jeziorze"],
+  "wracać":      ["do domu","z pracy","późno wieczorem"],
+  "oglądać":     ["film","telewizję","mecz"],
+  "sprzątać":    ["pokój","w kuchni","w sobotę"],
+  "nazywać się": ["jak mój dziadek","inaczej","tak samo"],
+  "zaczynać":    ["pracę o ósmej","nowy kurs","od początku"],
+  "pamiętać":    ["o spotkaniu","ten dzień","jego imię"],
+  "czekać":      ["na autobus","na wyniki","przed kinem"],
+  "szukać":      ["pracy","kluczy","mieszkania"],
+  "odpoczywać":  ["w weekend","po pracy","nad morzem"],
+  "pytać":       ["o drogę","o cenę","o godzinę"],
+  "dzwonić":     ["do mamy","do lekarza","codziennie"],
+  "kończyć":     ["pracę o piątej","studia w czerwcu","lekcję"],
+  "płacić":      ["kartą","gotówką","za obiad"],
+  "prosić":      ["o pomoc","o kawę","o rachunek"],
+  "dawać":       ["prezenty","dobre rady","drugą szansę"],
+  "wstawać":     ["wcześnie","o siódmej","zawsze o tej porze"],
+  "brać":        ["parasol","taksówkę","urlop w lipcu"]
+};
+
+/* местоимение по лицу: [для утверждения, для вопроса] */
+const PRONOUN = {
+  "ja":          ["Ja","ja"],
+  "ty":          ["Ty","ty"],
+  "on/ona/ono":  ["On","on"],
+  "my":          ["My","my"],
+  "wy":          ["Wy","wy"],
+  "oni/one":     ["Oni","oni"]
+};
+const PRONOUN_ALT = {"on/ona/ono":["Ona","ona"], "oni/one":["One","one"]};
+
+function buildVerbData(){
+  const out = [];
+  Object.keys(VERB_TAILS).forEach(v => {
+    const forms = PARADIGMS[v];
+    if(!forms) return;
+    VERB_TAILS[v].forEach((tail, ti) => {
+      PERSON_ORDER.forEach((person, pi) => {
+        /* для разнообразия чередуем On/Ona и Oni/One */
+        const alt = PRONOUN_ALT[person] && (ti + pi) % 2 === 1;
+        const [Cap, low] = alt ? PRONOUN_ALT[person] : PRONOUN[person];
+        const answer = forms[pi];
+        out.push({v, person, sentence: `${Cap} ___ ${tail}.`, answer});
+        /* вопрос — для всех лиц кроме «ja»: «Czy ja…» звучит неестественно */
+        if(person !== 'ja'){
+          out.push({v, person, sentence: `Czy ${low} ___ ${tail}?`, answer});
+        }
+      });
+    });
+  });
+  return out;
+}
+
+
+Object.assign(PARADIGMS, NEW_PARADIGMS);
+Object.keys(NEW_GROUPS).forEach(k => {
+  if(k === 'EXC') NEW_GROUPS[k].forEach(v => EXCEPTIONS.add(v));
+  else CONJ_GROUPS[k].verbs.push(...NEW_GROUPS[k]);
+});
+
+/* руками написанные предложения + сгенерированные по лицам и дополнениям */
 const VERB_DATA = VERB_DATA_MANUAL.concat(buildVerbData());
 const NUM_SUBTOPICS = [
   {id:'jednosci',   label:'Цифры',   caption:'0–10'},
@@ -1219,49 +1181,45 @@ function buildNumData(){
 /* руками написанные предложения + сгенерированные по правилам */
 const NUM_DATA = NUM_DATA_MANUAL.concat(buildNumData());
 /* ============ РЕЕСТР ТЕМ ============ */
-const SUB_EMOJI = {jednosci:'1️⃣', dziesiatki:'🔟', setki:'💯', tysiace:'💰', daty:'📅', czas:'🕐',
-                   M:'📗', ISZ:'📘', ESZ:'📙', EXC:'⭐'};
+const SUB_EMOJI = {jednosci:'1️⃣', dziesiatki:'🔟', setki:'💯', tysiace:'💰', daty:'📅', czas:'🕐'};
 
 const TOPICS = {
   czasowniki: {
     id:'czasowniki', title:'Глаголы', subtitle:'Спряжение в настоящем времени',
-    emoji:'🗣️', color:'green', level:'A1', subtopics:VERB_SUBTOPICS,
-    note:'55 глаголов. Спряжения названы по окончаниям ja/ty — как в учебнике «Polski krok po kroku».',
+    emoji:'🗣️', color:'green', level:'A1', subtopics:null,
+    note:'46 глаголов, 5 групп спряжения и исключения.',
     blockInput:false,
-    questions(subs){
-      const out = [];
-      VERB_DATA.forEach(q => {
+    questions(){
+      return VERB_DATA.map(q => {
         const isExc = EXCEPTIONS.has(q.v);
         const group = isExc ? null : getConjGroup(q.v);
-        const g = isExc ? 'EXC' : (group ? group.key : 'OTHER');
-        if(subs && !subs.has(g)) return;
-        out.push({g, hint:q.v, sentence:q.sentence, answer:q.answer, ref:q.v, person:q.person, v:q.v});
+        return {g: isExc ? 'EXC' : (group ? group.key : 'OTHER'),
+                hint:q.v, sentence:q.sentence, answer:q.answer, ref:q.v, person:q.person, v:q.v};
       });
-      return out;
     },
     groupLabel(key){
-      if(key === 'EXC') return 'być';
+      if(key === 'EXC') return 'Исключения';
       return CONJ_GROUPS[key] ? CONJ_GROUPS[key].shortLabel : key;
     },
     wrongHtml(q){
-      if(q.g === 'EXC') return `<button type="button" class="ref-link" data-ref="${q.ref}">Нерегулярный глагол</button>. Правильно: <b>${q.answer}</b>.`;
+      if(q.g === 'EXC') return `<button type="button" class="ref-link" data-ref="${q.ref}">Исключение</button>. Правильно: <b>${q.answer}</b>.`;
       const group = CONJ_GROUPS[q.g];
       if(!group) return `Правильно: <b>${q.answer}</b>.`;
       return `По <button type="button" class="ref-link" data-ref="${q.ref}">спряжению</button> — ${group.label}, ${PERSON_LABEL[q.person]}, окончание <b>${group.endings[q.person]}</b> → нужно <b>${q.answer}</b>.`;
     },
     adviceHtml(key){
-      if(key === 'EXC') return `<li><span class="a-ico">📌</span><span>Выучи наизусть <button type="button" class="ref-link" data-ref="${EXC_BASE_VERB}">być</button>: jestem, jesteś, jest, jesteśmy, jesteście, są — единственный глагол, который не подчиняется ни одному спряжению.</span></li>`;
+      if(key === 'EXC') return `<li><span class="a-ico">📌</span><span>Учи наизусть <button type="button" class="ref-link" data-ref="${EXC_BASE_VERB}">глаголы-исключения</button>: ${[...EXCEPTIONS].join(', ')} — их формы не подчиняются общим правилам.</span></li>`;
       const g = CONJ_GROUPS[key];
       if(!g) return '';
       const ends = PERSON_ORDER.map(p => `${p} ${g.endings[p]}`).join(', ');
-      return `<li><span class="a-ico">📌</span><span>Подтяни спряжение <button type="button" class="ref-link" data-ref="${g.baseVerb}">${g.shortLabel}</button> (образец <i>${g.baseVerb}</i>, инфинитив на «${g.infEnding}»). Окончания: ${ends}.</span></li>`;
+      return `<li><span class="a-ico">📌</span><span>Подтяни <button type="button" class="ref-link" data-ref="${g.baseVerb}">${g.shortLabel}</button> — инфинитив на «<b>${g.infEnding}</b>» (например <i>${g.baseVerb}</i>). Окончания: ${ends}.</span></li>`;
     },
     reference(refKey){
       const forms = PARADIGMS[refKey];
       if(!forms) return null;
       const isExc = EXCEPTIONS.has(refKey);
       const group = isExc ? null : getConjGroup(refKey);
-      return {title:refKey, tag:isExc ? 'нерегулярный' : (group ? group.shortLabel : ''),
+      return {title:refKey, tag:isExc ? 'Исключение' : (group ? group.shortLabel : ''),
               sub:'Все формы, настоящее время.', cols:['Лицо','Окончание','Форма'],
               rows:PERSON_ORDER.map((p,i) => [p, (!isExc && group) ? group.endings[p] : '—', forms[i]])};
     }
@@ -1383,24 +1341,7 @@ const hudPoints = document.getElementById('hudPoints');
 const modalBackdrop = document.getElementById('modalBackdrop');
 const modalBox = document.getElementById('modalBox');
 
-/* Микс: набор подтем, отмеченных кнопкой «в микс». Пока он не пуст — тест идёт по нему,
-   а не по той карточке, что сейчас в центре свайпера. */
-let mixSet = new Set();
-
-const subsSet = () => mixSet.size ? new Set(mixSet)
-                    : (selectedSub ? new Set([selectedSub]) : null);
-/* под каким ключом писать прогресс: одна подтема — своя запись, несколько — общая «микс» */
-function currentRecKey(){
-  if(mixSet.size > 1) return topic.id + ':mix';
-  if(mixSet.size === 1) return recKey(topic.id, [...mixSet][0]);
-  return recKey(topic.id, selectedSub);
-}
-function mixName(){
-  if(mixSet.size) return 'микс: ' + topic.subtopics
-    .filter(x => mixSet.has(x.id)).map(x => x.label).join(' + ');
-  if(selectedSub) return topic.groupLabel(selectedSub);
-  return topic.subtopics ? 'Всё подряд' : null;
-}
+const subsSet = () => selectedSub ? new Set([selectedSub]) : null;
 const currentPool = () => topic.questions(subsSet());
 const maxTests = () => Math.max(1, Math.floor(currentPool().length / BATCH_SIZE));
 
@@ -1423,7 +1364,7 @@ function plural(n, one, few, many){
   return many;
 }
 function syncHud(){
-  const r = getRec(currentRecKey());
+  const r = getRec(recKey(topic.id, selectedSub));
   const lv = levelOf(r.best);
   hudBest.textContent = r.best === null ? '—' : r.best + '%';
   hudPoints.textContent = stats ? stats.points : fmtPts(r.points);
@@ -1485,13 +1426,9 @@ function buildSwiper(slides, activeIndex, onChange){
 }
 
 /* карточка выбора: эмодзи, название, уровень, очки, сколько вопросов */
-function pickCard(kind, color, emoji, title, sub, total, key, mixId){
+function pickCard(kind, color, emoji, title, sub, total, key){
   const r = getRec(key);
   const lv = levelOf(r.best);
-  const on = mixId && mixSet.has(mixId);
-  const toggle = mixId
-    ? `<button type="button" class="mix-toggle${on ? ' on' : ''}" data-mix="${mixId}">${on ? '✓ в миксе' : '＋ в микс'}</button>`
-    : '';
   return `
     <div class="pick pick-${kind} pick-c-${color}">
       <div class="pick-emoji">${emoji}</div>
@@ -1502,15 +1439,11 @@ function pickCard(kind, color, emoji, title, sub, total, key, mixId){
         <span class="pk-chip">⭐ ${fmtPts(r.points)}</span>
         <span class="pk-chip">${total} ${plural(total,'вопрос','вопроса','вопросов')}</span>
       </div>
-      ${toggle}
     </div>`;
 }
 
 /* ============ ЭКРАН 1: ТЕМА ============ */
 function renderTopicScreen(){
-  /* микс живёт ровно один заход на экран подтем: вернулся к темам — начинаем с чистого листа,
-     иначе он молча переопределял бы карточку, на которую человек свайпнул */
-  mixSet.clear();
   const slides = TOPIC_ORDER.map(id => {
     const t = TOPICS[id];
     return pickCard('topic', t.color, t.emoji, t.title, t.subtitle, t.questions(null).length, recKey(id, null));
@@ -1519,7 +1452,6 @@ function renderTopicScreen(){
     topicIdx = i;
     topic = TOPICS[TOPIC_ORDER[i]];
     selectedSub = null;
-    mixSet.clear();
     syncHud();
   });
 
@@ -1551,13 +1483,13 @@ function renderSubScreen(){
   let swHtml = '', sw = null;
   if(items){
     const slides = items.map(s => pickCard('sub', 'blue', s.emoji, s.label, s.caption,
-      topic.questions(s.id ? new Set([s.id]) : null).length, recKey(topic.id, s.id), s.id));
+      topic.questions(s.id ? new Set([s.id]) : null).length, recKey(topic.id, s.id)));
     const active = Math.max(0, items.findIndex(s => s.id === selectedSub));
     sw = buildSwiper(slides, active, i => {
       selectedSub = items[i].id;
-      if(selectedSub === null) mixSet.clear();   // «Всё подряд» и есть всё — микс тут лишний
       selectedCount = Math.min(selectedCount, maxTests());
-      syncMix();
+      syncCount();
+      syncHud();
     });
     swHtml = sw.html;
   }
@@ -1565,12 +1497,8 @@ function renderSubScreen(){
   app.innerHTML = `
     <button type="button" class="back-link" id="backBtn">‹ другая тема</button>
     <div class="screen-title">${topic.emoji} ${topic.title}</div>
-    ${items ? '<div class="screen-sub">Подтема · листай вбок, можно смешать несколько</div>' + swHtml : ''}
+    ${items ? '<div class="screen-sub">Подтема · листай вбок</div>' + swHtml : ''}
     <div class="screen-pad">
-      <div class="mix-bar" id="mixBar" style="display:none">
-        <span id="mixText"></span>
-        <button type="button" class="mini-btn" id="mixClear">сбросить</button>
-      </div>
       <div class="panel">
         <div class="panel-title">Сколько тестов подряд</div>
         <div class="stepper">
@@ -1597,43 +1525,6 @@ function renderSubScreen(){
       `по ${BATCH_SIZE} вопросов · максимум ${max} из ${pool}`;
   }
 
-  /* микс-панель, подпись кнопки старта и счётчик — всё зависит от mixSet */
-  function syncMix(){
-    const bar = document.getElementById('mixBar');
-    if(bar){
-      bar.style.display = mixSet.size ? 'flex' : 'none';
-      if(mixSet.size){
-        const names = topic.subtopics.filter(x => mixSet.has(x.id)).map(x => x.label).join(' + ');
-        document.getElementById('mixText').textContent =
-          `Вперемешку: ${names} · ${currentPool().length} вопросов`;
-      }
-    }
-    const btn = document.getElementById('startBtn');
-    if(btn) btn.textContent = mixSet.size > 1 ? `СТАРТ · МИКС (${mixSet.size})` : 'СТАРТ';
-    syncCount();
-    syncHud();
-  }
-
-  /* кнопки «в микс» живут внутри слайдов — ловим кликом по свайперу */
-  const swRoot = app.querySelector('.swiper');
-  if(swRoot) swRoot.addEventListener('click', e => {
-    const b = e.target.closest('.mix-toggle');
-    if(!b) return;
-    const id = b.dataset.mix;
-    if(mixSet.has(id)) mixSet.delete(id); else mixSet.add(id);
-    b.classList.toggle('on', mixSet.has(id));
-    b.textContent = mixSet.has(id) ? '✓ в миксе' : '＋ в микс';
-    syncMix();
-  });
-  const mixClear = document.getElementById('mixClear');
-  if(mixClear) mixClear.addEventListener('click', () => {
-    mixSet.clear();
-    app.querySelectorAll('.mix-toggle').forEach(b => {
-      b.classList.remove('on'); b.textContent = '＋ в микс';
-    });
-    syncMix();
-  });
-
   document.getElementById('backBtn').addEventListener('click', () => {
     state = 'topic'; render(); window.scrollTo({top:0, behavior:'smooth'});
   });
@@ -1647,7 +1538,8 @@ function renderSubScreen(){
     render(); window.scrollTo({top:0, behavior:'smooth'});
   });
 
-  syncMix();
+  syncCount();
+  syncHud();
 }
 
 /* ============ ЭКРАН ТЕСТА ============ */
@@ -1793,14 +1685,13 @@ function renderSummary(){
   const starCount = pct >= 90 ? 3 : pct >= 70 ? 2 : pct >= 40 ? 1 : 0;
   const stars = [0,1,2].map(i => `<span class="star${i < starCount ? ' on' : ''}">★</span>`).join('');
 
-  const subKey = currentRecKey();
-  const allKey = recKey(topic.id, null);
+  const subKey = recKey(topic.id, selectedSub);
   const before = getRec(subKey).best;
   const isRecord = before === null || pct > before;
-  const subName = mixName();
   addRec(subKey, stats.points, pct);
-  if(subKey !== allKey) addRec(allKey, stats.points, pct);   // общий счёт темы
+  if(selectedSub) addRec(recKey(topic.id, null), stats.points, pct);   // общий счёт темы
   const lv = levelOf(getRec(subKey).best);
+  const subName = selectedSub ? topic.groupLabel(selectedSub) : (topic.subtopics ? 'Всё подряд' : null);
 
   const rows = Object.keys(stats.byGroup)
     .filter(k => stats.byGroup[k].wrong > 0)
