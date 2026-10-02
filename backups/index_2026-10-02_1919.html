@@ -363,115 +363,6 @@
   .confirm-text{font-size:.88rem;font-weight:600;line-height:1.5;margin-bottom:16px;}
   .confirm-actions{display:flex;gap:10px;}
   .confirm-actions .gbtn{flex:1;font-size:.92rem;padding:13px 12px;}
-
-  /* ---------- вкладки «Тесты» / «Таблицы» ---------- */
-  .tabs{display:flex;gap:8px;margin:0 0 12px;}
-  .tab{
-    flex:1;border:2px solid var(--panel-line);border-radius:999px;cursor:pointer;
-    background:var(--deep);color:var(--muted);font-family:var(--font);font-weight:800;font-size:.92rem;
-    padding:10px 0;box-shadow:0 3px 0 rgba(0,0,0,.3);
-  }
-  .tab.on{background:linear-gradient(180deg,var(--amber),var(--amber-2));color:#3a2600;border-color:#ffe08a;}
-  body.tables-mode .hud{display:none;}
-
-  /* ---------- книжные таблицы падежей (Tablice gramatyczne KPK) ----------
-     Карточка .gt — светлый «лист книги» на тёмном фоне приложения. Цвет колонок задаётся
-     переменными --col/--col-dark/--lbl на карточке: оливковый у dopełniacz/biernik и голубой
-     у narzędnik — как в книге; у остальных падежей цвета свои, в книге их мы не видели. */
-  .gt-filter{display:flex;gap:6px;overflow-x:auto;padding:2px 0 12px;scrollbar-width:none;-ms-overflow-style:none;}
-  .gt-filter::-webkit-scrollbar{display:none;}
-  .gt-chip{
-    flex:0 0 auto;border:2px solid var(--panel-line);border-radius:999px;cursor:pointer;
-    background:var(--deep);color:#fff;font-family:var(--font);font-weight:800;font-size:.78rem;padding:7px 12px;
-  }
-  .gt-chip.on{background:#fff;color:var(--card-ink);border-color:#fff;}
-
-  .gt{
-    --col:#dfe0bf;--col-dark:#cbcc9f;--lbl:#b7b784;--ser:Georgia,"Times New Roman",serif;
-    background:#f7f4ea;border-radius:16px;padding:12px 10px 12px;margin-bottom:14px;color:#1c1c1c;
-    box-shadow:0 6px 0 rgba(0,0,0,.26);
-  }
-  .gt.c-blue{--col:#d5e5f0;--col-dark:#bdd4e5;--lbl:#9cbbd1;}
-  .gt.c-sand{--col:#ece3cd;--col-dark:#dccfae;--lbl:#c3b48c;}
-  .gt.c-rose{--col:#f0d9d9;--col-dark:#e2c0c0;--lbl:#cfa1a1;}
-  .gt.c-green{--col:#d8e8d1;--col-dark:#c0d8b6;--lbl:#9fbf92;}
-  .gt-head{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:10px;}
-  .gt-num{background:#e8192c;color:#fff;font-weight:900;font-size:.8rem;padding:6px 9px;border-radius:3px;}
-  .gt-case{color:#e8192c;font-weight:900;font-size:1.05rem;letter-spacing:.02em;}
-  .gt-q{color:#e8192c;font-weight:800;font-size:.9rem;}
-  .gt-n{
-    margin-left:auto;background:#111;color:#fff;font-family:var(--ser);font-style:italic;font-weight:700;
-    font-size:.82rem;padding:4px 10px;border-radius:6px;
-  }
-  .gt-warn{width:100%;font-size:.68rem;color:#8a5c05;background:#fff0d0;border-radius:8px;padding:5px 8px;font-weight:700;}
-
-  .gt-grid{display:grid;gap:3px;grid-template-columns:20px repeat(var(--n),minmax(0,1fr));}
-  .gt-grid > *{min-width:0;}
-  .gt-grid > i{display:block;}
-  .gt-gen{
-    background:var(--col-dark);font-family:var(--ser);font-weight:700;font-style:italic;font-size:.66rem;
-    padding:5px 4px;display:flex;align-items:center;justify-content:space-between;gap:3px;line-height:1.15;
-  }
-  .gt-gen .ic{flex:0 0 auto;background:#4d7a3a;color:#fff;border-radius:3px;font-size:.62rem;padding:1px 3px;font-style:normal;}
-  .gt-sub{background:var(--col);font-family:var(--ser);font-size:.6rem;font-weight:700;font-style:italic;text-align:center;padding:3px 2px;}
-  .gt-sub .ic{display:block;font-size:.85rem;font-style:normal;line-height:1.1;}
-  .gt-cell{
-    background:var(--col);display:flex;flex-direction:column;align-items:center;justify-content:center;
-    gap:4px;padding:12px 3px;position:relative;
-  }
-  .gt-lbl{
-    background:var(--lbl);color:#fff;writing-mode:vertical-rl;transform:rotate(180deg);
-    font-family:var(--ser);font-style:italic;font-weight:700;font-size:.62rem;
-    display:flex;align-items:center;justify-content:center;border-radius:4px;padding:6px 0;
-  }
-  .pill{
-    color:#fff;font-family:var(--ser);font-style:italic;font-weight:700;font-size:1.05rem;line-height:1.15;
-    padding:8px 9px;border-radius:9px;border:2px solid #fff;box-shadow:0 2px 3px rgba(0,0,0,.25);
-    text-align:center;min-width:54px;max-width:100%;
-  }
-  .pill.y{background:#ffd400;color:#111;}
-  .pill.r{background:#f31b3c;}
-  .pill small{font-size:.6em;vertical-align:top;}
-  .pill .alt{
-    display:block;font-family:var(--font);font-style:normal;font-weight:700;font-size:.56rem;
-    margin-top:4px;text-align:left;line-height:1.3;
-  }
-  .pill .alt b{
-    display:inline-block;font-family:var(--ser);font-style:italic;font-size:.8rem;
-    border:1.5px solid #fff;border-radius:5px;padding:0 5px;margin-left:4px;line-height:1.2;
-  }
-  .gt-eq{
-    position:absolute;left:50%;bottom:-8px;transform:translateX(-50%);z-index:1;white-space:nowrap;
-    background:#6b8e3d;color:#fff;font-size:.56rem;font-weight:800;padding:2px 6px;border-radius:5px;letter-spacing:.03em;
-  }
-  .gt-ex{
-    background:#fff;border:1px solid var(--col-dark);padding:6px 5px;
-    font-family:var(--ser);font-style:italic;font-size:.66rem;line-height:1.45;
-    overflow-wrap:anywhere;   /* узкая колонка: длинное слово переносится, а не обрезается */
-  }
-  .gt-ex b{font-weight:700;}
-  .e-a{color:#d9a400;font-weight:700;}
-  .e-n{color:#f31b3c;font-weight:700;}
-  .gt-ask{
-    background:#fff;border:1px solid var(--col-dark);text-align:center;font-weight:700;font-size:.68rem;
-    padding:6px 2px;letter-spacing:.02em;
-  }
-  .gt-note{font-size:.7rem;margin-top:8px;color:#444;line-height:1.4;}
-  .gt-note b{color:#1c1c1c;}
-
-  /* инфографика «-a czy -u?» — два столбца списков */
-  .gt-title{color:#333;font-weight:900;font-size:.9rem;margin-bottom:10px;background:#e0e0e0;padding:6px 10px;border-radius:4px;}
-  .gt-lists{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
-  .gt-badge{
-    display:inline-block;background:#f31b3c;color:#fff;border-radius:50%;width:40px;height:40px;line-height:40px;
-    text-align:center;font-family:var(--ser);font-style:italic;font-weight:700;font-size:1.05rem;margin-bottom:8px;
-  }
-  .gt-grp{margin-bottom:7px;}
-  .gt-grp h4{
-    margin:0;background:#555;color:#fff;font-size:.56rem;font-weight:800;text-transform:uppercase;
-    letter-spacing:.04em;padding:3px 7px;border-radius:5px 5px 0 0;display:inline-block;
-  }
-  .gt-grp div{background:#fff;border:1px solid #ddd;border-radius:0 6px 6px 6px;padding:5px 7px;font-size:.66rem;line-height:1.45;overflow-wrap:anywhere;}
 </style>
 </head>
 <body>
@@ -1757,170 +1648,6 @@ const CASE_REF = {
 /* вопросы по падежам собираются один раз при загрузке */
 const CASE_DATA = buildCaseData();
 
-/* ============ ТАБЛИЦЫ ПАДЕЖЕЙ (книжные) ============
-   Воспроизводят развороты «Tablice gramatyczne» (Polski krok po kroku): шапка tab. N,
-   колонки родов, ряд прилагательного (жёлтые плашки), ряд существительного (красные),
-   примеры и строка вопроса JAKI?. Это справочник, движок тестов их не читает.
-
-   Формат ячейки: {end, span, alt:[[когда, окончание]], eq:'= BIERNIK'}.
-   В примерах {..} — окончание прилагательного (жёлтое), [..] — существительного (красное);
-   слово с маркером выделяется жирным, пустой маркер [] = нулевое окончание.
-
-   verified:true — таблица сверена со скриншотом книги плашка в плашку.
-   verified:false — страницы в скринах не было, собрана по правилам: при показе помечается. */
-const CASE_TABLES = [
-  { id:'M1', num:'tab. 1', kase:'MIANOWNIK', q:'Kto? Co?', n:'l. poj.', group:'M', color:'sand', verified:false,
-    cols:[{label:'rodzaj męski', ic:'m'},{label:'rodzaj żeński', ic:'f'},{label:'rodzaj nijaki', ic:'n'}],
-    adj:[{end:'-y', alt:[['k, g','-i']]},{end:'-a'},{end:'-e'}],
-    noun:[{end:'-ø', alt:[['kolega, tata, mężczyzna','-a']]},{end:'-a', alt:[['pani','-i'],['noc, miłość','-ø']]},{end:'-o<br>-e<br>-ę<br>-um'}],
-    ex:[{lines:['To jest dobr{y} student[].','To jest wysok{i} mężczyzn[a].']},
-        {lines:['To jest dobr{a} studentk[a].','To jest now{a} kaw[a].']},
-        {lines:['To jest dobr{e} dzieck[o].','To jest ładn{e} imi[ę].','To jest now{e} muze[um].']}],
-    ask:[{t:'JAKI?'},{t:'JAKA?'},{t:'JAKIE?'}] },
-
-  { id:'M2', num:'tab. 2', kase:'MIANOWNIK', q:'Kto? Co?', n:'l. mn.', group:'M', color:'sand', verified:false,
-    cols:[{label:'rodzaj męski osobowy', ic:'mm'},{label:'rodzaj męski nieosobowy', ic:'h'},{label:'rodzaj żeński', ic:'f'},{label:'rodzaj nijaki', ic:'n'}],
-    adj:[{end:'-i', alt:[['k, g, r + sz, ż, cz, rz','-y']]},{end:'-e', span:3}],
-    noun:[{end:'-i', alt:[['k, g, r + c','-y'],['ś, ć, ź, dź, ń, l, j<br>sz, ż, cz, rz','-e'],['pan, syn, ojciec','-owie']]},
-          {end:'-y', span:2, alt:[['k, g','-i'],['sz, cz, dz, dż, ż, rz<br>ś, ć, ź, dź, ń, c, l, j','-e']]},
-          {end:'-a'}],
-    ex:[{lines:['To są dobrz{y} studenc[i].','To są mil{i} Polac[y].','To są now{i} nauczyciel[e].']},
-        {lines:['To są now{e} komputer[y].','To są drog{ie} hotel[e].']},
-        {lines:['To są dobr{e} studentk[i].','To są czarn{e} kaw[y].']},
-        {lines:['To są włosk{ie} win[a].','To są smaczn{e} jabłk[a].']}],
-    ask:[{t:'JACY?'},{t:'JAKIE?', span:3}],
-    note:'<b>Мужско-личный род меняет согласную:</b> student → studenci, Polak → Polacy, aktor → aktorzy, Francuz → Francuzi; dobry → dobrzy, miły → mili, wysoki → wysocy, drogi → drodzy.' },
-
-  { id:'D1', num:'tab. 5', kase:'DOPEŁNIACZ', q:'Kogo? Czego?', n:'l. poj.', group:'D', color:'olive', verified:true,
-    cols:[{label:'rodzaj męski', ic:'m', span:2},{label:'rodzaj żeński', ic:'f'},{label:'rodzaj nijaki', ic:'n'}],
-    subs:[{label:'żywotne', ic:'♡'},{label:'nieżywotne', ic:'⊘'},null,null],
-    adj:[{end:'-ego', eq:'= BIERNIK'},{end:'-ego'},{end:'-ej'},{end:'-ego'}],
-    noun:[{end:'-a'},{end:'-a<br>-u'},{end:'-y', alt:[['k, g<br>ś, ć, ź, dź, ń + l, j','-i']]},{end:'-a'}],
-    ex:[{lines:['Nie mam starsz{ego} brat[a].','Nie mam młod{ego} tat[y].']},
-        {lines:['Nie lubię ciemn{ego} chleb[a].','Nie jem słodk{iego} dżem[u].']},
-        {lines:['Nie lubię zimn{ej} zup[y].','Nie kupuję tłust{ej} szynk[i].','Nie mam now{ej} powieśc[i].','Nie jem smażon{ej} cebul[i].']},
-        {lines:['Nie chcę gorąc{ego} mlek[a].']}],
-    ask:[{t:'JAKIEGO?', span:2},{t:'JAKIEJ?'},{t:'JAKIEGO?'}] },
-
-  { id:'D2', num:'tab. 6', kase:'DOPEŁNIACZ', q:'Kogo? Czego?', n:'l. mn.', group:'D', color:'olive', verified:false,
-    cols:[{label:'rodzaj męski', ic:'m'},{label:'rodzaj żeński', ic:'f'},{label:'rodzaj nijaki', ic:'n'}],
-    adj:[{end:'-ych', span:3, alt:[['k, g','-ich']]}],
-    noun:[{end:'-ów', alt:[['sz, cz, dz, dż<br>ż, rz + c','-y'],['ś, ć, ź, dź<br>ń + l, j','-i']]},
-          {end:'-ø', alt:[['kawiarnia, lekcja, powieść','-i'],['ulica, noc, rzecz','-y']]},
-          {end:'-ø', alt:[['imię → imion',''],['muzeum → muzeów','']]}],
-    ex:[{lines:['Nie mam dobr{ych} koleg[ów].','Nie lubię tych star{ych} film[ów].','Nie znam t{ych} nauczyciel[i].']},
-        {lines:['Nie mam now{ych} książ[ek].','Nie znam mił{ych} student[ek].','Nie mam dziś lekcj[i].']},
-        {lines:['Nie kupuję drog{ich} win[].','Nie znam krakowsk{ich} muze[ów].']}],
-    ask:[{t:'JAKICH?', span:3}] },
-
-  { kind:'lists', id:'Dau', group:'D', color:'olive', verified:true,
-    title:'DOPEŁNIACZ – rodzaj męski nieżywotny: „-a” czy „-u”?',
-    cols:[
-      {end:'-a', groups:[
-        ['Nazwy walut', ['dolar – dolar[a]','funt – funt[a]','cent – cent[a]']],
-        ['Marki', ['Ford – Ford[a]','Citroen – Citroen[a]','Adidas – Adidas[a]']],
-        ['Miary', ['kilogram – kilogram[a]','kilometr – kilometr[a]','metr – metr[a]']],
-        ['Naczynia i sztućce', ['talerz – talerz[a]','nóż – noż[a]','garnek – garnk[a]']],
-        ['Gry i sport', ['tenis – tenis[a]','hokej – hokej[a]','brydż – brydż[a]']],
-        ['Części ciała', ['brzuch – brzuch[a]','palec – palc[a]','nos – nos[a]']],
-        ['Narzędzia', ['młotek – młotk[a]','klucz – klucz[a]','ołówek – ołówk[a]']],
-        ['Tańce', ['walc – walc[a]','polonez – polonez[a]','fokstrot – fokstrot[a]']],
-        ['Nazwy miast', ['Berlin – Berlin[a]','Paryż – Paryż[a]','Gdańsk – Gdańsk[a]']],
-        ['Niektóre produkty spożywcze', ['chleb – chleb[a]','ser – ser[a]','naleśnik – naleśnik[a]']],
-        ['Nazwy miesięcy', ['styczni[a], marc[a], kwietni[a], maj[a], czerwc[a], lipc[a], sierpni[a], wrześni[a], październik[a], listopad[a], grudni[a]']],
-        ['Kwiaty, warzywa, owoce', ['tulipan – tulipan[a]','banan – banan[a]','ogórek – ogórk[a]']]
-      ]},
-      {end:'-u', groups:[
-        ['Substancje płynne', ['sok – sok[u]','majonez – majonez[u]','klej – klej[u]']],
-        ['Środki transportu', ['samochód – samochod[u]','rower – rower[u]','autobus – autobus[u]']],
-        ['Dni tygodnia', ['poniedziałek – poniedziałk[u]','wtorek – wtork[u]','czwartek – czwartk[u]','piątek – piątk[u]']],
-        ['Rzeczowniki „zbiorowe”', ['makaron – makaron[u]','cukier – cukr[u]','las – las[u]']],
-        ['Pojęcia abstrakcyjne', ['Nie ma problem[u]!','Nie rób hałas[u]!','Z chaos[u] wyłoniła się Gaja i Uranos.']]
-      ]}
-    ],
-    note:'<b>UWAGA!</b> Регулярное окончание — <b>-u</b>, но <b>-a</b> встречается почти так же часто. Сомневаешься — проверь слово в Wikisłownik. У некоторых слов допустимы оба: krawat – krawat<b>a</b> / krawat<b>u</b>.' },
-
-  { id:'C1', num:'tab. 7', kase:'CELOWNIK', q:'Komu? Czemu?', n:'l. poj.', group:'C', color:'rose', verified:false,
-    cols:[{label:'rodzaj męski', ic:'m'},{label:'rodzaj żeński', ic:'f'},{label:'rodzaj nijaki', ic:'n'}],
-    adj:[{end:'-emu', alt:[['k, g','-iemu']]},{end:'-ej'},{end:'-emu', alt:[['k, g','-iemu']]}],
-    noun:[{end:'-owi', alt:[['brat, ojciec, pan, chłopiec<br>kot, pies, Bóg','-u']]},
-          {end:'-e', alt:[['k → ce, g → dze, r → rze<br>t → cie, d → dzie, ł → le',''],['miękkie + sz, ż, cz, rz, c','-i / -y']]},
-          {end:'-u'}],
-    ex:[{lines:['Pomagam dobr{emu} student[owi].','Ufam star{emu} brat[u].']},
-        {lines:['Daję kwiaty mił{ej} koleżan[ce].','Dziękuję moj{ej} mam[ie].']},
-        {lines:['Przyglądam się mał{emu} dzieck[u].']}],
-    ask:[{t:'JAKIEMU?'},{t:'JAKIEJ?'},{t:'JAKIEMU?'}],
-    note:'В «Krok po kroku 1» celownik даётся только на местоимениях (<b>podoba mi się</b>, <b>pomagam ci</b>); существительные в этом падеже — уже книга 2.' },
-
-  { id:'C2', num:'tab. 8', kase:'CELOWNIK', q:'Komu? Czemu?', n:'l. mn.', group:'C', color:'rose', verified:false,
-    cols:[{label:'rodzaj męski', ic:'m'},{label:'rodzaj żeński', ic:'f'},{label:'rodzaj nijaki', ic:'n'}],
-    adj:[{end:'-ym', span:3, alt:[['k, g','-im']]}],
-    noun:[{end:'-om', span:3}],
-    ex:[{lines:['Pomagam dobr{ym} student[om].']},{lines:['Dziękuję mił{ym} koleżank[om].']},{lines:['Przyglądam się mał{ym} dzieci[om].']}],
-    ask:[{t:'JAKIM?', span:3}] },
-
-  { id:'B1', num:'tab. 9', kase:'BIERNIK', q:'Kogo? Co?', n:'l. poj.', group:'B', color:'olive', verified:true,
-    cols:[{label:'rodzaj męski', ic:'m', span:2},{label:'rodzaj żeński', ic:'f'},{label:'rodzaj nijaki', ic:'n'}],
-    subs:[{label:'żywotne', ic:'♡'},{label:'nieżywotne', ic:'⊘'},null,null],
-    adj:[{end:'-ego'},{end:'-y', alt:[['k, g','-i']], eq:'= MIANOWNIK'},{end:'-ą'},{end:'-e', eq:'= MIANOWNIK'}],
-    noun:[{end:'-a'},{end:'-ø'},{end:'-ę'},{end:'-o<br>-e<br>-ę<br>-um'}],
-    ex:[{lines:['Mam inteligentn{ego} brat[a].','Mam czarn{ego} kot[a].','Mam dobr{ego} tat[ę].']},
-        {lines:['Mam woln{y} czas[].','Mam niebiesk{i} sweter[].']},
-        {lines:['Znam twoj{ą} siostr[ę].','Czytam ciekaw{ą} książk[ę].']},
-        {lines:['Mam sportow{e} aut[o].','Jem dobr{e} śniadani[e].','Masz ładn{e} imi[ę].','Lubię to now{e} centr[um] handlow{e}.']}],
-    ask:[{t:'JAKIEGO?'},{t:'JAKI?'},{t:'JAKĄ?'},{t:'JAKIE?'}] },
-
-  { id:'B2', num:'tab. 10', kase:'BIERNIK', q:'Kogo? Co?', n:'l. mn.', group:'B', color:'olive', verified:true,
-    cols:[{label:'rodzaj męski osobowy', ic:'mm'},{label:'rodzaj męski nieosobowy', ic:'h'},{label:'rodzaj żeński', ic:'f'},{label:'rodzaj nijaki', ic:'n'}],
-    adj:[{end:'-ych', alt:[['k, g','-ich']], eq:'= DOPEŁNIACZ'},{end:'-e', span:3, eq:'= MIANOWNIK'}],
-    noun:[{end:'-ów', alt:[['sz, cz, dz, dż<br>ż, rz + c','-y'],['ś, ć, ź, dź<br>ń + l, j','-i']]},
-          {end:'-y', span:2, alt:[['k, g','-i'],['sz, cz, dz, dż, ż, rz<br>ś, ć, ź, dź, ń, c, l, j','-e']]},
-          {end:'-a'}],
-    ex:[{lines:['Znam tych starsz{ych} pan[ów].','Poznałem polsk{ich} piłkarz[y].','Lubię nasz{ych} nauczyciel[i].']},
-        {lines:['Znam te piękn{e} obraz[y].','Lubię rusk{ie} pierog[i].','Masz drobn{e} pieniądz[e]?']},
-        {lines:['Proszę dwie czarn{e} kaw[y].','Znam te mił{e} studentk[i].','Kupiłem czerwon{e} róż[e].']},
-        {lines:['Lubię włosk{ie} win[a].','Jemy smaczn{e} śniadani[a].','Macie ładn{e} imion[a].','Zwiedzam krakowsk{ie} muze[a].']}],
-    ask:[{t:'JAKICH?'},{t:'JAKIE?', span:3}],
-    note:'<b>mąż → mężów</b>' },
-
-  { id:'N1', num:'tab. 11', kase:'NARZĘDNIK', q:'(z) Kim? (z) Czym?', n:'l. poj.', group:'N', color:'blue', verified:true,
-    cols:[{label:'rodzaj męski', ic:'m'},{label:'rodzaj żeński', ic:'f'},{label:'rodzaj nijaki', ic:'n'}],
-    adj:[{end:'-ym', alt:[['k, g','-im']]},{end:'-ą'},{end:'-ym', alt:[['k, g','-im']]}],
-    noun:[{end:'<small>(i)</small>-em'},{end:'-ą'},{end:'<small>(i)</small>-em'}],
-    ex:[{lines:['On jest dobr{ym} student[em].','On jest wysok{im} mężczyzn[ą].']},
-        {lines:['Ona jest dobr{ą} studentk[ą].']},
-        {lines:['Ono jest dobr{ym} dzieck[iem].']}],
-    ask:[{t:'JAKIM?'},{t:'JAKĄ?'},{t:'JAKIM?'}],
-    note:'<b>(i)-em</b> — после k, g вставляется i: Polak → Polak<b>iem</b>, dziecko → dzieck<b>iem</b>.' },
-
-  { id:'N2', num:'tab. 12', kase:'NARZĘDNIK', q:'(z) Kim? (z) Czym?', n:'l. mn.', group:'N', color:'blue', verified:true,
-    cols:[{label:'rodzaj męski', ic:'m'},{label:'rodzaj żeński', ic:'f'},{label:'rodzaj nijaki', ic:'n'}],
-    adj:[{end:'-ymi', span:3, alt:[['k, g','-imi']]}],
-    noun:[{end:'-ami', span:3}],
-    ex:[{lines:['Oni są dobr{ymi} student[ami].']},{lines:['Interesuję się star{ymi} monet[ami].']},{lines:['Deser ze słodk{imi} jabłk[ami].']}],
-    ask:[{t:'JAKIMI?', span:3}],
-    note:'<b>Wyjątki -mi:</b> ludźmi, braćmi, przyjaciółmi, dziećmi, pieniędzmi, końmi, liśćmi (а также gośćmi, księżmi, kośćmi, dłońmi, nićmi).' },
-
-  { id:'L1', num:'tab. 13', kase:'MIEJSCOWNIK', q:'(o) Kim? (o) Czym? Gdzie?', n:'l. poj.', group:'L', color:'green', verified:false,
-    cols:[{label:'rodzaj męski', ic:'m'},{label:'rodzaj żeński', ic:'f'},{label:'rodzaj nijaki', ic:'n'}],
-    adj:[{end:'-ym', alt:[['k, g','-im']]},{end:'-ej'},{end:'-ym', alt:[['k, g','-im']]}],
-    noun:[{end:'-e', alt:[['t → cie, d → dzie, r → rze<br>ł → le, st → ście',''],['k, g, ch + miękkie<br>sz, ż, cz, rz, c, l, j','-u']]},
-          {end:'-e', alt:[['k → ce, g → dze, r → rze<br>t → cie, d → dzie, ł → le',''],['miękkie + sz, ż, cz, rz, c, l, j','-i / -y']]},
-          {end:'-e', alt:[['k, g, ch + miękkie, -um','-u']]}],
-    ex:[{lines:['Mieszkam w now{ym} dom[u].','Mówię o dobr{ym} studen[cie].']},
-        {lines:['Jestem w dobr{ej} szko[le].','Myślę o now{ej} książ[ce].','Jestem w prac[y].']},
-        {lines:['Jestem w duż{ym} mie[ście].','Mówię o mał{ym} dzieck[u].']}],
-    ask:[{t:'JAKIM?'},{t:'JAKIEJ?'},{t:'JAKIM?'}],
-    note:'Только с предлогом: <b>w / we</b>, <b>na</b>, <b>o</b>, <b>przy</b>. Месяцы: w styczniu, w lutym, we wrześniu.' },
-
-  { id:'L2', num:'tab. 14', kase:'MIEJSCOWNIK', q:'(o) Kim? (o) Czym? Gdzie?', n:'l. mn.', group:'L', color:'green', verified:false,
-    cols:[{label:'rodzaj męski', ic:'m'},{label:'rodzaj żeński', ic:'f'},{label:'rodzaj nijaki', ic:'n'}],
-    adj:[{end:'-ych', span:3, alt:[['k, g','-ich']]}],
-    noun:[{end:'-ach', span:3}],
-    ex:[{lines:['Mówię o dobr{ych} student[ach].']},{lines:['Myślę o star{ych} monet[ach].']},{lines:['Czytam o mał{ych} dzieci[ach].']}],
-    ask:[{t:'JAKICH?', span:3}] }
-];
-
 /* ============ РЕЕСТР ТЕМ ============ */
 const SUB_EMOJI = {jednosci:'1️⃣', dziesiatki:'🔟', setki:'💯', tysiace:'💰', daty:'📅', czas:'🕐',
                    M:'📗', ISZ:'📘', ESZ:'📙', EXC:'⭐'};
@@ -2097,7 +1824,7 @@ function fmtPts(n){ return n >= 1000 ? (n/1000).toFixed(n >= 10000 ? 0 : 1).repl
 
 /* ============ СОСТОЯНИЕ ============ */
 const BATCH_SIZE = 10;
-let state = 'topic';           // 'topic' | 'sub' | 'quiz' | 'summary' | 'tables'
+let state = 'topic';           // 'topic' | 'sub' | 'quiz' | 'summary'
 let topicIdx = 0;
 let topic = TOPICS[TOPIC_ORDER[0]];
 let selectedSub = null;
@@ -2254,7 +1981,6 @@ function renderTopicScreen(){
   });
 
   app.innerHTML = `
-    ${tabsHtml('tests')}
     <div class="screen-title">Выбери тему</div>
     ${sw.html}
     <div class="screen-pad">
@@ -2587,100 +2313,8 @@ function renderSummary(){
   });
 }
 
-/* ============ ЭКРАН: ТАБЛИЦЫ ============
-   Отдельная вкладка рядом с тестами. Ничего не считает и не пишет в прогресс —
-   только рисует CASE_TABLES. Фильтр по падежу живёт в tablesFilter и переживает
-   переходы между вкладками в рамках одной сессии. */
-let tablesFilter = null;   // null = все падежи, иначе ключ группы ('M','D',…)
-const TABLE_CASES = [['M','Mianownik'],['D','Dopełniacz'],['C','Celownik'],['B','Biernik'],['N','Narzędnik'],['L','Miejscownik']];
-const GENDER_ICON = {m:'👨', f:'👩', n:'👶', mm:'👥', h:'🏠'};
-
-function tabsHtml(on){
-  return `<div class="tabs">
-    <button type="button" class="tab${on === 'tests' ? ' on' : ''}" data-tab="tests">📝 Тесты</button>
-    <button type="button" class="tab${on === 'tables' ? ' on' : ''}" data-tab="tables">📖 Таблицы</button>
-  </div>`;
-}
-
-/* {..} → окончание прилагательного, [..] → окончание существительного; слово с маркером — жирное */
-function exHtml(s){
-  return s.split(' ').map(w => {
-    const marked = /[{\[]/.test(w);
-    const h = w.replace(/\{([^}]*)\}/g, '<span class="e-a">$1</span>')
-               .replace(/\[([^\]]*)\]/g, '<span class="e-n">$1</span>');
-    return marked ? `<b>${h}</b>` : h;
-  }).join(' ');
-}
-function pillHtml(c, cls){
-  const alt = (c.alt || []).map(([when, end]) =>
-    `<span class="alt"><i>${when}</i>${end ? `<b>${end}</b>` : ''}</span>`).join('');
-  return `<span class="pill ${cls}">${c.end}${alt}</span>${c.eq ? `<span class="gt-eq">${c.eq}</span>` : ''}`;
-}
-const spanAttr = c => (c.span || 1) > 1 ? ` style="grid-column:span ${c.span}"` : '';
-
-function tableHeadHtml(t){
-  return `<div class="gt-head">
-      <span class="gt-num">${t.num}</span><span class="gt-case">${t.kase}</span>
-      <span class="gt-q">${t.q}</span><span class="gt-n">${t.n}</span>
-      ${t.verified ? '' : '<div class="gt-warn">⚠️ Этой страницы не было среди скринов книги — собрано по правилам, сверить с книгой.</div>'}
-    </div>`;
-}
-function gridTableHtml(t){
-  const leaf = t.cols.reduce((s, c) => s + (c.span || 1), 0);
-  let g = '<i></i>' + t.cols.map(c =>
-    `<div class="gt-gen"${spanAttr(c)}><span>${c.label}</span><span class="ic">${GENDER_ICON[c.ic] || ''}</span></div>`).join('');
-  if(t.subs) g += '<i></i>' + t.subs.map(s =>
-    s ? `<div class="gt-sub"><span class="ic">${s.ic}</span>${s.label}</div>` : '<div class="gt-sub"></div>').join('');
-  g += '<div class="gt-lbl">przymiotnik</div>' + t.adj.map(c => `<div class="gt-cell"${spanAttr(c)}>${pillHtml(c, 'y')}</div>`).join('');
-  g += '<div class="gt-lbl">rzeczownik</div>'  + t.noun.map(c => `<div class="gt-cell"${spanAttr(c)}>${pillHtml(c, 'r')}</div>`).join('');
-  g += '<div class="gt-lbl">przykład</div>'    + t.ex.map(c => `<div class="gt-ex"${spanAttr(c)}>${c.lines.map(exHtml).join('<br>')}</div>`).join('');
-  g += '<i></i>' + t.ask.map(c => `<div class="gt-ask"${spanAttr(c)}>${c.t}</div>`).join('');
-  return `<section class="gt c-${t.color}" data-case="${t.group}">
-    ${tableHeadHtml(t)}
-    <div class="gt-grid" style="--n:${leaf}">${g}</div>
-    ${t.note ? `<div class="gt-note">${t.note}</div>` : ''}
-  </section>`;
-}
-function listsTableHtml(t){
-  const cols = t.cols.map(c => `<div class="gt-lcol"><span class="gt-badge">${c.end}</span>${
-    c.groups.map(([h, items]) => `<div class="gt-grp"><h4>${h}</h4><div>${items.map(exHtml).join('<br>')}</div></div>`).join('')
-  }</div>`).join('');
-  return `<section class="gt c-${t.color}" data-case="${t.group}">
-    <div class="gt-title">${t.title}</div>
-    <div class="gt-lists">${cols}</div>
-    ${t.note ? `<div class="gt-note">${t.note}</div>` : ''}
-  </section>`;
-}
-const tableHtml = t => t.kind === 'lists' ? listsTableHtml(t) : gridTableHtml(t);
-
-function renderTables(){
-  const chips = [['all', 'Все']].concat(TABLE_CASES).map(([k, l]) =>
-    `<button type="button" class="gt-chip${(tablesFilter || 'all') === k ? ' on' : ''}" data-case="${k}">${l}</button>`).join('');
-  const shown = CASE_TABLES.filter(t => !tablesFilter || t.group === tablesFilter);
-  /* пустой список невозможен при текущих данных, но если фильтр не нашёл таблиц — сказать словами, а не показать пустоту */
-  const list = shown.length ? shown.map(tableHtml).join('')
-                            : '<div class="panel" style="text-align:center">Для этого падежа таблиц пока нет.</div>';
-  app.innerHTML = `${tabsHtml('tables')}
-    <div class="screen-title">Таблицы падежей</div>
-    <div class="screen-sub">как в «Tablice gramatyczne» · Polski krok po kroku</div>
-    <div class="gt-filter">${chips}</div>
-    ${list}`;
-  app.querySelectorAll('.gt-chip').forEach(b => b.addEventListener('click', () => {
-    tablesFilter = b.dataset.case === 'all' ? null : b.dataset.case;
-    renderTables();
-    window.scrollTo({top:0, behavior:'smooth'});
-  }));
-}
-
 /* ============ МОДАЛ ============ */
 document.addEventListener('click', e => {
-  const tab = e.target.closest('.tab');
-  if(tab){
-    state = tab.dataset.tab === 'tables' ? 'tables' : 'topic';
-    render();
-    window.scrollTo({top:0, behavior:'smooth'});
-    return;
-  }
   const link = e.target.closest('.ref-link');
   if(link){ openRefModal(link.dataset.ref); return; }
   if(e.target === modalBackdrop) closeModal();
@@ -2710,9 +2344,6 @@ function render(){
   else if(state === 'sub') renderSubScreen();
   else if(state === 'quiz') renderQuiz();
   else if(state === 'summary') renderSummary();
-  else if(state === 'tables') renderTables();
-  /* на вкладке таблиц HUD с очками не нужен — он про тесты */
-  document.body.classList.toggle('tables-mode', state === 'tables');
 }
 render();
 
