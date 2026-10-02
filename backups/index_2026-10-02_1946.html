@@ -403,8 +403,7 @@
     margin-left:auto;background:#111;color:#fff;font-family:var(--ser);font-style:italic;font-weight:700;
     font-size:.82rem;padding:4px 10px;border-radius:6px;
   }
-  .gt-use{font-size:.7rem;line-height:1.4;color:#333;background:#fff;border-left:3px solid #e8192c;border-radius:0 8px 8px 0;padding:5px 8px;margin:-2px 0 10px;}
-  .gt-use i{font-style:italic;font-family:var(--ser);font-size:.78rem;}
+  .gt-warn{width:100%;font-size:.68rem;color:#8a5c05;background:#fff0d0;border-radius:8px;padding:5px 8px;font-weight:700;}
 
   .gt-grid{display:grid;gap:3px;grid-template-columns:20px repeat(var(--n),minmax(0,1fr));}
   .gt-grid > *{min-width:0;}
@@ -1768,18 +1767,7 @@ const CASE_DATA = buildCaseData();
    слово с маркером выделяется жирным, пустой маркер [] = нулевое окончание.
 
    verified:true — таблица сверена со скриншотом книги плашка в плашку.
-   verified:false — страницы в скринах не было, собрана по правилам. На экране не отличается:
-   владелец проверил и снял пометку 2026-10-02; флаг оставлен как память о том, что сверялось. */
-/* когда какой падеж нужен — одна строка на падеж, выводится под шапкой каждой таблицы */
-const CASE_USE = {
-  M:'Kto? Co? Словарная форма: подлежащее и всё после <i>to jest / to są</i>.',
-  D:'После отрицания (<i>nie mam czasu</i>), количества (<i>dużo pracy, kilo sera</i>), предлогов <i>do, z, od, dla, bez, u, obok</i> и глаголов <i>szukać, słuchać, uczyć się, potrzebować</i>.',
-  C:'Komu? Адресат: <i>dawać, pomagać, dziękować, podobać się</i>, безличное (<i>zimno mi</i>), предлоги <i>dzięki, przeciwko</i>.',
-  B:'Прямой объект: <i>mam, lubię, kupuję, jem, piję, znam, widzę</i>; направление и время: <i>na koncert, w piątek, przez</i>.',
-  N:'После <i>być</i> (<i>jestem studentem</i>), <i>interesować się</i>, транспорт (<i>jadę autobusem</i>), <i>z</i> + кем/чем (<i>z bratem, kawa z mlekiem</i>), <i>przed, za, pod, nad, między</i>.',
-  L:'Только с предлогом: <i>w / we / na</i> (где: <i>w Krakowie, na poczcie</i>), <i>o</i> (о чём: <i>o filmie</i>), <i>przy, po</i>; месяцы (<i>w maju</i>).'
-};
-
+   verified:false — страницы в скринах не было, собрана по правилам: при показе помечается. */
 const CASE_TABLES = [
   { id:'M1', num:'tab. 1', kase:'MIANOWNIK', q:'Kto? Co?', n:'l. poj.', group:'M', color:'sand', verified:false,
     cols:[{label:'rodzaj męski', ic:'m'},{label:'rodzaj żeński', ic:'f'},{label:'rodzaj nijaki', ic:'n'}],
@@ -2634,8 +2622,8 @@ function tableHeadHtml(t){
   return `<div class="gt-head">
       <span class="gt-num">${t.num}</span><span class="gt-case">${t.kase}</span>
       <span class="gt-q">${t.q}</span><span class="gt-n">${t.n}</span>
-    </div>
-    <div class="gt-use"><b>Когда:</b> ${CASE_USE[t.group]}</div>`;
+      ${t.verified ? '' : '<div class="gt-warn">⚠️ Этой страницы не было среди скринов книги — собрано по правилам, сверить с книгой.</div>'}
+    </div>`;
 }
 function gridTableHtml(t){
   const leaf = t.cols.reduce((s, c) => s + (c.span || 1), 0);
@@ -2659,7 +2647,6 @@ function listsTableHtml(t){
   }</div>`).join('');
   return `<section class="gt c-${t.color}" data-case="${t.group}">
     <div class="gt-title">${t.title}</div>
-    <div class="gt-use"><b>Когда:</b> ${CASE_USE[t.group]}</div>
     <div class="gt-lists">${cols}</div>
     ${t.note ? `<div class="gt-note">${t.note}</div>` : ''}
   </section>`;
