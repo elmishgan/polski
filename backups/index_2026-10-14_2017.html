@@ -1,0 +1,2743 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<title>Польский — тренажёр</title>
+
+<!-- PWA: установка на домашний экран -->
+<link rel="manifest" href="manifest.webmanifest">
+<meta name="theme-color" content="#33459b">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Polski">
+<link rel="apple-touch-icon" href="icons/icon-180.png">
+<link rel="icon" href="icons/icon-192.png">
+<style>
+  :root{
+    --bg-top:#33459b;
+    --bg-bot:#161e4d;
+    --panel:#3a52ad;
+    --panel-2:#2b3d8d;
+    --panel-line:#6d8dee;
+    --deep:#1b2559;
+    --ink:#ffffff;
+    --muted:#a9bcf2;
+    --card:#ffffff;
+    --card-ink:#1c2547;
+    --card-line:#d8e1ff;
+    --green:#5fd46f;      --green-2:#3fae4d;  --green-dark:#2a7a34;
+    --blue:#5ba3ff;       --blue-2:#2f7ae0;   --blue-dark:#1f56a8;
+    --amber:#ffc44d;      --amber-2:#f0a018;  --amber-dark:#b9760a;
+    --red:#ff7361;        --red-2:#e8442c;    --red-dark:#a82c1a;
+    --gold:#ffd23f;
+    --font:ui-rounded,"SF Pro Rounded",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    font-family:var(--font);
+    background:linear-gradient(180deg,var(--bg-top) 0%,var(--bg-bot) 70%) fixed;
+    background-color:var(--bg-bot);
+    color:var(--ink);
+    min-height:100vh;
+    padding:calc(10px + env(safe-area-inset-top)) calc(12px + env(safe-area-inset-right))
+            calc(24px + env(safe-area-inset-bottom)) calc(12px + env(safe-area-inset-left));
+    -webkit-text-size-adjust:100%;
+    -webkit-tap-highlight-color:transparent;
+    overscroll-behavior-y:none;
+    touch-action:manipulation;
+  }
+  html{touch-action:manipulation;}
+  .wrap{max-width:560px;margin:0 auto;}
+
+  /* ---------- HUD ---------- */
+  .hud{display:flex;align-items:center;gap:8px;margin-bottom:12px;}
+  .hud-pill{
+    display:flex;align-items:center;gap:7px;
+    background:var(--deep);border:2px solid #4d69c9;border-radius:999px;
+    padding:4px 13px 4px 4px;box-shadow:0 3px 0 rgba(0,0,0,.3);
+  }
+  .hud-ico{
+    width:26px;height:26px;border-radius:50%;
+    display:flex;align-items:center;justify-content:center;font-size:.85rem;
+    background:linear-gradient(180deg,#ffd964,#f0a51a);box-shadow:inset 0 -2px 0 rgba(0,0,0,.18);
+  }
+  .hud-ico.cup{background:linear-gradient(180deg,#8fd0ff,#3d8ede);}
+  .hud-val{font-weight:800;font-size:.95rem;letter-spacing:.01em;}
+  .hud-spacer{flex:1;}
+
+  /* ---------- панели ---------- */
+  .panel{
+    background:linear-gradient(180deg,var(--panel),var(--panel-2));
+    border:2px solid var(--panel-line);border-radius:22px;
+    padding:16px;margin-bottom:12px;
+    box-shadow:0 6px 0 rgba(0,0,0,.26), inset 0 2px 0 rgba(255,255,255,.16);
+  }
+  .panel-title{
+    font-size:.72rem;font-weight:800;text-transform:uppercase;letter-spacing:.09em;
+    color:var(--muted);margin-bottom:10px;text-align:center;
+  }
+
+  /* ---------- кнопки ---------- */
+  .gbtn{
+    border:none;border-radius:18px;cursor:pointer;font-family:var(--font);
+    font-weight:800;font-size:1.02rem;color:#fff;padding:15px 20px;width:100%;
+    text-shadow:0 2px 0 rgba(0,0,0,.22);
+    box-shadow:0 5px 0 var(--bd), 0 9px 14px rgba(0,0,0,.26), inset 0 2px 0 rgba(255,255,255,.3);
+    transition:transform .06s, box-shadow .06s, filter .15s;
+  }
+  .gbtn:active{transform:translateY(4px);box-shadow:0 1px 0 var(--bd), inset 0 2px 0 rgba(255,255,255,.28);}
+  .gbtn:disabled{filter:grayscale(.7) brightness(.75);cursor:not-allowed;}
+  .gbtn:disabled:active{transform:none;box-shadow:0 5px 0 var(--bd), inset 0 2px 0 rgba(255,255,255,.3);}
+  .g-green{background:linear-gradient(180deg,var(--green),var(--green-2));--bd:var(--green-dark);}
+  .g-blue{background:linear-gradient(180deg,var(--blue),var(--blue-2));--bd:var(--blue-dark);}
+  .g-amber{background:linear-gradient(180deg,var(--amber),var(--amber-2));--bd:var(--amber-dark);}
+  .g-ghost{background:linear-gradient(180deg,#516cc8,#3a4da3);--bd:#26336e;}
+  .btn-row{display:flex;gap:10px;}
+  .btn-row .gbtn{flex:1;}
+  .btn-xl{font-size:1.18rem;padding:18px 20px;letter-spacing:.03em;}
+
+  /* ---------- свайпер ---------- */
+  /* лента во всю ширину экрана: карточка уезжает за край, рамок вокруг нет */
+  .swiper{
+    position:relative;
+    margin-left:calc(-12px - env(safe-area-inset-left));
+    margin-right:calc(-12px - env(safe-area-inset-right));
+  }
+  .swiper-track{
+    position:relative;
+    display:flex;overflow-x:auto;scroll-snap-type:x mandatory;
+    scrollbar-width:none;-ms-overflow-style:none;
+    -webkit-overflow-scrolling:touch;touch-action:pan-x pan-y;
+    padding:4px 8%;
+  }
+  .swiper-track::-webkit-scrollbar{display:none;}
+  .slide{flex:0 0 84%;scroll-snap-align:center;padding:0 6px;}
+  .sw-arrow{
+    position:absolute;top:50%;transform:translateY(-50%);z-index:2;
+    width:34px;height:34px;border-radius:50%;border:2px solid rgba(255,255,255,.45);
+    background:rgba(15,22,60,.55);color:#fff;font-size:1.1rem;font-weight:800;
+    display:flex;align-items:center;justify-content:center;cursor:pointer;font-family:var(--font);
+    padding:0;line-height:1;
+  }
+  .sw-arrow:active{background:rgba(15,22,60,.8);}
+  .sw-prev{left:-4px;} .sw-next{right:-4px;}
+  .sw-dots{display:flex;justify-content:center;gap:6px;margin-top:12px;flex-wrap:wrap;}
+  .sw-dot{width:9px;height:9px;border-radius:50%;background:rgba(255,255,255,.28);transition:all .2s;cursor:pointer;}
+  .sw-dot.active{background:var(--gold);width:22px;border-radius:999px;}
+
+  /* ---------- карточка темы / подтемы ---------- */
+  .pick{
+    border-radius:20px;padding:20px 16px;text-align:center;
+    box-shadow:0 5px 0 rgba(0,0,0,.28), inset 0 2px 0 rgba(255,255,255,.25);
+    border:2px solid rgba(255,255,255,.28);
+  }
+  .pick-topic{min-height:230px;display:flex;flex-direction:column;justify-content:center;}
+  .pick-sub{min-height:250px;display:flex;flex-direction:column;justify-content:center;}
+  .pick-c-green{background:linear-gradient(180deg,#57cc6a,#2f9440);}
+  .pick-c-amber{background:linear-gradient(180deg,#ffb445,#e8791f);}
+  .pick-c-blue{background:linear-gradient(180deg,#5ba3ff,#2f6fd0);}
+  .pick-c-purple{background:linear-gradient(180deg,#b06cf5,#7a3fd1);}
+  .pick-emoji{
+    width:66px;height:66px;margin:0 auto 10px;border-radius:50%;
+    background:rgba(255,255,255,.24);border:2px solid rgba(255,255,255,.4);
+    display:flex;align-items:center;justify-content:center;font-size:2rem;
+    box-shadow:inset 0 -3px 0 rgba(0,0,0,.12);
+  }
+  .pick-sub .pick-emoji{width:52px;height:52px;font-size:1.55rem;margin-bottom:8px;}
+  .pick h2{margin:0 0 5px;font-size:1.35rem;font-weight:900;text-shadow:0 2px 0 rgba(0,0,0,.2);}
+  .pick-sub h2{font-size:1.15rem;}
+  .pick p{margin:0;font-size:.85rem;font-weight:600;color:rgba(255,255,255,.9);line-height:1.35;}
+  .mix-toggle{
+    margin-top:11px;align-self:center;
+    border:2px solid rgba(255,255,255,.5);background:rgba(0,0,0,.22);color:#fff;
+    border-radius:999px;padding:7px 16px;cursor:pointer;
+    font-family:var(--font);font-weight:800;font-size:.76rem;
+  }
+  .mix-toggle.on{
+    background:linear-gradient(180deg,var(--gold),#f0a51a);color:#4a3000;
+    border-color:#fff;box-shadow:0 3px 0 #b9760a;
+  }
+  .mix-bar{
+    display:flex;align-items:center;justify-content:center;gap:12px;flex-wrap:wrap;
+    background:rgba(0,0,0,.26);border:2px solid var(--gold);border-radius:16px;
+    padding:11px 14px;margin-bottom:12px;font-size:.82rem;font-weight:800;text-align:center;
+  }
+  .mini-btn{
+    background:none;border:none;padding:0;cursor:pointer;color:var(--gold);
+    font-family:var(--font);font-weight:800;font-size:.78rem;text-decoration:underline;
+  }
+  .pick-stats{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;margin-top:12px;}
+  .pk-chip{
+    background:rgba(0,0,0,.24);border-radius:999px;padding:4px 10px;
+    font-size:.72rem;font-weight:800;letter-spacing:.01em;
+  }
+  .screen-title{
+    font-size:1.32rem;font-weight:900;text-align:center;margin:2px 0 4px;
+    text-shadow:0 2px 0 rgba(0,0,0,.22);
+  }
+  .screen-sub{
+    font-size:.7rem;font-weight:800;text-transform:uppercase;letter-spacing:.09em;
+    color:var(--muted);text-align:center;margin:0 0 6px;
+  }
+  .screen-pad{margin-top:16px;}
+
+  /* ---------- степпер ---------- */
+  .stepper{display:flex;align-items:center;justify-content:center;gap:16px;}
+  .step-btn{
+    width:50px;height:50px;border-radius:50%;border:none;cursor:pointer;
+    background:linear-gradient(180deg,#5ba3ff,#2f7ae0);color:#fff;
+    font-size:1.7rem;font-weight:800;font-family:var(--font);line-height:1;
+    display:flex;align-items:center;justify-content:center;padding:0;
+    box-shadow:0 4px 0 var(--blue-dark), inset 0 2px 0 rgba(255,255,255,.3);
+  }
+  .step-btn:active{transform:translateY(3px);box-shadow:0 1px 0 var(--blue-dark);}
+  .step-btn:disabled{filter:grayscale(.7) brightness(.7);}
+  .step-val{
+    min-width:86px;text-align:center;font-size:2.4rem;font-weight:900;
+    text-shadow:0 3px 0 rgba(0,0,0,.25);
+  }
+  .step-caption{text-align:center;font-size:.8rem;font-weight:600;color:var(--muted);margin-top:8px;}
+
+  /* ---------- прогресс ---------- */
+  .pbar{
+    height:15px;background:var(--deep);border:2px solid #4d69c9;
+    border-radius:999px;overflow:hidden;flex:1;
+  }
+  .pbar-fill{
+    height:100%;border-radius:999px;transition:width .35s ease;
+    background:linear-gradient(180deg,#8ce6ff,#33b3ef);
+    box-shadow:inset 0 -3px 0 rgba(0,0,0,.15);
+  }
+  .quizbar{display:flex;align-items:center;gap:10px;margin-bottom:12px;}
+  .quizbar-label{font-size:.82rem;font-weight:800;white-space:nowrap;}
+
+  /* ---------- карточки вопросов ---------- */
+  .grid{display:grid;grid-template-columns:1fr 1fr;gap:11px;}
+  @media (max-width:620px){.grid{grid-template-columns:1fr;}}
+  .card{
+    position:relative;background:var(--card);color:var(--card-ink);
+    border:2px solid var(--card-line);border-radius:18px;padding:13px 15px 15px;
+    box-shadow:0 4px 0 rgba(0,0,0,.2);
+  }
+  .card.correct{background:#eefbf0;border-color:var(--green-2);box-shadow:0 4px 0 var(--green-dark);}
+  .card.close{background:#fff7e4;border-color:var(--amber-2);box-shadow:0 4px 0 var(--amber-dark);}
+  .card.wrong{background:#fff0ed;border-color:var(--red-2);box-shadow:0 4px 0 var(--red-dark);}
+  .q-meta{
+    display:flex;justify-content:space-between;align-items:center;gap:8px;
+    font-size:.68rem;font-weight:800;text-transform:uppercase;letter-spacing:.05em;
+    color:#7d89b8;margin-bottom:7px;
+  }
+  .q-hint{
+    color:#fff;background:linear-gradient(180deg,#7d8ec9,#5b6cae);
+    padding:3px 9px;border-radius:999px;font-size:.68rem;letter-spacing:.03em;
+    text-transform:none;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:62%;
+  }
+  .card.correct .q-hint{background:linear-gradient(180deg,var(--green),var(--green-2));}
+  .card.close .q-hint{background:linear-gradient(180deg,var(--amber),var(--amber-2));}
+  .card.wrong .q-hint{background:linear-gradient(180deg,var(--red),var(--red-2));}
+  .q-sentence{font-size:1rem;line-height:1.55;font-weight:600;}
+  input.blank{
+    font-family:var(--font);font-size:16px;font-weight:800;
+    border:2px solid #ccd8ff;border-radius:11px;background:#f3f7ff;
+    padding:7px 10px;width:130px;text-align:center;color:var(--card-ink);
+    outline:none;transition:border-color .15s, background .15s;
+  }
+  input.blank:focus{border-color:var(--blue-2);background:#fff;}
+  input.blank:disabled{opacity:1;}
+  .card.correct input.blank{border-color:var(--green-2);background:#dff6e3;color:#1d6b2c;}
+  .card.close input.blank{border-color:var(--amber-2);background:#fff0d0;color:#8a5c05;}
+  .card.wrong input.blank{border-color:var(--red-2);background:#ffe2dd;color:#a3301b;}
+  .given{
+    font-family:var(--font);font-size:16px;font-weight:800;
+    border:2px solid #ccd8ff;border-radius:11px;background:#f3f7ff;
+    padding:7px 10px;color:var(--card-ink);
+    word-break:break-word;line-height:1.4;min-height:38px;
+  }
+  .card:not(.block) .given{display:inline-block;min-width:130px;text-align:center;vertical-align:middle;}
+  .card.correct .given{border-color:var(--green-2);background:#dff6e3;color:#1d6b2c;}
+  .card.close .given{border-color:var(--amber-2);background:#fff0d0;color:#8a5c05;}
+  .card.wrong .given{border-color:var(--red-2);background:#ffe2dd;color:#a3301b;}
+  .card.block .q-sentence{margin-bottom:8px;}
+  .card.block input.blank{display:block;width:100%;text-align:left;}
+  .blank-gap{
+    display:inline-block;min-width:62px;border-bottom:3px dotted #b9c6f2;vertical-align:baseline;
+  }
+  .card.correct .blank-gap{border-bottom-color:var(--green-2);}
+  .card.close .blank-gap{border-bottom-color:var(--amber-2);}
+  .card.wrong .blank-gap{border-bottom-color:var(--red-2);}
+  .pts{
+    position:absolute;top:-10px;left:12px;padding:3px 10px;border-radius:999px;
+    font-size:.76rem;font-weight:900;color:#fff;border:2px solid #fff;
+    box-shadow:0 2px 5px rgba(0,0,0,.28);
+  }
+  .pts.full{background:linear-gradient(180deg,var(--green),var(--green-2));}
+  .pts.part{background:linear-gradient(180deg,var(--amber),var(--amber-2));}
+  .pts.zero{background:linear-gradient(180deg,var(--red),var(--red-2));}
+  .feedback{
+    margin-top:8px;font-size:.8rem;font-weight:600;line-height:1.5;display:none;
+    color:#5c3226;background:rgba(0,0,0,.045);padding:7px 9px;border-radius:10px;
+  }
+  .card.close .feedback,.card.wrong .feedback{display:block;}
+  .icon{margin-right:4px;}
+  .ref-link{
+    color:var(--blue-dark);font-weight:900;text-decoration:underline;
+    cursor:pointer;border:none;background:none;padding:0;font:inherit;
+  }
+
+  /* ---------- баннер результата ---------- */
+  .result-banner{
+    display:none;text-align:center;font-weight:800;font-size:.95rem;
+    padding:13px;border-radius:16px;margin-top:12px;border:2px solid;
+  }
+  .rb-great{background:#e6faea;color:#1d6b2c;border-color:var(--green-2);}
+  .rb-ok{background:#fff5e0;color:#8a5c05;border-color:var(--amber-2);}
+  .rb-low{background:#ffeeeb;color:#a3301b;border-color:var(--red-2);}
+  .actions{display:flex;gap:10px;margin-top:14px;}
+  .actions .gbtn{flex:1;}
+
+  /* ---------- итоги ---------- */
+  .score-hero{text-align:center;padding:6px 0 2px;}
+  .stars{font-size:2rem;letter-spacing:6px;margin-bottom:6px;}
+  .star{color:rgba(255,255,255,.22);}
+  .star.on{color:var(--gold);text-shadow:0 0 14px rgba(255,210,63,.65);}
+  .big-points{font-size:3.2rem;font-weight:900;line-height:1;text-shadow:0 4px 0 rgba(0,0,0,.28);}
+  .big-points-cap{font-size:.78rem;font-weight:800;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);margin-top:4px;}
+  .score-line{
+    display:flex;justify-content:center;gap:10px;margin-top:14px;flex-wrap:wrap;
+  }
+  .score-chip{
+    background:var(--deep);border:2px solid #4d69c9;border-radius:999px;
+    padding:6px 14px;font-size:.82rem;font-weight:800;
+  }
+  .best-flag{
+    display:inline-block;margin-top:10px;padding:5px 14px;border-radius:999px;
+    background:linear-gradient(180deg,var(--gold),#f0a51a);color:#4a3000;
+    font-weight:900;font-size:.8rem;box-shadow:0 3px 0 #b9760a;
+  }
+  .breakdown-row{display:flex;align-items:center;gap:9px;margin-bottom:8px;font-size:.83rem;font-weight:700;}
+  .breakdown-label{flex:0 0 40%;}
+  .breakdown-track{flex:1;height:11px;background:var(--deep);border-radius:999px;overflow:hidden;border:1px solid #4d69c9;}
+  .breakdown-fill{height:100%;background:linear-gradient(180deg,var(--red),var(--red-2));border-radius:999px;}
+  .breakdown-count{flex:0 0 24px;text-align:right;font-weight:900;color:var(--red);}
+  .advice-list{list-style:none;padding:0;margin:0;}
+  .advice-list li{
+    display:flex;gap:9px;background:rgba(0,0,0,.16);border-radius:14px;
+    padding:11px 13px;margin-bottom:8px;font-size:.83rem;font-weight:600;line-height:1.5;
+  }
+  .advice-list .ref-link{color:var(--gold);}
+  .a-ico{flex:0 0 auto;}
+
+  /* ---------- модал ---------- */
+  .modal-backdrop{
+    position:fixed;inset:0;background:rgba(8,12,35,.72);backdrop-filter:blur(3px);
+    display:none;align-items:center;justify-content:center;padding:18px;z-index:50;
+  }
+  .modal-backdrop.open{display:flex;}
+  .modal-box{
+    position:relative;width:100%;max-width:420px;max-height:82vh;overflow-y:auto;
+    background:linear-gradient(180deg,var(--panel),var(--panel-2));
+    border:2px solid var(--panel-line);border-radius:22px;padding:20px;
+    box-shadow:0 10px 0 rgba(0,0,0,.3), 0 20px 40px rgba(0,0,0,.5);
+  }
+  .modal-box h3{margin:0 0 4px;font-size:1.2rem;font-weight:900;padding-right:34px;}
+  .modal-tag{font-size:.7rem;font-weight:800;background:rgba(0,0,0,.25);padding:3px 9px;border-radius:999px;vertical-align:middle;}
+  .modal-sub{font-size:.8rem;font-weight:600;color:var(--muted);line-height:1.5;margin-bottom:12px;}
+  .modal-close{
+    position:absolute;top:12px;right:12px;width:32px;height:32px;border-radius:50%;
+    border:2px solid rgba(255,255,255,.35);background:rgba(0,0,0,.25);color:#fff;
+    font-size:.95rem;font-weight:800;cursor:pointer;padding:0;line-height:1;font-family:var(--font);
+  }
+  .conj-table{width:100%;border-collapse:collapse;font-size:.85rem;}
+  .conj-table th{
+    text-align:left;padding:6px 8px;font-size:.66rem;font-weight:800;
+    text-transform:uppercase;letter-spacing:.06em;color:var(--muted);
+    border-bottom:2px solid rgba(255,255,255,.18);
+  }
+  .conj-table td{padding:6px 8px;border-bottom:1px solid rgba(255,255,255,.1);font-weight:700;}
+  .conj-table td:first-child{color:var(--muted);font-weight:600;width:34%;}
+  .conj-table td:last-child{text-align:right;color:#fff;}
+  .conj-table .end-col{color:var(--gold);font-weight:800;text-align:center;}
+  .confirm-text{font-size:.88rem;font-weight:600;line-height:1.5;margin-bottom:16px;}
+  .confirm-actions{display:flex;gap:10px;}
+  .confirm-actions .gbtn{flex:1;font-size:.92rem;padding:13px 12px;}
+
+  /* ---------- вкладки «Тесты» / «Таблицы» ---------- */
+  .tabs{display:flex;gap:8px;margin:0 0 12px;}
+  .tab{
+    flex:1;border:2px solid var(--panel-line);border-radius:999px;cursor:pointer;
+    background:var(--deep);color:var(--muted);font-family:var(--font);font-weight:800;font-size:.92rem;
+    padding:10px 0;box-shadow:0 3px 0 rgba(0,0,0,.3);
+  }
+  .tab.on{background:linear-gradient(180deg,var(--amber),var(--amber-2));color:#3a2600;border-color:#ffe08a;}
+  body.tables-mode .hud{display:none;}
+
+  /* ---------- книжные таблицы падежей (Tablice gramatyczne KPK) ----------
+     Карточка .gt — светлый «лист книги» на тёмном фоне приложения. Цвет колонок задаётся
+     переменными --col/--col-dark/--lbl на карточке: оливковый у dopełniacz/biernik и голубой
+     у narzędnik — как в книге; у остальных падежей цвета свои, в книге их мы не видели. */
+  .gt-filter{display:flex;gap:6px;overflow-x:auto;padding:2px 0 12px;scrollbar-width:none;-ms-overflow-style:none;}
+  .gt-filter::-webkit-scrollbar{display:none;}
+  .gt-chip{
+    flex:0 0 auto;border:2px solid var(--panel-line);border-radius:999px;cursor:pointer;
+    background:var(--deep);color:#fff;font-family:var(--font);font-weight:800;font-size:.78rem;padding:7px 12px;
+  }
+  .gt-chip.on{background:#fff;color:var(--card-ink);border-color:#fff;}
+
+  .gt{
+    --col:#dfe0bf;--col-dark:#cbcc9f;--lbl:#b7b784;--ser:Georgia,"Times New Roman",serif;
+    background:#f7f4ea;border-radius:16px;padding:12px 10px 12px;margin-bottom:14px;color:#1c1c1c;
+    box-shadow:0 6px 0 rgba(0,0,0,.26);
+  }
+  .gt.c-blue{--col:#d5e5f0;--col-dark:#bdd4e5;--lbl:#9cbbd1;}
+  .gt.c-sand{--col:#ece3cd;--col-dark:#dccfae;--lbl:#c3b48c;}
+  .gt.c-rose{--col:#f0d9d9;--col-dark:#e2c0c0;--lbl:#cfa1a1;}
+  .gt.c-green{--col:#d8e8d1;--col-dark:#c0d8b6;--lbl:#9fbf92;}
+  .gt-head{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:10px;}
+  .gt-num{background:#e8192c;color:#fff;font-weight:900;font-size:.8rem;padding:6px 9px;border-radius:3px;}
+  .gt-case{color:#e8192c;font-weight:900;font-size:1.05rem;letter-spacing:.02em;}
+  .gt-q{color:#e8192c;font-weight:800;font-size:.9rem;}
+  .gt-n{
+    margin-left:auto;background:#111;color:#fff;font-family:var(--ser);font-style:italic;font-weight:700;
+    font-size:.82rem;padding:4px 10px;border-radius:6px;
+  }
+  .gt-use{font-size:.7rem;line-height:1.4;color:#333;background:#fff;border-left:3px solid #e8192c;border-radius:0 8px 8px 0;padding:5px 8px;margin:-2px 0 10px;}
+  .gt-use i{font-style:italic;font-family:var(--ser);font-size:.78rem;}
+
+  .gt-grid{display:grid;gap:3px;grid-template-columns:20px repeat(var(--n),minmax(0,1fr));}
+  .gt-grid > *{min-width:0;}
+  .gt-grid > i{display:block;}
+  .gt-gen{
+    background:var(--col-dark);font-family:var(--ser);font-weight:700;font-style:italic;font-size:.66rem;
+    padding:5px 4px;display:flex;align-items:center;justify-content:space-between;gap:3px;line-height:1.15;
+  }
+  .gt-gen .ic{flex:0 0 auto;background:#4d7a3a;color:#fff;border-radius:3px;font-size:.62rem;padding:1px 3px;font-style:normal;}
+  .gt-sub{background:var(--col);font-family:var(--ser);font-size:.6rem;font-weight:700;font-style:italic;text-align:center;padding:3px 2px;}
+  .gt-sub .ic{display:block;font-size:.85rem;font-style:normal;line-height:1.1;}
+  .gt-cell{
+    background:var(--col);display:flex;flex-direction:column;align-items:center;justify-content:center;
+    gap:4px;padding:12px 3px;position:relative;
+  }
+  .gt-lbl{
+    background:var(--lbl);color:#fff;writing-mode:vertical-rl;transform:rotate(180deg);
+    font-family:var(--ser);font-style:italic;font-weight:700;font-size:.62rem;
+    display:flex;align-items:center;justify-content:center;border-radius:4px;padding:6px 0;
+  }
+  .pill{
+    color:#fff;font-family:var(--ser);font-style:italic;font-weight:700;font-size:1.05rem;line-height:1.15;
+    padding:8px 9px;border-radius:9px;border:2px solid #fff;box-shadow:0 2px 3px rgba(0,0,0,.25);
+    text-align:center;min-width:54px;max-width:100%;
+  }
+  .pill.y{background:#ffd400;color:#111;}
+  .pill.r{background:#f31b3c;}
+  .pill small{font-size:.6em;vertical-align:top;}
+  .pill .alt{
+    display:block;font-family:var(--font);font-style:normal;font-weight:700;font-size:.56rem;
+    margin-top:4px;text-align:left;line-height:1.3;
+  }
+  .pill .alt b{
+    display:inline-block;font-family:var(--ser);font-style:italic;font-size:.8rem;
+    border:1.5px solid #fff;border-radius:5px;padding:0 5px;margin-left:4px;line-height:1.2;
+  }
+  .gt-eq{
+    position:absolute;left:50%;bottom:-8px;transform:translateX(-50%);z-index:1;white-space:nowrap;
+    background:#6b8e3d;color:#fff;font-size:.56rem;font-weight:800;padding:2px 6px;border-radius:5px;letter-spacing:.03em;
+  }
+  .gt-ex{
+    background:#fff;border:1px solid var(--col-dark);padding:6px 5px;
+    font-family:var(--ser);font-style:italic;font-size:.66rem;line-height:1.45;
+    overflow-wrap:anywhere;   /* узкая колонка: длинное слово переносится, а не обрезается */
+  }
+  .gt-ex b{font-weight:700;}
+  .e-a{color:#d9a400;font-weight:700;}
+  .e-n{color:#f31b3c;font-weight:700;}
+  .gt-ask{
+    background:#fff;border:1px solid var(--col-dark);text-align:center;font-weight:700;font-size:.68rem;
+    padding:6px 2px;letter-spacing:.02em;
+  }
+  .gt-note{font-size:.7rem;margin-top:8px;color:#444;line-height:1.4;}
+  .gt-note b{color:#1c1c1c;}
+
+  /* инфографика «-a czy -u?» — два столбца списков */
+  .gt-title{color:#333;font-weight:900;font-size:.9rem;margin-bottom:10px;background:#e0e0e0;padding:6px 10px;border-radius:4px;}
+  .gt-lists{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
+  .gt-badge{
+    display:inline-block;background:#f31b3c;color:#fff;border-radius:50%;width:40px;height:40px;line-height:40px;
+    text-align:center;font-family:var(--ser);font-style:italic;font-weight:700;font-size:1.05rem;margin-bottom:8px;
+  }
+  .gt-grp{margin-bottom:7px;}
+  .gt-grp h4{
+    margin:0;background:#555;color:#fff;font-size:.56rem;font-weight:800;text-transform:uppercase;
+    letter-spacing:.04em;padding:3px 7px;border-radius:5px 5px 0 0;display:inline-block;
+  }
+  .gt-grp div{background:#fff;border:1px solid #ddd;border-radius:0 6px 6px 6px;padding:5px 7px;font-size:.66rem;line-height:1.45;overflow-wrap:anywhere;}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="hud">
+    <div class="hud-pill"><span class="hud-ico cup">🏆</span><span class="hud-val" id="hudBest">—</span></div>
+    <div class="hud-spacer"></div>
+    <div class="hud-pill"><span class="hud-ico">⭐</span><span class="hud-val" id="hudPoints">0</span></div>
+  </div>
+  <div id="app"></div>
+</div>
+
+<div class="modal-backdrop" id="modalBackdrop">
+  <div class="modal-box" id="modalBox"></div>
+</div>
+
+<script>
+/* ============ ОБЩЕЕ ============ */
+function shuffle(arr){
+  for(let i=arr.length-1;i>0;i--){
+    const j=Math.floor(Math.random()*(i+1));
+    [arr[i],arr[j]]=[arr[j],arr[i]];
+  }
+  return arr;
+}
+function normalize(s){
+  return (s || '').trim().toLowerCase().replace(/\s+/g,' ');
+}
+
+/* ============ ТЕМА: ГЛАГОЛЫ (данные) ============ */
+const PERSON_LABEL = {
+  "ja":"1 лицо ед.ч. (ja)",
+  "ty":"2 лицо ед.ч. (ty)",
+  "on/ona/ono":"3 лицо ед.ч. (on/ona/ono)",
+  "my":"1 лицо мн.ч. (my)",
+  "wy":"2 лицо мн.ч. (wy)",
+  "oni/one":"3 лицо мн.ч. (oni/one)"
+};
+const PERSON_ORDER = ["ja","ty","on/ona/ono","my","wy","oni/one"];
+
+const PARADIGMS = {
+  /* --- спряжение -m, -sz --- */
+  "czytać":      ["czytam","czytasz","czyta","czytamy","czytacie","czytają"],
+  "mieszkać":    ["mieszkam","mieszkasz","mieszka","mieszkamy","mieszkacie","mieszkają"],
+  "słuchać":     ["słucham","słuchasz","słucha","słuchamy","słuchacie","słuchają"],
+  "znać":        ["znam","znasz","zna","znamy","znacie","znają"],
+  "grać":        ["gram","grasz","gra","gramy","gracie","grają"],
+  "pomagać":     ["pomagam","pomagasz","pomaga","pomagamy","pomagacie","pomagają"],
+  "pływać":      ["pływam","pływasz","pływa","pływamy","pływacie","pływają"],
+  "wracać":      ["wracam","wracasz","wraca","wracamy","wracacie","wracają"],
+  "oglądać":     ["oglądam","oglądasz","ogląda","oglądamy","oglądacie","oglądają"],
+  "sprzątać":    ["sprzątam","sprzątasz","sprząta","sprzątamy","sprzątacie","sprzątają"],
+  "nazywać się": ["nazywam się","nazywasz się","nazywa się","nazywamy się","nazywacie się","nazywają się"],
+  "zaczynać":    ["zaczynam","zaczynasz","zaczyna","zaczynamy","zaczynacie","zaczynają"],
+  "pamiętać":    ["pamiętam","pamiętasz","pamięta","pamiętamy","pamiętacie","pamiętają"],
+  "czekać":      ["czekam","czekasz","czeka","czekamy","czekacie","czekają"],
+  "szukać":      ["szukam","szukasz","szuka","szukamy","szukacie","szukają"],
+  "odpoczywać":  ["odpoczywam","odpoczywasz","odpoczywa","odpoczywamy","odpoczywacie","odpoczywają"],
+  "pytać":       ["pytam","pytasz","pyta","pytamy","pytacie","pytają"],
+  "mieć":        ["mam","masz","ma","mamy","macie","mają"],
+  "jeść":        ["jem","jesz","je","jemy","jecie","jedzą"],
+  "wiedzieć":    ["wiem","wiesz","wie","wiemy","wiecie","wiedzą"],
+  "rozumieć":    ["rozumiem","rozumiesz","rozumie","rozumiemy","rozumiecie","rozumieją"],
+  "umieć":       ["umiem","umiesz","umie","umiemy","umiecie","umieją"],
+
+  /* --- спряжение -ę, -isz/-ysz --- */
+  "mówić":       ["mówię","mówisz","mówi","mówimy","mówicie","mówią"],
+  "robić":       ["robię","robisz","robi","robimy","robicie","robią"],
+  "lubić":       ["lubię","lubisz","lubi","lubimy","lubicie","lubią"],
+  "widzieć":     ["widzę","widzisz","widzi","widzimy","widzicie","widzą"],
+  "tańczyć":     ["tańczę","tańczysz","tańczy","tańczymy","tańczycie","tańczą"],
+  "uczyć się":   ["uczę się","uczysz się","uczy się","uczymy się","uczycie się","uczą się"],
+  "jeździć":     ["jeżdżę","jeździsz","jeździ","jeździmy","jeździcie","jeżdżą"],
+  "spać":        ["śpię","śpisz","śpi","śpimy","śpicie","śpią"],
+  "dzwonić":     ["dzwonię","dzwonisz","dzwoni","dzwonimy","dzwonicie","dzwonią"],
+  "kończyć":     ["kończę","kończysz","kończy","kończymy","kończycie","kończą"],
+  "płacić":      ["płacę","płacisz","płaci","płacimy","płacicie","płacą"],
+  "prosić":      ["proszę","prosisz","prosi","prosimy","prosicie","proszą"],
+  "musieć":      ["muszę","musisz","musi","musimy","musicie","muszą"],
+  "chodzić":     ["chodzę","chodzisz","chodzi","chodzimy","chodzicie","chodzą"],
+  "słyszeć":     ["słyszę","słyszysz","słyszy","słyszymy","słyszycie","słyszą"],
+  "siedzieć":    ["siedzę","siedzisz","siedzi","siedzimy","siedzicie","siedzą"],
+  "myśleć":      ["myślę","myślisz","myśli","myślimy","myślicie","myślą"],
+
+  /* --- спряжение -ę, -esz --- */
+  "pisać":       ["piszę","piszesz","pisze","piszemy","piszecie","piszą"],
+  "pić":         ["piję","pijesz","pije","pijemy","pijecie","piją"],
+  "dawać":       ["daję","dajesz","daje","dajemy","dajecie","dają"],
+  "wstawać":     ["wstaję","wstajesz","wstaje","wstajemy","wstajecie","wstają"],
+  "pracować":    ["pracuję","pracujesz","pracuje","pracujemy","pracujecie","pracują"],
+  "kupować":     ["kupuję","kupujesz","kupuje","kupujemy","kupujecie","kupują"],
+  "gotować":     ["gotuję","gotujesz","gotuje","gotujemy","gotujecie","gotują"],
+  "studiować":   ["studiuję","studiujesz","studiuje","studiujemy","studiujecie","studiują"],
+  "dziękować":   ["dziękuję","dziękujesz","dziękuje","dziękujemy","dziękujecie","dziękują"],
+  "malować":     ["maluję","malujesz","maluje","malujemy","malujecie","malują"],
+  "iść":         ["idę","idziesz","idzie","idziemy","idziecie","idą"],
+  "jechać":      ["jadę","jedziesz","jedzie","jedziemy","jedziecie","jadą"],
+  "chcieć":      ["chcę","chcesz","chce","chcemy","chcecie","chcą"],
+  "móc":         ["mogę","możesz","może","możemy","możecie","mogą"],
+  "brać":        ["biorę","bierzesz","bierze","bierzemy","bierzecie","biorą"],
+
+  /* --- нерегулярный --- */
+  "być":         ["jestem","jesteś","jest","jesteśmy","jesteście","są"]
+};
+
+/* Спряжения по учебнику «Polski krok po kroku 1» (Glossa):
+   группы называются не римскими цифрами, а окончаниями ja/ty. */
+const CONJ_GROUPS = {
+  M: {
+    label: "спряжение -m, -sz (тип czytać / rozumieć)",
+    shortLabel: "-m, -sz",
+    infEnding: "-ać, -eć",
+    baseVerb: "czytać",
+    verbs: ["czytać","mieszkać","słuchać","znać","grać","pomagać","pływać","wracać","oglądać",
+            "sprzątać","nazywać się","zaczynać","pamiętać","czekać","szukać","odpoczywać","pytać",
+            "mieć","jeść","wiedzieć","rozumieć","umieć"],
+    endings: {"ja":"-am / -em","ty":"-asz / -esz","on/ona/ono":"-a / -e",
+              "my":"-amy / -emy","wy":"-acie / -ecie","oni/one":"-ają / -dzą / -eją"}
+  },
+  ISZ: {
+    label: "спряжение -ę, -isz/-ysz (тип robić / tańczyć)",
+    shortLabel: "-ę, -isz/-ysz",
+    infEnding: "-ić, -yć, -eć",
+    baseVerb: "robić",
+    verbs: ["mówić","robić","lubić","widzieć","tańczyć","uczyć się","jeździć","spać","dzwonić",
+            "kończyć","płacić","prosić","musieć","chodzić","słyszeć","siedzieć","myśleć"],
+    endings: {"ja":"-ę","ty":"-isz / -ysz","on/ona/ono":"-i / -y",
+              "my":"-imy / -ymy","wy":"-icie / -ycie","oni/one":"-ą"}
+  },
+  ESZ: {
+    label: "спряжение -ę, -esz (тип pisać / gotować)",
+    shortLabel: "-ę, -esz",
+    infEnding: "-ać, -ować, -ić",
+    baseVerb: "pisać",
+    verbs: ["pisać","pić","dawać","wstawać","pracować","kupować","gotować","studiować","dziękować",
+            "malować","iść","jechać","chcieć","móc","brać"],
+    endings: {"ja":"-ę","ty":"-esz","on/ona/ono":"-e",
+              "my":"-emy","wy":"-ecie","oni/one":"-ą"}
+  }
+};
+const EXCEPTIONS = new Set(["być"]);
+const EXC_BASE_VERB = "być";
+
+function getConjGroup(verb){
+  for(const key in CONJ_GROUPS){
+    if(CONJ_GROUPS[key].verbs.includes(verb)) return {key, ...CONJ_GROUPS[key]};
+  }
+  return null;
+}
+
+/* Подтемы темы «Глаголы» — ровно как группы в учебнике */
+const VERB_SUBTOPICS = [
+  {id:'M',   label:'-m, -sz',       caption:'тип czytam / czytasz'},
+  {id:'ISZ', label:'-ę, -isz/-ysz', caption:'тип robię / robisz'},
+  {id:'ESZ', label:'-ę, -esz',      caption:'тип piszę / piszesz'},
+  {id:'EXC', label:'być',           caption:'нерегулярный глагол'}
+];
+
+/* Наборы наречий: вставляются перед глаголом. Подобраны так, чтобы не врать по смыслу —
+   «często idę» было бы ошибкой (для повторяющегося движения нужен chodzić). */
+const ADV_FREQ = ["często","zawsze","dzisiaj"];   // обычные динамические глаголы
+const ADV_NOW  = ["teraz","już","dzisiaj"];       // однократное действие и состояния
+const ADV_WELL = ["dobrze","już","naprawdę"];     // знание и умение
+
+/* Дополнения подобраны так, чтобы подходить ко всем шести лицам без изменений.
+   adv: null — глагол идёт без наречной модели. */
+const VERB_DEF = {
+  "czytać":      {adv:ADV_FREQ, tails:["książkę","gazetę","wiadomości"]},
+  "mieszkać":    {adv:ADV_NOW,  tails:["w Warszawie","w centrum","blisko parku"]},
+  "słuchać":     {adv:ADV_FREQ, tails:["muzyki","radia","podcastu"]},
+  "znać":        {adv:ADV_WELL, tails:["to miejsce","tę piosenkę","jego brata"]},
+  "grać":        {adv:ADV_FREQ, tails:["w piłkę","na gitarze","w szachy"]},
+  "pomagać":     {adv:ADV_FREQ, tails:["mamie","koledze","w kuchni"]},
+  "pływać":      {adv:ADV_FREQ, tails:["w basenie","w jeziorze","w morzu"]},
+  "wracać":      {adv:ADV_FREQ, tails:["do domu","z pracy","późno wieczorem"]},
+  "oglądać":     {adv:ADV_FREQ, tails:["film","telewizję","mecz"]},
+  "sprzątać":    {adv:ADV_FREQ, tails:["pokój","w kuchni","w sobotę"]},
+  "nazywać się": {adv:null,     tails:["jak mój dziadek","inaczej","tak samo"]},
+  "zaczynać":    {adv:ADV_FREQ, tails:["pracę o ósmej","nowy kurs","od początku"]},
+  "pamiętać":    {adv:ADV_WELL, tails:["o spotkaniu","ten dzień","jego imię"]},
+  "czekać":      {adv:ADV_FREQ, tails:["na autobus","na wyniki","przed kinem"]},
+  "szukać":      {adv:ADV_FREQ, tails:["pracy","kluczy","mieszkania"]},
+  "odpoczywać":  {adv:ADV_FREQ, tails:["w weekend","po pracy","nad morzem"]},
+  "pytać":       {adv:ADV_FREQ, tails:["o drogę","o cenę","o godzinę"]},
+  "mieć":        {adv:ADV_NOW,  tails:["psa i kota","dużo pracy","nowy telefon"]},
+  "jeść":        {adv:ADV_FREQ, tails:["śniadanie","zupę","kolację","obiad","owoce","warzywa","chleb z masłem","coś słodkiego"]},
+  "wiedzieć":    {adv:ADV_WELL, tails:["wszystko","gdzie to jest","o tym","jak to zrobić","kiedy jest spotkanie","kto to jest","co robić","dlaczego tak"]},
+  "rozumieć":    {adv:ADV_WELL, tails:["po polsku","to pytanie","wszystko","ten tekst","o co chodzi","instrukcję","tę zasadę"]},
+  "umieć":       {adv:ADV_WELL, tails:["pływać","gotować","tańczyć","jeździć na rowerze","mówić po polsku","grać na gitarze","prowadzić samochód"]},
+
+  "mówić":       {adv:ADV_FREQ, tails:["po polsku","po angielsku","prawdę"]},
+  "robić":       {adv:ADV_FREQ, tails:["obiad","zadanie domowe","zakupy"]},
+  "lubić":       {adv:["naprawdę","bardzo","też"], tails:["kawę","polskie filmy","muzykę"]},
+  "widzieć":     {adv:ADV_NOW,  tails:["ten dom","coś dziwnego","morze z okna"]},
+  "tańczyć":     {adv:ADV_FREQ, tails:["w klubie","na weselu","do późna"]},
+  "uczyć się":   {adv:ADV_FREQ, tails:["polskiego","matematyki","nowych słów"]},
+  "jeździć":     {adv:ADV_FREQ, tails:["rowerem","samochodem","do pracy autobusem"]},
+  "spać":        {adv:ADV_FREQ, tails:["osiem godzin","do południa","w hotelu"]},
+  "dzwonić":     {adv:ADV_FREQ, tails:["do mamy","do lekarza","wieczorem"]},
+  "kończyć":     {adv:ADV_FREQ, tails:["pracę o piątej","studia w czerwcu","lekcję"]},
+  "płacić":      {adv:ADV_FREQ, tails:["kartą","gotówką","za obiad"]},
+  "prosić":      {adv:ADV_FREQ, tails:["o pomoc","o kawę","o rachunek"]},
+  "musieć":      {adv:ADV_NOW,  tails:["iść do pracy","to zrobić","wcześnie wstawać"]},
+  "chodzić":     {adv:ADV_FREQ, tails:["do szkoły","na spacery","do kina w weekend"]},
+  "słyszeć":     {adv:ADV_WELL, tails:["muzykę","ten hałas","wszystko"]},
+  "siedzieć":    {adv:ADV_FREQ, tails:["w domu","przy stole","w ogrodzie"]},
+  "myśleć":      {adv:ADV_FREQ, tails:["o wakacjach","o tym","inaczej"]},
+
+  "pisać":       {adv:ADV_FREQ, tails:["e-mail","list do babci","wiadomość"]},
+  "pić":         {adv:ADV_FREQ, tails:["kawę","herbatę","wodę"]},
+  "dawać":       {adv:ADV_FREQ, tails:["prezenty","dobre rady","drugą szansę"]},
+  "wstawać":     {adv:ADV_FREQ, tails:["wcześnie","o siódmej","bardzo późno"]},
+  "pracować":    {adv:ADV_FREQ, tails:["w biurze","od rana","w weekend"]},
+  "kupować":     {adv:ADV_FREQ, tails:["chleb","bilety","prezenty"]},
+  "gotować":     {adv:ADV_FREQ, tails:["obiad","zupę","coś pysznego"]},
+  "studiować":   {adv:ADV_NOW,  tails:["medycynę","na uniwersytecie","informatykę"]},
+  "dziękować":   {adv:null,     tails:["za pomoc","za prezent","za wszystko"]},
+  "malować":     {adv:ADV_FREQ, tails:["obrazy","ścianę","ładne pejzaże"]},
+  "iść":         {adv:ADV_NOW,  tails:["do domu","do sklepu","na spacer"]},
+  "jechać":      {adv:ADV_NOW,  tails:["do Krakowa","na wakacje","autobusem"]},
+  "chcieć":      {adv:ADV_NOW,  tails:["kawy","spać","iść do kina"]},
+  "móc":         {adv:ADV_NOW,  tails:["przyjść jutro","to zrobić","poczekać chwilę"]},
+  "brać":        {adv:ADV_FREQ, tails:["parasol","taksówkę","urlop w lipcu"]},
+
+  "być":         {adv:ADV_NOW, tails:[
+    "w domu","w pracy","w szkole","w sklepie","w kinie","w teatrze","w parku","w restauracji",
+    "w kawiarni","w hotelu","w bibliotece","w banku","w biurze","w aptece","w Polsce",
+    "w Warszawie","w Krakowie","na uniwersytecie","na dworcu","na lotnisku","na poczcie",
+    "na plaży","na wakacjach","na spotkaniu","na koncercie","na basenie","u lekarza",
+    "u babci","w centrum miasta","za granicą"]}
+};
+
+const PRONOUN = {
+  "ja":         ["Ja","ja"],
+  "ty":         ["Ty","ty"],
+  "on/ona/ono": ["On","on"],
+  "my":         ["My","my"],
+  "wy":         ["Wy","wy"],
+  "oni/one":    ["Oni","oni"]
+};
+const PRONOUN_ALT = {"on/ona/ono":["Ona","ona"], "oni/one":["One","one"]};
+
+function buildVerbData(){
+  const out = [];
+  Object.keys(VERB_DEF).forEach(v => {
+    const forms = PARADIGMS[v];
+    const def = VERB_DEF[v];
+    if(!forms) return;
+    def.tails.forEach((tail, ti) => {
+      PERSON_ORDER.forEach((person, pi) => {
+        const alt = PRONOUN_ALT[person] && (ti + pi) % 2 === 1;
+        const [Cap, low] = alt ? PRONOUN_ALT[person] : PRONOUN[person];
+        const answer = forms[pi];
+        out.push({v, person, sentence:`${Cap} ___ ${tail}.`, answer});
+        /* вопрос — для всех лиц кроме «ja»: «Czy ja…» звучит неестественно */
+        if(person !== 'ja') out.push({v, person, sentence:`Czy ${low} ___ ${tail}?`, answer});
+        /* наречная модель — только там, где наречие не ломает смысл */
+        if(def.adv){
+          const adv = def.adv[(ti + pi) % def.adv.length];
+          out.push({v, person, sentence:`${Cap} ${adv} ___ ${tail}.`, answer});
+        }
+      });
+    });
+  });
+  return out;
+}
+
+
+const VERB_DATA_MANUAL = [
+  {v:"być", person:"ja", sentence:"Ja ___ studentem z Ukrainy.", answer:"jestem"},
+  {v:"być", person:"ty", sentence:"Czy ty ___ lekarzem?", answer:"jesteś"},
+  {v:"być", person:"on/ona/ono", sentence:"Ona ___ bardzo miła.", answer:"jest"},
+  {v:"być", person:"my", sentence:"My ___ w domu.", answer:"jesteśmy"},
+  {v:"być", person:"wy", sentence:"Wy ___ moimi przyjaciółmi.", answer:"jesteście"},
+  {v:"być", person:"oni/one", sentence:"Oni ___ w pracy.", answer:"są"},
+
+  {v:"mieć", person:"ja", sentence:"Ja ___ psa i kota.", answer:"mam"},
+  {v:"mieć", person:"ty", sentence:"Czy ty ___ czas jutro?", answer:"masz"},
+  {v:"mieć", person:"on/ona/ono", sentence:"On ___ nowy telefon.", answer:"ma"},
+  {v:"mieć", person:"my", sentence:"My ___ dużo pracy.", answer:"mamy"},
+  {v:"mieć", person:"wy", sentence:"Wy ___ piękny dom.", answer:"macie"},
+  {v:"mieć", person:"oni/one", sentence:"One ___ dwoje dzieci.", answer:"mają"},
+
+  {v:"mówić", person:"ja", sentence:"Ja ___ trochę po polsku.", answer:"mówię"},
+  {v:"mówić", person:"ty", sentence:"Ty dobrze ___ po angielsku.", answer:"mówisz"},
+  {v:"mówić", person:"on/ona/ono", sentence:"Ona ___ po niemiecku.", answer:"mówi"},
+  {v:"mówić", person:"wy", sentence:"Wy zawsze ___ prawdę.", answer:"mówicie"},
+  {v:"mówić", person:"oni/one", sentence:"Oni ___ po rosyjsku.", answer:"mówią"},
+
+  {v:"czytać", person:"ja", sentence:"Ja ___ książkę wieczorem.", answer:"czytam"},
+  {v:"czytać", person:"ty", sentence:"Co ty ___ teraz?", answer:"czytasz"},
+  {v:"czytać", person:"on/ona/ono", sentence:"On ___ gazetę codziennie.", answer:"czyta"},
+  {v:"czytać", person:"my", sentence:"My ___ razem tę powieść.", answer:"czytamy"},
+  {v:"czytać", person:"oni/one", sentence:"Oni ___ dużo książek.", answer:"czytają"},
+
+  {v:"pisać", person:"ja", sentence:"Ja ___ list do mamy.", answer:"piszę"},
+  {v:"pisać", person:"ty", sentence:"Ty ___ bardzo ładnie.", answer:"piszesz"},
+  {v:"pisać", person:"on/ona/ono", sentence:"Ona ___ e-mail do szefa.", answer:"pisze"},
+  {v:"pisać", person:"wy", sentence:"Wy ___ zadanie domowe.", answer:"piszecie"},
+  {v:"pisać", person:"oni/one", sentence:"Oni ___ test z gramatyki.", answer:"piszą"},
+
+  {v:"robić", person:"ja", sentence:"Co ja dzisiaj ___?", answer:"robię"},
+  {v:"robić", person:"ty", sentence:"Co ty ___ w weekend?", answer:"robisz"},
+  {v:"robić", person:"on/ona/ono", sentence:"On ___ obiad.", answer:"robi"},
+  {v:"robić", person:"my", sentence:"My ___ zakupy w sobotę.", answer:"robimy"},
+  {v:"robić", person:"oni/one", sentence:"Oni ___ dużo błędów.", answer:"robią"},
+
+  {v:"iść", person:"ja", sentence:"Ja teraz ___ do sklepu.", answer:"idę"},
+  {v:"iść", person:"ty", sentence:"Dokąd ty ___?", answer:"idziesz"},
+  {v:"iść", person:"on/ona/ono", sentence:"On ___ do pracy pieszo.", answer:"idzie"},
+  {v:"iść", person:"my", sentence:"My ___ na spacer.", answer:"idziemy"},
+  {v:"iść", person:"oni/one", sentence:"Oni ___ do kina.", answer:"idą"},
+
+  {v:"jechać", person:"ja", sentence:"Ja ___ do Warszawy pociągiem.", answer:"jadę"},
+  {v:"jechać", person:"ty", sentence:"Ty ___ samochodem czy autobusem?", answer:"jedziesz"},
+  {v:"jechać", person:"on/ona/ono", sentence:"Ona ___ na wakacje w lipcu.", answer:"jedzie"},
+  {v:"jechać", person:"wy", sentence:"Wy ___ razem na koncert?", answer:"jedziecie"},
+  {v:"jechać", person:"oni/one", sentence:"Oni ___ do Krakowa.", answer:"jadą"},
+
+  {v:"jeść", person:"ja", sentence:"Ja ___ śniadanie o ósmej.", answer:"jem"},
+  {v:"jeść", person:"ty", sentence:"Co ty ___ na obiad?", answer:"jesz"},
+  {v:"jeść", person:"on/ona/ono", sentence:"On ___ mało mięsa.", answer:"je"},
+  {v:"jeść", person:"my", sentence:"My ___ kolację razem.", answer:"jemy"},
+  {v:"jeść", person:"oni/one", sentence:"Oni ___ tylko warzywa.", answer:"jedzą"},
+
+  {v:"pić", person:"ja", sentence:"Ja ___ herbatę rano.", answer:"piję"},
+  {v:"pić", person:"ty", sentence:"Ty ___ za dużo kawy.", answer:"pijesz"},
+  {v:"pić", person:"on/ona/ono", sentence:"Ona ___ wodę mineralną.", answer:"pije"},
+  {v:"pić", person:"oni/one", sentence:"Oni ___ sok pomarańczowy.", answer:"piją"},
+
+  {v:"chcieć", person:"ja", sentence:"Ja ___ nauczyć się polskiego.", answer:"chcę"},
+  {v:"chcieć", person:"ty", sentence:"Czy ty ___ iść do kina?", answer:"chcesz"},
+  {v:"chcieć", person:"on/ona/ono", sentence:"On ___ kupić nowy rower.", answer:"chce"},
+  {v:"chcieć", person:"my", sentence:"My ___ zwiedzić Kraków.", answer:"chcemy"},
+  {v:"chcieć", person:"oni/one", sentence:"Oni ___ odpocząć.", answer:"chcą"},
+
+  {v:"móc", person:"ja", sentence:"Ja nie ___ przyjść jutro.", answer:"mogę"},
+  {v:"móc", person:"ty", sentence:"Czy ty ___ mi pomóc?", answer:"możesz"},
+  {v:"móc", person:"on/ona/ono", sentence:"Ona nie ___ dzisiaj pracować.", answer:"może"},
+  {v:"móc", person:"wy", sentence:"Wy ___ zostać na noc.", answer:"możecie"},
+  {v:"móc", person:"oni/one", sentence:"Oni ___ przyjechać w piątek.", answer:"mogą"},
+
+  {v:"wiedzieć", person:"ja", sentence:"Ja nie ___, gdzie on jest.", answer:"wiem"},
+  {v:"wiedzieć", person:"ty", sentence:"Czy ty ___, która godzina?", answer:"wiesz"},
+  {v:"wiedzieć", person:"on/ona/ono", sentence:"On ___ dużo o historii.", answer:"wie"},
+  {v:"wiedzieć", person:"oni/one", sentence:"Oni ___, co się stało.", answer:"wiedzą"},
+
+  {v:"znać", person:"ja", sentence:"Ja ___ tę piosenkę.", answer:"znam"},
+  {v:"znać", person:"ty", sentence:"Czy ty ___ tego pana?", answer:"znasz"},
+  {v:"znać", person:"on/ona/ono", sentence:"Ona ___ dobrze to miasto.", answer:"zna"},
+  {v:"znać", person:"my", sentence:"My ___ się od dziecka.", answer:"znamy"},
+
+  {v:"mieszkać", person:"ja", sentence:"Ja ___ w Warszawie.", answer:"mieszkam"},
+  {v:"mieszkać", person:"ty", sentence:"Gdzie ty ___?", answer:"mieszkasz"},
+  {v:"mieszkać", person:"on/ona/ono", sentence:"On ___ na wsi.", answer:"mieszka"},
+  {v:"mieszkać", person:"my", sentence:"My ___ razem od roku.", answer:"mieszkamy"},
+  {v:"mieszkać", person:"oni/one", sentence:"Oni ___ w centrum miasta.", answer:"mieszkają"},
+
+  {v:"pracować", person:"ja", sentence:"Ja ___ w banku.", answer:"pracuję"},
+  {v:"pracować", person:"ty", sentence:"Gdzie ty ___?", answer:"pracujesz"},
+  {v:"pracować", person:"on/ona/ono", sentence:"Ona ___ jako nauczycielka.", answer:"pracuje"},
+  {v:"pracować", person:"wy", sentence:"Wy ___ razem w tej firmie.", answer:"pracujecie"},
+  {v:"pracować", person:"oni/one", sentence:"Oni ___ zbyt dużo.", answer:"pracują"},
+
+  {v:"uczyć się", person:"ja", sentence:"Ja ___ polskiego od miesiąca.", answer:"uczę się"},
+  {v:"uczyć się", person:"ty", sentence:"Ty ___ szybko.", answer:"uczysz się"},
+  {v:"uczyć się", person:"on/ona/ono", sentence:"On ___ do egzaminu.", answer:"uczy się"},
+  {v:"uczyć się", person:"my", sentence:"My ___ razem w bibliotece.", answer:"uczymy się"},
+
+  {v:"lubić", person:"ja", sentence:"Ja bardzo ___ czekoladę.", answer:"lubię"},
+  {v:"lubić", person:"ty", sentence:"Czy ty ___ sport?", answer:"lubisz"},
+  {v:"lubić", person:"on/ona/ono", sentence:"Ona ___ czytać książki.", answer:"lubi"},
+  {v:"lubić", person:"oni/one", sentence:"Oni ___ podróżować.", answer:"lubią"},
+
+  {v:"grać", person:"ja", sentence:"Ja ___ na gitarze.", answer:"gram"},
+  {v:"grać", person:"ty", sentence:"Ty ___ w piłkę nożną?", answer:"grasz"},
+  {v:"grać", person:"on/ona/ono", sentence:"On ___ w tenisa.", answer:"gra"},
+  {v:"grać", person:"oni/one", sentence:"Oni ___ w karty.", answer:"grają"},
+
+  {v:"słuchać", person:"ja", sentence:"Ja ___ muzyki w słuchawkach.", answer:"słucham"},
+  {v:"słuchać", person:"ty", sentence:"Ty ___ radia rano?", answer:"słuchasz"},
+  {v:"słuchać", person:"on/ona/ono", sentence:"Ona ___ podcastów.", answer:"słucha"},
+
+  {v:"kupować", person:"ja", sentence:"Ja ___ owoce na targu.", answer:"kupuję"},
+  {v:"kupować", person:"ty", sentence:"Co ty zwykle ___?", answer:"kupujesz"},
+  {v:"kupować", person:"on/ona/ono", sentence:"On ___ chleb codziennie.", answer:"kupuje"},
+  {v:"kupować", person:"oni/one", sentence:"Oni ___ nowe mieszkanie.", answer:"kupują"},
+
+  {v:"rozumieć", person:"ja", sentence:"Ja nie ___ tego słowa.", answer:"rozumiem"},
+  {v:"rozumieć", person:"ty", sentence:"Czy ty ___ po polsku?", answer:"rozumiesz"},
+  {v:"rozumieć", person:"on/ona/ono", sentence:"On ___ wszystko.", answer:"rozumie"},
+
+  {v:"spać", person:"ja", sentence:"Ja ___ osiem godzin.", answer:"śpię"},
+  {v:"spać", person:"ty", sentence:"Ty jeszcze ___?", answer:"śpisz"},
+  {v:"spać", person:"on/ona/ono", sentence:"Dziecko ___ spokojnie.", answer:"śpi"},
+
+  {v:"widzieć", person:"ja", sentence:"Ja ___ go rzadko.", answer:"widzę"},
+  {v:"widzieć", person:"ty", sentence:"Czy ty ___ tamten dom?", answer:"widzisz"},
+  {v:"widzieć", person:"on/ona/ono", sentence:"Ona ___ swoją siostrę.", answer:"widzi"},
+
+  {v:"pomagać", person:"ja", sentence:"Ja ___ mamie w kuchni.", answer:"pomagam"},
+  {v:"pomagać", person:"ty", sentence:"Czy ty ___ rodzicom?", answer:"pomagasz"},
+  {v:"pomagać", person:"on/ona/ono", sentence:"On ___ kolegom w pracy.", answer:"pomaga"},
+
+  {v:"jeździć", person:"ja", sentence:"Ja ___ na rowerze co tydzień.", answer:"jeżdżę"},
+  {v:"jeździć", person:"ty", sentence:"Czy ty ___ na nartach?", answer:"jeździsz"},
+  {v:"jeździć", person:"oni/one", sentence:"Oni ___ do pracy metrem.", answer:"jeżdżą"},
+
+  {v:"tańczyć", person:"ja", sentence:"Ja ___ na weselu.", answer:"tańczę"},
+  {v:"tańczyć", person:"ty", sentence:"Ty ładnie ___.", answer:"tańczysz"},
+  {v:"tańczyć", person:"oni/one", sentence:"Oni ___ walca.", answer:"tańczą"},
+
+  {v:"gotować", person:"ja", sentence:"Ja ___ obiad co niedzielę.", answer:"gotuję"},
+  {v:"gotować", person:"ty", sentence:"Ty dobrze ___?", answer:"gotujesz"},
+  {v:"gotować", person:"on/ona/ono", sentence:"On ___ pyszną zupę.", answer:"gotuje"},
+
+  {v:"pływać", person:"ja", sentence:"Ja ___ na basenie.", answer:"pływam"},
+  {v:"pływać", person:"ty", sentence:"Czy ty ___ dobrze?", answer:"pływasz"},
+  {v:"pływać", person:"oni/one", sentence:"Oni ___ w jeziorze.", answer:"pływają"}
+];
+
+const VERB_DATA = VERB_DATA_MANUAL.concat(buildVerbData());
+const NUM_SUBTOPICS = [
+  {id:'jednosci',   label:'Цифры',   caption:'0–10'},
+  {id:'dziesiatki', label:'Десятки', caption:'11–99'},
+  {id:'setki',      label:'Сотни',   caption:'100–999'},
+  {id:'tysiace',    label:'Тысячи',  caption:'1000 и больше'},
+  {id:'daty',       label:'Даты',    caption:'kiedy? / w którym roku?'},
+  {id:'czas',       label:'Время',   caption:'która godzina?'}
+];
+
+const NUM_REF = {
+  jednosci: {
+    title:'Цифры 0–10',
+    sub:'Базовая форма (мужской и средний род).',
+    cols:['Цифра','По-польски'],
+    rows:[['0','zero'],['1','jeden'],['2','dwa'],['3','trzy'],['4','cztery'],['5','pięć'],
+          ['6','sześć'],['7','siedem'],['8','osiem'],['9','dziewięć'],['10','dziesięć']]
+  },
+  dziesiatki: {
+    title:'11–19 и десятки',
+    sub:'Составное число = десяток + единица через пробел: 25 → dwadzieścia pięć, 47 → czterdzieści siedem.',
+    cols:['Число','По-польски'],
+    rows:[['11','jedenaście'],['12','dwanaście'],['13','trzynaście'],['14','czternaście'],
+          ['15','piętnaście'],['16','szesnaście'],['17','siedemnaście'],['18','osiemnaście'],
+          ['19','dziewiętnaście'],['20','dwadzieścia'],['30','trzydzieści'],['40','czterdzieści'],
+          ['50','pięćdziesiąt'],['60','sześćdziesiąt'],['70','siedemdziesiąt'],
+          ['80','osiemdziesiąt'],['90','dziewięćdziesiąt']]
+  },
+  setki: {
+    title:'Сотни',
+    sub:'Сотня + десяток + единица через пробел: 365 → trzysta sześćdziesiąt pięć. Обрати внимание: 200 и 300–400 образуются не как остальные.',
+    cols:['Число','По-польски'],
+    rows:[['100','sto'],['200','dwieście'],['300','trzysta'],['400','czterysta'],['500','pięćset'],
+          ['600','sześćset'],['700','siedemset'],['800','osiemset'],['900','dziewięćset']]
+  },
+  tysiace: {
+    title:'Тысячи',
+    sub:'После 2, 3, 4 — «tysiące», после 5 и больше — «tysięcy». Ровно одна тысяча — просто «tysiąc», без «jeden».',
+    cols:['Число','По-польски'],
+    rows:[['1000','tysiąc'],['2000','dwa tysiące'],['3000','trzy tysiące'],['4000','cztery tysiące'],
+          ['5000','pięć tysięcy'],['9000','dziewięć tysięcy'],['10 000','dziesięć tysięcy'],
+          ['20 000','dwadzieścia tysięcy'],['100 000','sto tysięcy'],
+          ['1500','tysiąc pięćset'],['2500','dwa tysiące pięćset'],['3450','trzy tysiące czterysta pięćdziesiąt']]
+  },
+  daty: {
+    title:'Даты',
+    sub:'Kiedy? — день в родительном падеже (-ego) + месяц в родительном: pierwszego maja. Месяцы: stycznia, lutego, marca, kwietnia, maja, czerwca, lipca, sierpnia, września, października, listopada, grudnia. W którym roku? — склоняется только последнее слово: w tysiąc dziewięćset osiemdziesiątym piątym roku.',
+    cols:['Число','Kiedy? (-ego)'],
+    rows:[['1','pierwszego'],['2','drugiego'],['3','trzeciego'],['4','czwartego'],['5','piątego'],
+          ['6','szóstego'],['7','siódmego'],['8','ósmego'],['9','dziewiątego'],['10','dziesiątego'],
+          ['11','jedenastego'],['12','dwunastego'],['15','piętnastego'],['17','siedemnastego'],
+          ['20','dwudziestego'],['22','dwudziestego drugiego'],['24','dwudziestego czwartego'],
+          ['30','trzydziestego'],['31','trzydziestego pierwszego']]
+  },
+  czas: {
+    title:'Время',
+    sub:'Час — порядковое числительное женского рода (godzina — она). «Jest…» — именительный, «o…» (во сколько) — предложный. Минуты называются обычным числительным: 17:30 → siedemnasta trzydzieści.',
+    cols:['Час','Jest… (который)','o… (во сколько)'],
+    rows:[['1','pierwsza','pierwszej'],['2','druga','drugiej'],['3','trzecia','trzeciej'],
+          ['4','czwarta','czwartej'],['5','piąta','piątej'],['6','szósta','szóstej'],
+          ['7','siódma','siódmej'],['8','ósma','ósmej'],['9','dziewiąta','dziewiątej'],
+          ['10','dziesiąta','dziesiątej'],['11','jedenasta','jedenastej'],['12','dwunasta','dwunastej'],
+          ['13','trzynasta','trzynastej'],['15','piętnasta','piętnastej'],
+          ['17','siedemnasta','siedemnastej'],['19','dziewiętnasta','dziewiętnastej'],
+          ['20','dwudziesta','dwudziestej'],['21','dwudziesta pierwsza','dwudziestej pierwszej'],
+          ['23','dwudziesta trzecia','dwudziestej trzeciej']]
+  }
+};
+
+/* sub — подтема, hint — что показать в шапке карточки, alt — другие допустимые ответы */
+const NUM_DATA_MANUAL = [
+  /* ---------- цифры 0–10 ---------- */
+  {sub:'jednosci', hint:'0',  sentence:"Mój wynik to ___ punktów.",        answer:"zero"},
+  {sub:'jednosci', hint:'1',  sentence:"Autobus numer ___ jedzie do centrum.", answer:"jeden"},
+  {sub:'jednosci', hint:'1',  sentence:"To jest ___ złoty.",               answer:"jeden"},
+  {sub:'jednosci', hint:'2',  sentence:"Ile to jest 1 + 1? To ___.",       answer:"dwa"},
+  {sub:'jednosci', hint:'3',  sentence:"Na stole są ___ książki.",         answer:"trzy"},
+  {sub:'jednosci', hint:'3',  sentence:"Ile to jest 6 − 3? To ___.",       answer:"trzy"},
+  {sub:'jednosci', hint:'4',  sentence:"Mam ___ koty.",                    answer:"cztery"},
+  {sub:'jednosci', hint:'4',  sentence:"Rok ma ___ pory roku.",            answer:"cztery"},
+  {sub:'jednosci', hint:'5',  sentence:"W klasie jest ___ uczniów.",       answer:"pięć"},
+  {sub:'jednosci', hint:'5',  sentence:"Poczekaj ___ minut.",              answer:"pięć"},
+  {sub:'jednosci', hint:'6',  sentence:"To kosztuje ___ złotych.",         answer:"sześć"},
+  {sub:'jednosci', hint:'6',  sentence:"Kup ___ jajek, proszę.",           answer:"sześć"},
+  {sub:'jednosci', hint:'7',  sentence:"W tygodniu jest ___ dni.",         answer:"siedem"},
+  {sub:'jednosci', hint:'7',  sentence:"Pokój numer ___, proszę.",         answer:"siedem"},
+  {sub:'jednosci', hint:'8',  sentence:"Pracuję ___ godzin dziennie.",     answer:"osiem"},
+  {sub:'jednosci', hint:'9',  sentence:"Ile to jest 4 + 5? To ___.",       answer:"dziewięć"},
+  {sub:'jednosci', hint:'9',  sentence:"W biurze pracuje ___ osób.",       answer:"dziewięć"},
+  {sub:'jednosci', hint:'10', sentence:"Mam ___ palców u rąk.",            answer:"dziesięć"},
+  {sub:'jednosci', hint:'10', sentence:"Ile to jest 5 + 5? To ___.",       answer:"dziesięć"},
+
+  /* ---------- десятки 11–99 ---------- */
+  {sub:'dziesiatki', hint:'11', sentence:"Mój syn ma ___ lat.",             answer:"jedenaście"},
+  {sub:'dziesiatki', hint:'12', sentence:"Rok ma ___ miesięcy.",            answer:"dwanaście"},
+  {sub:'dziesiatki', hint:'13', sentence:"W pokoju jest ___ krzeseł.",      answer:"trzynaście"},
+  {sub:'dziesiatki', hint:'14', sentence:"To kosztuje ___ złotych.",        answer:"czternaście"},
+  {sub:'dziesiatki', hint:'15', sentence:"Czekam już ___ minut.",           answer:"piętnaście"},
+  {sub:'dziesiatki', hint:'16', sentence:"Moja siostra ma ___ lat.",        answer:"szesnaście"},
+  {sub:'dziesiatki', hint:'17', sentence:"W grupie jest ___ studentów.",    answer:"siedemnaście"},
+  {sub:'dziesiatki', hint:'18', sentence:"Kończę ___ lat w maju.",          answer:"osiemnaście"},
+  {sub:'dziesiatki', hint:'19', sentence:"Autobus numer ___ jedzie na dworzec.", answer:"dziewiętnaście"},
+  {sub:'dziesiatki', hint:'20', sentence:"Bilet kosztuje ___ złotych.",     answer:"dwadzieścia"},
+  {sub:'dziesiatki', hint:'21', sentence:"Mam ___ lat.",                    answer:"dwadzieścia jeden"},
+  {sub:'dziesiatki', hint:'25', sentence:"Mój kolega ma ___ lat.",          answer:"dwadzieścia pięć"},
+  {sub:'dziesiatki', hint:'30', sentence:"W klasie jest ___ uczniów.",      answer:"trzydzieści"},
+  {sub:'dziesiatki', hint:'33', sentence:"Mój brat ma ___ lata.",           answer:"trzydzieści trzy"},
+  {sub:'dziesiatki', hint:'40', sentence:"To kosztuje ___ złotych.",        answer:"czterdzieści"},
+  {sub:'dziesiatki', hint:'47', sentence:"W hotelu jest ___ pokoi.",        answer:"czterdzieści siedem"},
+  {sub:'dziesiatki', hint:'50', sentence:"Mam ___ złotych.",                answer:"pięćdziesiąt"},
+  {sub:'dziesiatki', hint:'58', sentence:"Moja mama ma ___ lat.",           answer:"pięćdziesiąt osiem"},
+  {sub:'dziesiatki', hint:'60', sentence:"Godzina ma ___ minut.",           answer:"sześćdziesiąt"},
+  {sub:'dziesiatki', hint:'64', sentence:"W szkole pracują ___ osoby.",     answer:"sześćdziesiąt cztery"},
+  {sub:'dziesiatki', hint:'70', sentence:"Bilet kosztuje ___ złotych.",     answer:"siedemdziesiąt"},
+  {sub:'dziesiatki', hint:'72', sentence:"Mój dziadek ma ___ lata.",        answer:"siedemdziesiąt dwa"},
+  {sub:'dziesiatki', hint:'80', sentence:"W bibliotece jest ___ książek.",  answer:"osiemdziesiąt"},
+  {sub:'dziesiatki', hint:'86', sentence:"To kosztuje ___ złotych.",        answer:"osiemdziesiąt sześć"},
+  {sub:'dziesiatki', hint:'90', sentence:"Film trwa ___ minut.",            answer:"dziewięćdziesiąt"},
+  {sub:'dziesiatki', hint:'99', sentence:"W sklepie jest ___ produktów.",   answer:"dziewięćdziesiąt dziewięć"},
+
+  /* ---------- сотни 100–999 ---------- */
+  {sub:'setki', hint:'100', sentence:"To kosztuje ___ złotych.",            answer:"sto"},
+  {sub:'setki', hint:'200', sentence:"Bilet kosztuje ___ złotych.",         answer:"dwieście"},
+  {sub:'setki', hint:'300', sentence:"Do Krakowa jest ___ kilometrów.",     answer:"trzysta"},
+  {sub:'setki', hint:'400', sentence:"W szkole jest ___ uczniów.",          answer:"czterysta"},
+  {sub:'setki', hint:'500', sentence:"Mam ___ złotych.",                    answer:"pięćset"},
+  {sub:'setki', hint:'600', sentence:"Hotel ma ___ pokoi.",                 answer:"sześćset"},
+  {sub:'setki', hint:'700', sentence:"Ta książka ma ___ stron.",            answer:"siedemset"},
+  {sub:'setki', hint:'800', sentence:"Zapłaciłem ___ złotych.",             answer:"osiemset"},
+  {sub:'setki', hint:'900', sentence:"W miasteczku mieszka ___ osób.",      answer:"dziewięćset"},
+  {sub:'setki', hint:'101', sentence:"To kosztuje ___ złotych.",            answer:"sto jeden"},
+  {sub:'setki', hint:'150', sentence:"Kurtka kosztuje ___ złotych.",        answer:"sto pięćdziesiąt"},
+  {sub:'setki', hint:'220', sentence:"Do Gdańska jest ___ kilometrów.",     answer:"dwieście dwadzieścia"},
+  {sub:'setki', hint:'250', sentence:"Do Warszawy jest ___ kilometrów.",    answer:"dwieście pięćdziesiąt"},
+  {sub:'setki', hint:'365', sentence:"Rok ma ___ dni.",                     answer:"trzysta sześćdziesiąt pięć"},
+  {sub:'setki', hint:'480', sentence:"W teatrze jest ___ miejsc.",          answer:"czterysta osiemdziesiąt"},
+  {sub:'setki', hint:'512', sentence:"Mam ___ złotych.",                    answer:"pięćset dwanaście"},
+  {sub:'setki', hint:'630', sentence:"Bilet kosztuje ___ złotych.",         answer:"sześćset trzydzieści"},
+  {sub:'setki', hint:'725', sentence:"Ta książka ma ___ stron.",            answer:"siedemset dwadzieścia pięć"},
+  {sub:'setki', hint:'840', sentence:"Komputer kosztuje ___ złotych.",      answer:"osiemset czterdzieści"},
+  {sub:'setki', hint:'999', sentence:"W hotelu jest ___ gości.",            answer:"dziewięćset dziewięćdziesiąt dziewięć"},
+
+  /* ---------- тысячи ---------- */
+  {sub:'tysiace', hint:'1000',    sentence:"To kosztuje ___ złotych.",      answer:"tysiąc", alt:["jeden tysiąc"]},
+  {sub:'tysiace', hint:'2000',    sentence:"Zarabiam ___ złotych.",         answer:"dwa tysiące"},
+  {sub:'tysiace', hint:'3000',    sentence:"Laptop kosztuje ___ złotych.",  answer:"trzy tysiące"},
+  {sub:'tysiace', hint:'4000',    sentence:"Zapłaciłem ___ złotych.",       answer:"cztery tysiące"},
+  {sub:'tysiace', hint:'5000',    sentence:"Mam ___ złotych.",              answer:"pięć tysięcy"},
+  {sub:'tysiace', hint:'6000',    sentence:"Samochód kosztuje ___ złotych.", answer:"sześć tysięcy"},
+  {sub:'tysiace', hint:'7000',    sentence:"Mam ___ złotych oszczędności.", answer:"siedem tysięcy"},
+  {sub:'tysiace', hint:'8000',    sentence:"Kredyt to ___ złotych.",        answer:"osiem tysięcy"},
+  {sub:'tysiace', hint:'10 000',  sentence:"W mieście mieszka ___ osób.",   answer:"dziesięć tysięcy"},
+  {sub:'tysiace', hint:'20 000',  sentence:"W miasteczku mieszka ___ osób.", answer:"dwadzieścia tysięcy"},
+  {sub:'tysiace', hint:'100 000', sentence:"Samochód kosztuje ___ złotych.", answer:"sto tysięcy"},
+  {sub:'tysiace', hint:'1100',    sentence:"Bilet kosztuje ___ złotych.",   answer:"tysiąc sto"},
+  {sub:'tysiace', hint:'1200',    sentence:"Do Berlina jest ___ kilometrów.", answer:"tysiąc dwieście"},
+  {sub:'tysiace', hint:'1500',    sentence:"Telefon kosztuje ___ złotych.", answer:"tysiąc pięćset"},
+  {sub:'tysiace', hint:'2500',    sentence:"Bilet kosztuje ___ złotych.",   answer:"dwa tysiące pięćset"},
+  {sub:'tysiace', hint:'2025',    sentence:"Zapłaciłem ___ złotych.",       answer:"dwa tysiące dwadzieścia pięć"},
+  {sub:'tysiace', hint:'3450',    sentence:"Zapłaciłem ___ złotych.",       answer:"trzy tysiące czterysta pięćdziesiąt"},
+  {sub:'tysiace', hint:'1990',    sentence:"Komputer kosztuje ___ złotych.", answer:"tysiąc dziewięćset dziewięćdziesiąt"},
+
+  /* ---------- даты: kiedy? ---------- */
+  {sub:'daty', hint:'kiedy? · 1 maja',        sentence:"Święto Pracy jest ___.",        answer:"pierwszego maja"},
+  {sub:'daty', hint:'kiedy? · 3 maja',        sentence:"Święto Konstytucji jest ___.",  answer:"trzeciego maja"},
+  {sub:'daty', hint:'kiedy? · 6 stycznia',    sentence:"Trzech Króli jest ___.",        answer:"szóstego stycznia"},
+  {sub:'daty', hint:'kiedy? · 8 marca',       sentence:"Dzień Kobiet jest ___.",        answer:"ósmego marca"},
+  {sub:'daty', hint:'kiedy? · 11 listopada',  sentence:"Święto Niepodległości jest ___.", answer:"jedenastego listopada"},
+  {sub:'daty', hint:'kiedy? · 24 grudnia',    sentence:"Wigilia jest ___.",             answer:"dwudziestego czwartego grudnia"},
+  {sub:'daty', hint:'kiedy? · 2 lutego',      sentence:"Spotkanie jest ___.",           answer:"drugiego lutego"},
+  {sub:'daty', hint:'kiedy? · 9 czerwca',     sentence:"Koncert jest ___.",             answer:"dziewiątego czerwca"},
+  {sub:'daty', hint:'kiedy? · 12 lutego',     sentence:"Test jest ___.",                answer:"dwunastego lutego"},
+  {sub:'daty', hint:'kiedy? · 15 sierpnia',   sentence:"Urodziny mamy są ___.",         answer:"piętnastego sierpnia"},
+  {sub:'daty', hint:'kiedy? · 17 kwietnia',   sentence:"Mój urlop zaczyna się ___.",    answer:"siedemnastego kwietnia"},
+  {sub:'daty', hint:'kiedy? · 22 lipca',      sentence:"Wracam z wakacji ___.",         answer:"dwudziestego drugiego lipca"},
+  {sub:'daty', hint:'kiedy? · 30 września',   sentence:"Egzamin jest ___.",             answer:"trzydziestego września"},
+  {sub:'daty', hint:'kiedy? · 31 października', sentence:"Halloween jest ___.",         answer:"trzydziestego pierwszego października"},
+  /* ---------- даты: w którym roku? ---------- */
+  {sub:'daty', hint:'w którym roku? · 1918', sentence:"Polska odzyskała niepodległość w ___ roku.", answer:"tysiąc dziewięćset osiemnastym"},
+  {sub:'daty', hint:'w którym roku? · 1978', sentence:"Mój tata urodził się w ___ roku.", answer:"tysiąc dziewięćset siedemdziesiątym ósmym"},
+  {sub:'daty', hint:'w którym roku? · 1985', sentence:"To było w ___ roku.",            answer:"tysiąc dziewięćset osiemdziesiątym piątym"},
+  {sub:'daty', hint:'w którym roku? · 1990', sentence:"Urodziłem się w ___ roku.",      answer:"tysiąc dziewięćset dziewięćdziesiątym"},
+  {sub:'daty', hint:'w którym roku? · 1999', sentence:"Skończyłem szkołę w ___ roku.",  answer:"tysiąc dziewięćset dziewięćdziesiątym dziewiątym"},
+  {sub:'daty', hint:'w którym roku? · 2000', sentence:"To było w ___ roku.",            answer:"dwutysięcznym"},
+  {sub:'daty', hint:'w którym roku? · 2004', sentence:"Polska weszła do Unii w ___ roku.", answer:"dwa tysiące czwartym"},
+  {sub:'daty', hint:'w którym roku? · 2010', sentence:"Byłem w Polsce w ___ roku.",     answer:"dwa tysiące dziesiątym"},
+  {sub:'daty', hint:'w którym roku? · 2020', sentence:"Zacząłem pracę w ___ roku.",     answer:"dwa tysiące dwudziestym"},
+  {sub:'daty', hint:'w którym roku? · 2024', sentence:"Przeprowadziłem się w ___ roku.", answer:"dwa tysiące dwudziestym czwartym"},
+
+  /* ---------- время ---------- */
+  {sub:'czas', hint:'która? · 7:00',  sentence:"Jest ___.",                     answer:"siódma"},
+  {sub:'czas', hint:'która? · 8:00',  sentence:"Jest ___.",                     answer:"ósma"},
+  {sub:'czas', hint:'która? · 12:00', sentence:"Jest ___.",                     answer:"dwunasta"},
+  {sub:'czas', hint:'która? · 13:00', sentence:"Jest ___.",                     answer:"trzynasta"},
+  {sub:'czas', hint:'która? · 15:00', sentence:"Jest ___.",                     answer:"piętnasta"},
+  {sub:'czas', hint:'która? · 6:30',  sentence:"Jest ___.",                     answer:"szósta trzydzieści"},
+  {sub:'czas', hint:'która? · 9:15',  sentence:"Jest ___.",                     answer:"dziewiąta piętnaście"},
+  {sub:'czas', hint:'która? · 10:30', sentence:"Jest ___.",                     answer:"dziesiąta trzydzieści"},
+  {sub:'czas', hint:'która? · 11:40', sentence:"Jest ___.",                     answer:"jedenasta czterdzieści"},
+  {sub:'czas', hint:'która? · 14:20', sentence:"Jest ___.",                     answer:"czternasta dwadzieścia"},
+  {sub:'czas', hint:'która? · 16:25', sentence:"Jest ___.",                     answer:"szesnasta dwadzieścia pięć"},
+  {sub:'czas', hint:'która? · 17:30', sentence:"Jest ___.",                     answer:"siedemnasta trzydzieści"},
+  {sub:'czas', hint:'która? · 18:05', sentence:"Jest ___.",                     answer:"osiemnasta pięć"},
+  {sub:'czas', hint:'która? · 19:50', sentence:"Jest ___.",                     answer:"dziewiętnasta pięćdziesiąt"},
+  {sub:'czas', hint:'która? · 20:45', sentence:"Jest ___.",                     answer:"dwudziesta czterdzieści pięć"},
+  {sub:'czas', hint:'która? · 21:10', sentence:"Jest ___.",                     answer:"dwudziesta pierwsza dziesięć"},
+  {sub:'czas', hint:'która? · 22:15', sentence:"Jest ___.",                     answer:"dwudziesta druga piętnaście"},
+  {sub:'czas', hint:'która? · 23:55', sentence:"Jest ___.",                     answer:"dwudziesta trzecia pięćdziesiąt pięć"},
+  {sub:'czas', hint:'o której? · 8:00',  sentence:"Zaczynam pracę o ___.",      answer:"ósmej"},
+  {sub:'czas', hint:'o której? · 10:00', sentence:"Spotkanie jest o ___.",      answer:"dziesiątej"},
+  {sub:'czas', hint:'o której? · 15:00', sentence:"Kończę pracę o ___.",        answer:"piętnastej"},
+  {sub:'czas', hint:'o której? · 19:30', sentence:"Film zaczyna się o ___.",    answer:"dziewiętnastej trzydzieści"},
+  {sub:'czas', hint:'o której? · 21:00', sentence:"Wracam do domu o ___.",      answer:"dwudziestej pierwszej"}
+];
+
+
+/* ===== числительные словами (правила, а не список) ===== */
+const N_ONES  = ['zero','jeden','dwa','trzy','cztery','pięć','sześć','siedem','osiem','dziewięć'];
+const N_TEENS = ['dziesięć','jedenaście','dwanaście','trzynaście','czternaście','piętnaście','szesnaście','siedemnaście','osiemnaście','dziewiętnaście'];
+const N_TENS  = ['','','dwadzieścia','trzydzieści','czterdzieści','pięćdziesiąt','sześćdziesiąt','siedemdziesiąt','osiemdziesiąt','dziewięćdziesiąt'];
+const N_HUND  = ['','sto','dwieście','trzysta','czterysta','pięćset','sześćset','siedemset','osiemset','dziewięćset'];
+
+/* род влияет только на последнюю единицу и двойку: jeden/jedna/jedno, dwa/dwie */
+function oneForm(o, g){
+  if(o === 1) return g === 'f' ? 'jedna' : g === 'n' ? 'jedno' : 'jeden';
+  if(o === 2) return g === 'f' ? 'dwie' : 'dwa';
+  return N_ONES[o];
+}
+/* oneGender: род применяется к последней «1» только если всё число — ровно 1.
+   В составных (21, 31…) остаётся jeden, а существительное уходит в родительный мн.
+   На «2» это не распространяется: 22 книги → dwadzieścia dwie książki. */
+function under1000(n, g, oneGender){
+  const parts = [];
+  const h = Math.floor(n / 100), r = n % 100;
+  if(h) parts.push(N_HUND[h]);
+  if(r >= 10 && r < 20) parts.push(N_TEENS[r - 10]);
+  else {
+    const t = Math.floor(r / 10), o = r % 10;
+    if(t >= 2) parts.push(N_TENS[t]);
+    if(o) parts.push(o === 1 && !oneGender ? 'jeden' : oneForm(o, g));
+  }
+  return parts.join(' ');
+}
+function thousandNoun(th){
+  const l = th % 10, l2 = th % 100;
+  return (l >= 2 && l <= 4 && !(l2 >= 12 && l2 <= 14)) ? 'tysiące' : 'tysięcy';
+}
+function numToPl(n, g){
+  g = g || 'm';
+  if(n === 0) return 'zero';
+  const th = Math.floor(n / 1000), r = n % 1000;
+  const parts = [];
+  if(th === 1) parts.push('tysiąc');
+  else if(th > 1){ parts.push(under1000(th, 'm', false)); parts.push(thousandNoun(th)); }
+  if(r) parts.push(under1000(r, g, n === 1));
+  return parts.join(' ');
+}
+/* форма существительного: 1 → ед.ч., 2-4 → им.мн., остальное → род.мн. */
+function nounForm(n, f){
+  if(n === 1) return f[0];
+  const l = n % 10, l2 = n % 100;
+  return (l >= 2 && l <= 4 && !(l2 >= 12 && l2 <= 14)) ? f[1] : f[2];
+}
+
+/* ===== даты ===== */
+const DAY_GEN = ['','pierwszego','drugiego','trzeciego','czwartego','piątego','szóstego','siódmego',
+  'ósmego','dziewiątego','dziesiątego','jedenastego','dwunastego','trzynastego','czternastego',
+  'piętnastego','szesnastego','siedemnastego','osiemnastego','dziewiętnastego','dwudziestego',
+  'dwudziestego pierwszego','dwudziestego drugiego','dwudziestego trzeciego','dwudziestego czwartego',
+  'dwudziestego piątego','dwudziestego szóstego','dwudziestego siódmego','dwudziestego ósmego',
+  'dwudziestego dziewiątego','trzydziestego','trzydziestego pierwszego'];
+const MONTH_GEN = ['stycznia','lutego','marca','kwietnia','maja','czerwca','lipca','sierpnia',
+  'września','października','listopada','grudnia'];
+const MONTH_DAYS = [31,28,31,30,31,30,31,31,30,31,30,31];
+
+const ORD_LOC_U = ['','pierwszym','drugim','trzecim','czwartym','piątym','szóstym','siódmym','ósmym','dziewiątym'];
+/* индексируется как [n-10], поэтому без ведущего пустого элемента */
+const ORD_LOC_T = ['dziesiątym','jedenastym','dwunastym','trzynastym','czternastym','piętnastym',
+  'szesnastym','siedemnastym','osiemnastym','dziewiętnastym'];
+const ORD_LOC_D = ['','','dwudziestym','trzydziestym','czterdziestym','pięćdziesiątym',
+  'sześćdziesiątym','siedemdziesiątym','osiemdziesiątym','dziewięćdziesiątym'];
+
+function ordLoc2(n){
+  if(n < 10) return ORD_LOC_U[n];
+  if(n < 20) return ORD_LOC_T[n - 10];
+  const t = Math.floor(n / 10), o = n % 10;
+  return o ? ORD_LOC_D[t] + ' ' + ORD_LOC_U[o] : ORD_LOC_D[t];
+}
+/* в польском в годе склоняется только последний элемент (последние две цифры) */
+function yearLoc(y){
+  if(y === 2000) return 'dwutysięcznym';
+  if(y >= 2001 && y <= 2099) return 'dwa tysiące ' + ordLoc2(y - 2000);
+  if(y >= 1901 && y <= 1999) return 'tysiąc dziewięćset ' + ordLoc2(y - 1900);
+  return null;
+}
+
+/* ===== время ===== */
+const HOUR_NOM = ['','pierwsza','druga','trzecia','czwarta','piąta','szósta','siódma','ósma','dziewiąta',
+  'dziesiąta','jedenasta','dwunasta','trzynasta','czternasta','piętnasta','szesnasta','siedemnasta',
+  'osiemnasta','dziewiętnasta','dwudziesta','dwudziesta pierwsza','dwudziesta druga','dwudziesta trzecia'];
+const HOUR_LOC = ['','pierwszej','drugiej','trzeciej','czwartej','piątej','szóstej','siódmej','ósmej','dziewiątej',
+  'dziesiątej','jedenastej','dwunastej','trzynastej','czternastej','piętnastej','szesnastej','siedemnastej',
+  'osiemnastej','dziewiętnastej','dwudziestej','dwudziestej pierwszej','dwudziestej drugiej','dwudziestej trzeciej'];
+const MIN_WORD = {0:'',5:'zero pięć',10:'dziesięć',15:'piętnaście',20:'dwadzieścia',25:'dwadzieścia pięć',
+  30:'trzydzieści',35:'trzydzieści pięć',40:'czterdzieści',45:'czterdzieści pięć',50:'pięćdziesiąt',55:'pięćdziesiąt pięć'};
+
+
+/* Вопросы по числительным собираются по правилам, а не пишутся руками:
+   форма существительного и род числительного считаются от самого числа. */
+
+const N_NOUNS = {
+  rok:      {g:'m', f:['rok','lata','lat']},
+  zloty:    {g:'m', f:['złoty','złote','złotych']},
+  bilet:    {g:'m', f:['bilet','bilety','biletów']},
+  kilometr: {g:'m', f:['kilometr','kilometry','kilometrów']},
+  pokoj:    {g:'m', f:['pokój','pokoje','pokoi']},
+  punkt:    {g:'m', f:['punkt','punkty','punktów']},
+  minuta:   {g:'f', f:['minuta','minuty','minut']},
+  godzina:  {g:'f', f:['godzina','godziny','godzin']},
+  strona:   {g:'f', f:['strona','strony','stron']},
+  ksiazka:  {g:'f', f:['książka','książki','książek']},
+  jablko:   {g:'n', f:['jabłko','jabłka','jabłek']},
+  okno:     {g:'n', f:['okno','okna','okien']},
+  zdjecie:  {g:'n', f:['zdjęcie','zdjęcia','zdjęć']}
+};
+
+/* Все шаблоны — с переходным глаголом и винительным падежом.
+   У существительных женского рода винительный ед.ч. отличается от именительного
+   (jedną książkę), поэтому ровно «1» с ними не берём. */
+const N_FRAMES = {
+  jednosci: [
+    ['Mam ___ {n}.', 'jablko'], ['Mam ___ {n}.', 'bilet'], ['Mam ___ {n}.', 'ksiazka'],
+    ['To kosztuje ___ {n}.', 'zloty'], ['Kupiłem ___ {n}.', 'bilet'],
+    ['Widzę ___ {n}.', 'okno'], ['Zrobiłem ___ {n}.', 'zdjecie'],
+    ['Zdobyłem ___ {n}.', 'punkt'], ['Czekam ___ {n}.', 'minuta']
+  ],
+  dziesiatki: [
+    ['Mam ___ {n}.', 'rok'], ['To kosztuje ___ {n}.', 'zloty'],
+    ['Czekam ___ {n}.', 'minuta'], ['Hotel ma ___ {n}.', 'pokoj'],
+    ['Zdobyłem ___ {n}.', 'punkt'], ['Kupiłem ___ {n}.', 'bilet']
+  ],
+  setki: [
+    ['To kosztuje ___ {n}.', 'zloty'], ['Ta książka ma ___ {n}.', 'strona'],
+    ['Przejechałem ___ {n}.', 'kilometr'], ['Hotel ma ___ {n}.', 'pokoj'],
+    ['Zrobiłem ___ {n}.', 'zdjecie']
+  ],
+  tysiace: [
+    ['To kosztuje ___ {n}.', 'zloty'], ['Zapłaciłem ___ {n}.', 'zloty'],
+    ['Zarabiam ___ {n} miesięcznie.', 'zloty'], ['Przejechałem ___ {n}.', 'kilometr'],
+    ['Zdobyłem ___ {n}.', 'punkt']
+  ]
+};
+
+function fmtNum(n){
+  return n >= 10000 ? n.toLocaleString('ru-RU').replace(/ /g,' ') : String(n);
+}
+
+function numberQuestions(sub, numbers){
+  const out = [];
+  N_FRAMES[sub].forEach(([tpl, key]) => {
+    const noun = N_NOUNS[key];
+    numbers.forEach(n => {
+      if(n === 1 && noun.g === 'f') return;          // «jedną książkę» — винительный, пропускаем
+      if(n === 0 && key !== 'punkt') return;   // «Mam zero jabłek» — грамматично, но нелепо
+      out.push({
+        sub,
+        hint: fmtNum(n),
+        sentence: tpl.replace('{n}', nounForm(n, noun.f)),
+        answer: numToPl(n, noun.g)
+      });
+    });
+  });
+  return out;
+}
+
+function buildNumData(){
+  const out = [];
+  const range = (a, b, step) => { const r = []; for(let i = a; i <= b; i += step) r.push(i); return r; };
+
+  out.push(...numberQuestions('jednosci', range(0, 10, 1)));
+  out.push(...numberQuestions('dziesiatki', range(11, 99, 3)));
+  out.push(...numberQuestions('setki', range(100, 999, 23)));
+  out.push(...numberQuestions('tysiace', range(1000, 9900, 220).concat([10000,15000,20000,25000,50000,100000])));
+
+  /* даты: kiedy? — день в родительном + месяц в родительном */
+  const dayFrames = ['Urodziny mam ___.', 'Spotkanie jest ___.', 'Egzamin jest ___.',
+                     'Wracam do domu ___.', 'Koncert jest ___.'];
+  MONTH_GEN.forEach((month, mi) => {
+    const maxDay = MONTH_DAYS[mi];
+    for(let d = 1; d <= maxDay; d += 2){
+      const tpl = dayFrames[(mi + d) % dayFrames.length];
+      out.push({
+        sub:'daty',
+        hint:`kiedy? · ${String(d).padStart(2,'0')}.${String(mi+1).padStart(2,'0')}`,
+        sentence: tpl,
+        answer: `${DAY_GEN[d]} ${month}`
+      });
+    }
+  });
+
+  /* даты: w którym roku? — склоняется только последний элемент */
+  const yearFrames = ['Urodziłem się w ___ roku.', 'To było w ___ roku.',
+                      'Skończyłem szkołę w ___ roku.', 'Byłem w Polsce w ___ roku.'];
+  for(let y = 1901; y <= 2030; y += 2){
+    const loc = yearLoc(y);
+    if(!loc) continue;
+    out.push({sub:'daty', hint:`w którym roku? · ${y}`, sentence: yearFrames[y % yearFrames.length], answer: loc});
+  }
+
+  /* время: «Jest…» — именительный, «o…» — предложный */
+  const mins = [0,5,10,15,20,25,30,35,40,45,50,55];
+  const timeFramesNom = ['Jest ___.', 'Teraz jest ___.'];
+  const timeFramesLoc = ['Spotkanie jest o ___.', 'Film zaczyna się o ___.',
+                         'Zaczynam pracę o ___.', 'Wracam do domu o ___.'];
+  for(let h = 1; h <= 23; h++){
+    mins.forEach((m, mi) => {
+      const mw = MIN_WORD[m];
+      const hh = `${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}`;
+      if((h + mi) % 2 === 0){
+        out.push({sub:'czas', hint:`która godzina? · ${hh}`,
+                  sentence: timeFramesNom[(h+mi) % timeFramesNom.length],
+                  answer: (HOUR_NOM[h] + (mw ? ' ' + mw : '')).trim()});
+      } else {
+        out.push({sub:'czas', hint:`o której? · ${hh}`,
+                  sentence: timeFramesLoc[(h+mi) % timeFramesLoc.length],
+                  answer: (HOUR_LOC[h] + (mw ? ' ' + mw : '')).trim()});
+      }
+    });
+  }
+  return out;
+}
+
+
+/* руками написанные предложения + сгенерированные по правилам */
+const NUM_DATA = NUM_DATA_MANUAL.concat(buildNumData());
+/* ============ ТЕМА: ПАДЕЖИ (данные) ============
+   Падежи по «Polski krok po kroku 1» (A1): mianownik (в т.ч. мн.ч.), narzędnik,
+   biernik, dopełniacz, miejscownik — на существительных; celownik — только местоимения.
+   Формы написаны руками и сверены проверкой по правилам склонения (§5). */
+
+/* n — словарная форма, g — род (m/f/n/pl), an — одушевлённость (для m: biernik = dopełniacz),
+   tags — в каких рамках слово уместно, prep — предлог места (w/we/na), формы: pl D B N L */
+const CASE_NOUNS = [
+  /* семья и люди */
+  {n:"brat",g:"m",an:1,tags:["family","person"],pl:"bracia",D:"brata",B:"brata",N:"bratem",L:"bracie"},
+  {n:"siostra",g:"f",tags:["family","person"],pl:"siostry",D:"siostry",B:"siostrę",N:"siostrą",L:"siostrze"},
+  {n:"mama",g:"f",tags:["family","person"],pl:"mamy",D:"mamy",B:"mamę",N:"mamą",L:"mamie"},
+  {n:"tata",g:"m",an:1,tags:["family","person"],pl:"tatowie",D:"taty",B:"tatę",N:"tatą",L:"tacie"},
+  {n:"syn",g:"m",an:1,tags:["family","person"],pl:"synowie",D:"syna",B:"syna",N:"synem",L:"synu"},
+  {n:"córka",g:"f",tags:["family","person"],pl:"córki",D:"córki",B:"córkę",N:"córką",L:"córce"},
+  {n:"babcia",g:"f",tags:["family","person"],pl:"babcie",D:"babci",B:"babcię",N:"babcią",L:"babci"},
+  {n:"dziadek",g:"m",an:1,tags:["family","person"],pl:"dziadkowie",D:"dziadka",B:"dziadka",N:"dziadkiem",L:"dziadku"},
+  {n:"mąż",g:"m",an:1,tags:["family","person"],pl:"mężowie",D:"męża",B:"męża",N:"mężem",L:"mężu"},
+  {n:"żona",g:"f",tags:["family","person"],pl:"żony",D:"żony",B:"żonę",N:"żoną",L:"żonie"},
+  {n:"dziecko",g:"n",tags:["family"],pl:"dzieci",D:"dziecka",B:"dziecko",N:"dzieckiem",L:"dziecku"},
+  {n:"kolega",g:"m",an:1,tags:["person"],pl:"koledzy",D:"kolegi",B:"kolegę",N:"kolegą",L:"koledze"},
+  {n:"koleżanka",g:"f",tags:["person"],pl:"koleżanki",D:"koleżanki",B:"koleżankę",N:"koleżanką",L:"koleżance"},
+  {n:"przyjaciel",g:"m",an:1,tags:["person"],pl:"przyjaciele",D:"przyjaciela",B:"przyjaciela",N:"przyjacielem",L:"przyjacielu"},
+  {n:"pan",g:"m",an:1,tags:["person"],pl:"panowie",D:"pana",B:"pana",N:"panem",L:"panu"},
+  {n:"pani",g:"f",tags:["person"],pl:"panie",D:"pani",B:"panią",N:"panią",L:"pani"},
+  {n:"kobieta",g:"f",tags:["person"],pl:"kobiety",D:"kobiety",B:"kobietę",N:"kobietą",L:"kobiecie"},
+  {n:"mężczyzna",g:"m",an:1,tags:["person"],pl:"mężczyźni",D:"mężczyzny",B:"mężczyznę",N:"mężczyzną",L:"mężczyźnie"},
+  /* профессии и национальности */
+  {n:"student",g:"m",an:1,tags:["profession","person"],pl:"studenci",D:"studenta",B:"studenta",N:"studentem",L:"studencie"},
+  {n:"studentka",g:"f",tags:["profession","person"],pl:"studentki",D:"studentki",B:"studentkę",N:"studentką",L:"studentce"},
+  {n:"nauczyciel",g:"m",an:1,tags:["profession","person"],pl:"nauczyciele",D:"nauczyciela",B:"nauczyciela",N:"nauczycielem",L:"nauczycielu"},
+  {n:"nauczycielka",g:"f",tags:["profession","person"],pl:"nauczycielki",D:"nauczycielki",B:"nauczycielkę",N:"nauczycielką",L:"nauczycielce"},
+  {n:"lekarz",g:"m",an:1,tags:["profession","person"],pl:"lekarze",D:"lekarza",B:"lekarza",N:"lekarzem",L:"lekarzu"},
+  {n:"lekarka",g:"f",tags:["profession","person"],pl:"lekarki",D:"lekarki",B:"lekarkę",N:"lekarką",L:"lekarce"},
+  {n:"kelner",g:"m",an:1,tags:["profession","person"],pl:"kelnerzy",D:"kelnera",B:"kelnera",N:"kelnerem",L:"kelnerze"},
+  {n:"kelnerka",g:"f",tags:["profession","person"],pl:"kelnerki",D:"kelnerki",B:"kelnerkę",N:"kelnerką",L:"kelnerce"},
+  {n:"kierowca",g:"m",an:1,tags:["profession","person"],pl:"kierowcy",D:"kierowcy",B:"kierowcę",N:"kierowcą",L:"kierowcy"},
+  {n:"aktor",g:"m",an:1,tags:["profession","person"],pl:"aktorzy",D:"aktora",B:"aktora",N:"aktorem",L:"aktorze"},
+  {n:"aktorka",g:"f",tags:["profession","person"],pl:"aktorki",D:"aktorki",B:"aktorkę",N:"aktorką",L:"aktorce"},
+  {n:"inżynier",g:"m",an:1,tags:["profession","person"],pl:"inżynierowie",D:"inżyniera",B:"inżyniera",N:"inżynierem",L:"inżynierze"},
+  {n:"dentysta",g:"m",an:1,tags:["profession","person"],pl:"dentyści",D:"dentysty",B:"dentystę",N:"dentystą",L:"dentyście"},
+  {n:"sprzedawca",g:"m",an:1,tags:["profession","person"],pl:"sprzedawcy",D:"sprzedawcy",B:"sprzedawcę",N:"sprzedawcą",L:"sprzedawcy"},
+  {n:"policjant",g:"m",an:1,tags:["profession","person"],pl:"policjanci",D:"policjanta",B:"policjanta",N:"policjantem",L:"policjancie"},
+  {n:"Polak",g:"m",an:1,tags:["nation","person"],pl:"Polacy",D:"Polaka",B:"Polaka",N:"Polakiem",L:"Polaku"},
+  {n:"Polka",g:"f",tags:["nation","person"],pl:"Polki",D:"Polki",B:"Polkę",N:"Polką",L:"Polce"},
+  {n:"Niemiec",g:"m",an:1,tags:["nation","person"],pl:"Niemcy",D:"Niemca",B:"Niemca",N:"Niemcem",L:"Niemcu"},
+  {n:"Rosjanin",g:"m",an:1,tags:["nation","person"],pl:"Rosjanie",D:"Rosjanina",B:"Rosjanina",N:"Rosjaninem",L:"Rosjaninie"},
+  {n:"Ukrainiec",g:"m",an:1,tags:["nation","person"],pl:"Ukraińcy",D:"Ukraińca",B:"Ukraińca",N:"Ukraińcem",L:"Ukraińcu"},
+  {n:"Anglik",g:"m",an:1,tags:["nation","person"],pl:"Anglicy",D:"Anglika",B:"Anglika",N:"Anglikiem",L:"Angliku"},
+  /* животные */
+  {n:"pies",g:"m",an:1,tags:["animal"],pl:"psy",D:"psa",B:"psa",N:"psem",L:"psie"},
+  {n:"kot",g:"m",an:1,tags:["animal"],pl:"koty",D:"kota",B:"kota",N:"kotem",L:"kocie"},
+  /* еда и напитки */
+  {n:"kawa",g:"f",tags:["drink","food","event"],pl:"kawy",D:"kawy",B:"kawę",N:"kawą",L:"kawie"},
+  {n:"herbata",g:"f",tags:["drink","food"],pl:"herbaty",D:"herbaty",B:"herbatę",N:"herbatą",L:"herbacie"},
+  {n:"woda",g:"f",tags:["drink"],pl:"wody",D:"wody",B:"wodę",N:"wodą",L:"wodzie"},
+  {n:"mleko",g:"n",tags:["drink","addin"],pl:null,D:"mleka",B:"mleko",N:"mlekiem",L:"mleku"},
+  {n:"piwo",g:"n",tags:["drink","event"],pl:"piwa",D:"piwa",B:"piwo",N:"piwem",L:"piwie"},
+  {n:"sok",g:"m",tags:["drink"],pl:"soki",D:"soku",B:"sok",N:"sokiem",L:"soku"},
+  {n:"wino",g:"n",tags:["drink"],pl:"wina",D:"wina",B:"wino",N:"winem",L:"winie"},
+  {n:"chleb",g:"m",tags:["food"],pl:"chleby",D:"chleba",B:"chleb",N:"chlebem",L:"chlebie"},
+  {n:"ser",g:"m",tags:["food","addin"],pl:"sery",D:"sera",B:"ser",N:"serem",L:"serze"},
+  {n:"masło",g:"n",tags:["food","addin"],pl:null,D:"masła",B:"masło",N:"masłem",L:"maśle"},
+  {n:"cukier",g:"m",tags:["addin"],pl:null,D:"cukru",B:"cukier",N:"cukrem",L:"cukrze"},
+  {n:"szynka",g:"f",tags:["food","addin"],pl:"szynki",D:"szynki",B:"szynkę",N:"szynką",L:"szynce"},
+  {n:"zupa",g:"f",tags:["food"],pl:"zupy",D:"zupy",B:"zupę",N:"zupą",L:"zupie"},
+  {n:"jabłko",g:"n",tags:["food"],pl:"jabłka",D:"jabłka",B:"jabłko",N:"jabłkiem",L:"jabłku"},
+  {n:"pomidor",g:"m",tags:["food"],pl:"pomidory",D:"pomidora",B:"pomidor",N:"pomidorem",L:"pomidorze"},
+  {n:"ryba",g:"f",tags:["food"],pl:"ryby",D:"ryby",B:"rybę",N:"rybą",L:"rybie"},
+  {n:"mięso",g:"n",tags:["food"],pl:null,D:"mięsa",B:"mięso",N:"mięsem",L:"mięsie"},
+  {n:"ciasto",g:"n",tags:["food"],pl:"ciasta",D:"ciasta",B:"ciasto",N:"ciastem",L:"cieście"},
+  {n:"obiad",g:"m",tags:["meal","event"],pl:"obiady",D:"obiadu",B:"obiad",N:"obiadem",L:"obiedzie",prep:"na"},
+  {n:"śniadanie",g:"n",tags:["meal"],pl:"śniadania",D:"śniadania",B:"śniadanie",N:"śniadaniem",L:"śniadaniu",prep:"na"},
+  {n:"kolacja",g:"f",tags:["meal","event"],pl:"kolacje",D:"kolacji",B:"kolację",N:"kolacją",L:"kolacji",prep:"na"},
+  /* вещи и абстрактное */
+  {n:"dom",g:"m",tags:["thing","place"],pl:"domy",D:"domu",B:"dom",N:"domem",L:"domu",prep:"w"},
+  {n:"samochód",g:"m",tags:["thing","transport"],pl:"samochody",D:"samochodu",B:"samochód",N:"samochodem",L:"samochodzie"},
+  {n:"telefon",g:"m",tags:["thing"],pl:"telefony",D:"telefonu",B:"telefon",N:"telefonem",L:"telefonie"},
+  {n:"komputer",g:"m",tags:["thing"],pl:"komputery",D:"komputera",B:"komputer",N:"komputerem",L:"komputerze"},
+  {n:"książka",g:"f",tags:["thing","read"],pl:"książki",D:"książki",B:"książkę",N:"książką",L:"książce"},
+  {n:"gazeta",g:"f",tags:["read"],pl:"gazety",D:"gazety",B:"gazetę",N:"gazetą",L:"gazecie"},
+  {n:"film",g:"m",tags:["watch","interest"],pl:"filmy",D:"filmu",B:"film",N:"filmem",L:"filmie"},
+  {n:"klucz",g:"m",tags:["thing"],pl:"klucze",D:"klucza",B:"klucz",N:"kluczem",L:"kluczu"},
+  {n:"torba",g:"f",tags:["thing"],pl:"torby",D:"torby",B:"torbę",N:"torbą",L:"torbie"},
+  {n:"bilet",g:"m",tags:["thing"],pl:"bilety",D:"biletu",B:"bilet",N:"biletem",L:"bilecie"},
+  {n:"rower",g:"m",tags:["thing","transport"],pl:"rowery",D:"roweru",B:"rower",N:"rowerem",L:"rowerze"},
+  {n:"stół",g:"m",tags:["thing"],pl:"stoły",D:"stołu",B:"stół",N:"stołem",L:"stole"},
+  {n:"okno",g:"n",tags:["thing"],pl:"okna",D:"okna",B:"okno",N:"oknem",L:"oknie"},
+  {n:"zdjęcie",g:"n",tags:["thing"],pl:"zdjęcia",D:"zdjęcia",B:"zdjęcie",N:"zdjęciem",L:"zdjęciu"},
+  {n:"pieniądze",g:"pl",tags:["abstract"],pl:null,D:"pieniędzy",B:"pieniądze",N:"pieniędzmi",L:"pieniądzach"},
+  {n:"czas",g:"m",tags:["abstract"],pl:null,D:"czasu",B:"czas",N:"czasem",L:"czasie"},
+  {n:"praca",g:"f",tags:["abstract","place"],pl:"prace",D:"pracy",B:"pracę",N:"pracą",L:"pracy",prep:"w"},
+  /* места */
+  {n:"szkoła",g:"f",tags:["place","work"],pl:"szkoły",D:"szkoły",B:"szkołę",N:"szkołą",L:"szkole",prep:"w"},
+  {n:"sklep",g:"m",tags:["place","work"],pl:"sklepy",D:"sklepu",B:"sklep",N:"sklepem",L:"sklepie",prep:"w"},
+  {n:"bank",g:"m",tags:["place","work"],pl:"banki",D:"banku",B:"bank",N:"bankiem",L:"banku",prep:"w"},
+  {n:"kino",g:"n",tags:["place","goto"],pl:"kina",D:"kina",B:"kino",N:"kinem",L:"kinie",prep:"w"},
+  {n:"teatr",g:"m",tags:["place","goto"],pl:"teatry",D:"teatru",B:"teatr",N:"teatrem",L:"teatrze",prep:"w"},
+  {n:"restauracja",g:"f",tags:["place","work","goto"],pl:"restauracje",D:"restauracji",B:"restaurację",N:"restauracją",L:"restauracji",prep:"w"},
+  {n:"kawiarnia",g:"f",tags:["place","work","goto"],pl:"kawiarnie",D:"kawiarni",B:"kawiarnię",N:"kawiarnią",L:"kawiarni",prep:"w"},
+  {n:"park",g:"m",tags:["place","goto"],pl:"parki",D:"parku",B:"park",N:"parkiem",L:"parku",prep:"w"},
+  {n:"szpital",g:"m",tags:["place","work"],pl:"szpitale",D:"szpitala",B:"szpital",N:"szpitalem",L:"szpitalu",prep:"w"},
+  {n:"hotel",g:"m",tags:["place","work"],pl:"hotele",D:"hotelu",B:"hotel",N:"hotelem",L:"hotelu",prep:"w"},
+  {n:"muzeum",g:"n",tags:["place","goto"],pl:"muzea",D:"muzeum",B:"muzeum",N:"muzeum",L:"muzeum",prep:"w"},
+  {n:"biuro",g:"n",tags:["place","work"],pl:"biura",D:"biura",B:"biuro",N:"biurem",L:"biurze",prep:"w"},
+  {n:"poczta",g:"f",tags:["place","goto"],pl:"poczty",D:"poczty",B:"pocztę",N:"pocztą",L:"poczcie",prep:"na"},
+  {n:"dworzec",g:"m",tags:["place","goto"],pl:"dworce",D:"dworca",B:"dworzec",N:"dworcem",L:"dworcu",prep:"na"},
+  {n:"lotnisko",g:"n",tags:["place","goto"],pl:"lotniska",D:"lotniska",B:"lotnisko",N:"lotniskiem",L:"lotnisku",prep:"na"},
+  {n:"uniwersytet",g:"m",tags:["place","work","goto"],pl:"uniwersytety",D:"uniwersytetu",B:"uniwersytet",N:"uniwersytetem",L:"uniwersytecie",prep:"na"},
+  {n:"plaża",g:"f",tags:["place","goto"],pl:"plaże",D:"plaży",B:"plażę",N:"plażą",L:"plaży",prep:"na"},
+  {n:"ulica",g:"f",tags:["place"],pl:"ulice",D:"ulicy",B:"ulicę",N:"ulicą",L:"ulicy",prep:"na"},
+  {n:"rynek",g:"m",tags:["place","goto"],pl:"rynki",D:"rynku",B:"rynek",N:"rynkiem",L:"rynku",prep:"na"},
+  {n:"miasto",g:"n",tags:["place"],pl:"miasta",D:"miasta",B:"miasto",N:"miastem",L:"mieście",prep:"w"},
+  {n:"wieś",g:"f",tags:["place"],pl:"wsie",D:"wsi",B:"wieś",N:"wsią",L:"wsi",prep:"na"},
+  {n:"pokój",g:"m",tags:["place","room"],pl:"pokoje",D:"pokoju",B:"pokój",N:"pokojem",L:"pokoju",prep:"w"},
+  {n:"kuchnia",g:"f",tags:["place","room"],pl:"kuchnie",D:"kuchni",B:"kuchnię",N:"kuchnią",L:"kuchni",prep:"w"},
+  {n:"łazienka",g:"f",tags:["place","room"],pl:"łazienki",D:"łazienki",B:"łazienkę",N:"łazienką",L:"łazience",prep:"w"},
+  {n:"mieszkanie",g:"n",tags:["place","thing"],pl:"mieszkania",D:"mieszkania",B:"mieszkanie",N:"mieszkaniem",L:"mieszkaniu",prep:"w"},
+  {n:"ogród",g:"m",tags:["place"],pl:"ogrody",D:"ogrodu",B:"ogród",N:"ogrodem",L:"ogrodzie",prep:"w"},
+  {n:"las",g:"m",tags:["place"],pl:"lasy",D:"lasu",B:"las",N:"lasem",L:"lesie",prep:"w"},
+  {n:"morze",g:"n",tags:["thing"],pl:"morza",D:"morza",B:"morze",N:"morzem",L:"morzu"},
+  /* города и страны (без мн.ч.) */
+  {n:"Kraków",g:"m",tags:["city"],pl:null,D:"Krakowa",B:"Kraków",N:"Krakowem",L:"Krakowie",prep:"w"},
+  {n:"Warszawa",g:"f",tags:["city"],pl:null,D:"Warszawy",B:"Warszawę",N:"Warszawą",L:"Warszawie",prep:"w"},
+  {n:"Gdańsk",g:"m",tags:["city"],pl:null,D:"Gdańska",B:"Gdańsk",N:"Gdańskiem",L:"Gdańsku",prep:"w"},
+  {n:"Wrocław",g:"m",tags:["city"],pl:null,D:"Wrocławia",B:"Wrocław",N:"Wrocławiem",L:"Wrocławiu",prep:"we"},
+  {n:"Poznań",g:"m",tags:["city"],pl:null,D:"Poznania",B:"Poznań",N:"Poznaniem",L:"Poznaniu",prep:"w"},
+  {n:"Berlin",g:"m",tags:["city"],pl:null,D:"Berlina",B:"Berlin",N:"Berlinem",L:"Berlinie",prep:"w"},
+  {n:"Londyn",g:"m",tags:["city"],pl:null,D:"Londynu",B:"Londyn",N:"Londynem",L:"Londynie",prep:"w"},
+  {n:"Paryż",g:"m",tags:["city"],pl:null,D:"Paryża",B:"Paryż",N:"Paryżem",L:"Paryżu",prep:"w"},
+  {n:"Polska",g:"f",tags:["country"],pl:null,D:"Polski",B:"Polskę",N:"Polską",L:"Polsce",prep:"w"},
+  {n:"Niemcy",g:"pl",tags:["country"],pl:null,D:"Niemiec",B:"Niemcy",N:"Niemcami",L:"Niemczech",prep:"w"},
+  {n:"Ukraina",g:"f",tags:["country"],pl:null,D:"Ukrainy",B:"Ukrainę",N:"Ukrainą",L:"Ukrainie",prep:"na"},
+  {n:"Rosja",g:"f",tags:["country"],pl:null,D:"Rosji",B:"Rosję",N:"Rosją",L:"Rosji",prep:"w"},
+  {n:"Anglia",g:"f",tags:["country"],pl:null,D:"Anglii",B:"Anglię",N:"Anglią",L:"Anglii",prep:"w"},
+  {n:"Francja",g:"f",tags:["country"],pl:null,D:"Francji",B:"Francję",N:"Francją",L:"Francji",prep:"we"},
+  {n:"Hiszpania",g:"f",tags:["country"],pl:null,D:"Hiszpanii",B:"Hiszpanię",N:"Hiszpanią",L:"Hiszpanii",prep:"w"},
+  {n:"Włochy",g:"pl",tags:["country"],pl:null,D:"Włoch",B:"Włochy",N:"Włochami",L:"Włochach",prep:"we"},
+  /* транспорт */
+  {n:"autobus",g:"m",tags:["transport"],pl:"autobusy",D:"autobusu",B:"autobus",N:"autobusem",L:"autobusie"},
+  {n:"pociąg",g:"m",tags:["transport"],pl:"pociągi",D:"pociągu",B:"pociąg",N:"pociągiem",L:"pociągu"},
+  {n:"tramwaj",g:"m",tags:["transport"],pl:"tramwaje",D:"tramwaju",B:"tramwaj",N:"tramwajem",L:"tramwaju"},
+  {n:"taksówka",g:"f",tags:["transport"],pl:"taksówki",D:"taksówki",B:"taksówkę",N:"taksówką",L:"taksówce"},
+  {n:"metro",g:"n",tags:["transport"],pl:null,D:"metra",B:"metro",N:"metrem",L:"metrze"},
+  /* интересы и предметы */
+  {n:"muzyka",g:"f",tags:["interest","listen"],pl:null,D:"muzyki",B:"muzykę",N:"muzyką",L:"muzyce"},
+  {n:"sport",g:"m",tags:["interest"],pl:null,D:"sportu",B:"sport",N:"sportem",L:"sporcie"},
+  {n:"historia",g:"f",tags:["interest","subject"],pl:null,D:"historii",B:"historię",N:"historią",L:"historii"},
+  {n:"sztuka",g:"f",tags:["interest"],pl:null,D:"sztuki",B:"sztukę",N:"sztuką",L:"sztuce"},
+  {n:"polityka",g:"f",tags:["interest"],pl:null,D:"polityki",B:"politykę",N:"polityką",L:"polityce"},
+  {n:"literatura",g:"f",tags:["interest"],pl:null,D:"literatury",B:"literaturę",N:"literaturą",L:"literaturze"},
+  {n:"fotografia",g:"f",tags:["interest"],pl:null,D:"fotografii",B:"fotografię",N:"fotografią",L:"fotografii"},
+  {n:"matematyka",g:"f",tags:["interest","subject"],pl:null,D:"matematyki",B:"matematykę",N:"matematyką",L:"matematyce"},
+  {n:"radio",g:"n",tags:["listen"],pl:null,D:"radia",B:"radio",N:"radiem",L:"radiu"},
+  /* языки — только dopełniacz после uczyć się (склоняются как прилагательные) */
+  {n:"polski",g:"m",tags:["language"],pl:null,D:"polskiego",B:"polski",N:"polskim",L:"polskim"},
+  {n:"angielski",g:"m",tags:["language"],pl:null,D:"angielskiego",B:"angielski",N:"angielskim",L:"angielskim"},
+  {n:"niemiecki",g:"m",tags:["language"],pl:null,D:"niemieckiego",B:"niemiecki",N:"niemieckim",L:"niemieckim"},
+  {n:"hiszpański",g:"m",tags:["language"],pl:null,D:"hiszpańskiego",B:"hiszpański",N:"hiszpańskim",L:"hiszpańskim"},
+  {n:"rosyjski",g:"m",tags:["language"],pl:null,D:"rosyjskiego",B:"rosyjski",N:"rosyjskim",L:"rosyjskim"},
+  /* события (na + biernik) */
+  {n:"koncert",g:"m",tags:["event"],pl:"koncerty",D:"koncertu",B:"koncert",N:"koncertem",L:"koncercie",prep:"na"},
+  {n:"mecz",g:"m",tags:["event","watch"],pl:"mecze",D:"meczu",B:"mecz",N:"meczem",L:"meczu",prep:"na"},
+  {n:"spektakl",g:"m",tags:["event"],pl:"spektakle",D:"spektaklu",B:"spektakl",N:"spektaklem",L:"spektaklu",prep:"na"},
+  {n:"spacer",g:"m",tags:["event"],pl:"spacery",D:"spaceru",B:"spacer",N:"spacerem",L:"spacerze",prep:"na"},
+  {n:"zakupy",g:"pl",tags:["event"],pl:null,D:"zakupów",B:"zakupy",N:"zakupami",L:"zakupach",prep:"na"},
+  {n:"wakacje",g:"pl",tags:["event","abstract"],pl:null,D:"wakacji",B:"wakacje",N:"wakacjami",L:"wakacjach",prep:"na"},
+  {n:"impreza",g:"f",tags:["event"],pl:"imprezy",D:"imprezy",B:"imprezę",N:"imprezą",L:"imprezie",prep:"na"},
+  {n:"lekcja",g:"f",tags:["event"],pl:"lekcje",D:"lekcji",B:"lekcję",N:"lekcją",L:"lekcji",prep:"na"},
+  /* месяцы — miejscownik после w/we */
+  {n:"styczeń",g:"m",tags:["month"],pl:null,D:"stycznia",B:"styczeń",N:"styczniem",L:"styczniu",prep:"w"},
+  {n:"luty",g:"m",tags:["month"],pl:null,D:"lutego",B:"luty",N:"lutym",L:"lutym",prep:"w"},
+  {n:"marzec",g:"m",tags:["month"],pl:null,D:"marca",B:"marzec",N:"marcem",L:"marcu",prep:"w"},
+  {n:"kwiecień",g:"m",tags:["month"],pl:null,D:"kwietnia",B:"kwiecień",N:"kwietniem",L:"kwietniu",prep:"w"},
+  {n:"maj",g:"m",tags:["month"],pl:null,D:"maja",B:"maj",N:"majem",L:"maju",prep:"w"},
+  {n:"czerwiec",g:"m",tags:["month"],pl:null,D:"czerwca",B:"czerwiec",N:"czerwcem",L:"czerwcu",prep:"w"},
+  {n:"lipiec",g:"m",tags:["month"],pl:null,D:"lipca",B:"lipiec",N:"lipcem",L:"lipcu",prep:"w"},
+  {n:"sierpień",g:"m",tags:["month"],pl:null,D:"sierpnia",B:"sierpień",N:"sierpniem",L:"sierpniu",prep:"w"},
+  {n:"wrzesień",g:"m",tags:["month"],pl:null,D:"września",B:"wrzesień",N:"wrześniem",L:"wrześniu",prep:"we"},
+  {n:"październik",g:"m",tags:["month"],pl:null,D:"października",B:"październik",N:"październikiem",L:"październiku",prep:"w"},
+  {n:"listopad",g:"m",tags:["month"],pl:null,D:"listopada",B:"listopad",N:"listopadem",L:"listopadzie",prep:"w"},
+  {n:"grudzień",g:"m",tags:["month"],pl:null,D:"grudnia",B:"grudzień",N:"grudniem",L:"grudniu",prep:"w"}
+];
+
+/* прилагательные для согласования в mianowniku: m / f / n / мн. (не-мужсколичное) */
+const CASE_ADJ = [
+  {m:"nowy",f:"nowa",n:"nowe",pl:"nowe"},
+  {m:"stary",f:"stara",n:"stare",pl:"stare"},
+  {m:"dobry",f:"dobra",n:"dobre",pl:"dobre"},
+  {m:"duży",f:"duża",n:"duże",pl:"duże"},
+  {m:"mały",f:"mała",n:"małe",pl:"małe"},
+  {m:"ładny",f:"ładna",n:"ładne",pl:"ładne"},
+  {m:"drogi",f:"droga",n:"drogie",pl:"drogie"},
+  {m:"tani",f:"tania",n:"tanie",pl:"tanie"},
+  {m:"polski",f:"polska",n:"polskie",pl:"polskie"},
+  {m:"smaczny",f:"smaczna",n:"smaczne",pl:"smaczne"},
+  {m:"ciekawy",f:"ciekawa",n:"ciekawe",pl:"ciekawe"},
+  {m:"zimny",f:"zimna",n:"zimne",pl:"zimne"},
+  {m:"ciepły",f:"ciepła",n:"ciepłe",pl:"ciepłe"},
+  {m:"czysty",f:"czysta",n:"czyste",pl:"czyste"}
+];
+
+/* celownik — только личные местоимения, как в учебнике (урок 17) */
+const DAT_PRON = [
+  {n:"ja",form:"mi",alt:["mnie"]},
+  {n:"ty",form:"ci",alt:["tobie"]},
+  {n:"on",form:"mu",alt:["jemu"]},
+  {n:"ona",form:"jej"},
+  {n:"ono",form:"mu",alt:["jemu"]},
+  {n:"my",form:"nam"},
+  {n:"wy",form:"wam"},
+  {n:"oni",form:"im"},
+  {n:"one",form:"im"}
+];
+
+
+/* ============ ТЕМА: ПАДЕЖИ (генератор) ============
+   Вопрос строится из рамки (глагол + падеж, который он требует) и существительного
+   подходящей категории. Пропуск — всегда только склоняемое слово (и предлог места,
+   когда тренируется w/na). Глагольные формы берём из PARADIGMS темы «Глаголы». */
+
+const CASE_SUBTOPICS = [
+  {id:'M', label:'Mianownik',   caption:'kto? co? · мн. число, прилагательные'},
+  {id:'N', label:'Narzędnik',   caption:'kim? czym? · Jestem studentem'},
+  {id:'B', label:'Biernik',     caption:'kogo? co? · Lubię kawę'},
+  {id:'D', label:'Dopełniacz',  caption:'kogo? czego? · Nie mam czasu'},
+  {id:'L', label:'Miejscownik', caption:'gdzie? o czym? · w Krakowie'},
+  {id:'C', label:'Celownik',    caption:'komu? · podoba mi się (местоимения)'}
+];
+
+/* глаголы, которых нет в PARADIGMS темы «Глаголы» */
+const CASE_VERBS = {
+  "interesować się": ["interesuję się","interesujesz się","interesuje się","interesujemy się","interesujecie się","interesują się"],
+  "rozmawiać":       ["rozmawiam","rozmawiasz","rozmawia","rozmawiamy","rozmawiacie","rozmawiają"],
+  "marzyć":          ["marzę","marzysz","marzy","marzymy","marzycie","marzą"]
+};
+function vf(verb){ return PARADIGMS[verb] || CASE_VERBS[verb]; }
+
+const C_PRON = ["Ja","Ty","On","My","Wy","Oni"];
+const C_PRON_ALT = {2:"Ona", 5:"One"};
+
+/* has: все теги обязательны; any: хотя бы один; not: ни одного.
+   prepNot:'na' — исключить слова с предлогом na (idę do sklepu, но idę NA pocztę) */
+const CASE_FRAMES = [
+  /* ---------- NARZĘDNIK ---------- */
+  {c:'N', v:'być', tpl:'{P} {V} ___.', any:['profession','nation'], predicative:true},
+  {c:'N', v:'interesować się', tpl:'{P} {V} ___.', any:['interest']},
+  {c:'N', v:'jechać', tpl:'{P} {V} ___.', any:['transport']},
+  {c:'N', v:'jeździć', tpl:'{P} {V} do pracy ___.', any:['transport']},
+  {c:'N', v:'iść', tpl:'{P} {V} do kina z ___.', any:['person','family']},
+  {c:'N', v:'mieszkać', tpl:'{P} {V} z ___.', any:['family','person']},
+  {c:'N', v:'rozmawiać', tpl:'{P} {V} z ___.', any:['person','family']},
+  {c:'N', v:'pić', tpl:'{P} {V} kawę z ___.', any:['coffee']},
+  {c:'N', v:'jeść', tpl:'{P} {V} chleb z ___.', any:['bread']},
+  /* ---------- BIERNIK ---------- */
+  {c:'B', v:'mieć', tpl:'{P} {V} ___.', any:['thing','animal','family','abstract','transport']},
+  {c:'B', v:'lubić', tpl:'{P} {V} ___.', any:['food','drink','interest','animal','person']},
+  {c:'B', v:'kupować', tpl:'{P} {V} ___.', any:['food','drink','thing']},
+  {c:'B', v:'jeść', tpl:'{P} {V} ___.', any:['food']},
+  {c:'B', v:'pić', tpl:'{P} {V} ___.', any:['drink']},
+  {c:'B', v:'czytać', tpl:'{P} {V} ___.', any:['read']},
+  {c:'B', v:'oglądać', tpl:'{P} {V} ___.', any:['watch']},
+  {c:'B', v:'widzieć', tpl:'{P} {V} ___.', any:['thing','person','animal','place']},
+  {c:'B', v:'znać', tpl:'{P} {V} ___.', any:['person','city']},
+  {c:'B', v:'iść', tpl:'{P} {V} na ___.', any:['event']},
+  {c:'B', v:'czekać', tpl:'{P} {V} na ___.', any:['person','transport']},
+  /* ---------- DOPEŁNIACZ ---------- */
+  {c:'D', v:'mieć', tpl:'{P} nie {V} ___.', any:['thing','animal','family','abstract','transport']},
+  {c:'D', v:'lubić', tpl:'{P} nie {V} ___.', any:['food','drink','interest','animal']},
+  {c:'D', v:'szukać', tpl:'{P} {V} ___.', any:['thing','person','goto','abstract','family']},
+  {c:'D', v:'słuchać', tpl:'{P} {V} ___.', any:['listen','person']},
+  {c:'D', v:'znać', tpl:'{P} nie {V} ___.', any:['person','city']},
+  {c:'D', v:'widzieć', tpl:'{P} nie {V} ___.', any:['thing','person','animal']},
+  {c:'D', v:'pić', tpl:'{P} nie {V} ___.', any:['drink']},
+  {c:'D', v:'jeść', tpl:'{P} nie {V} ___.', any:['food']},
+  {c:'D', v:'uczyć się', tpl:'{P} {V} ___.', any:['language','subject']},
+  {c:'D', v:'iść', tpl:'{P} {V} do ___.', any:['place','goto','room','person','family'], prepNot:'na'},
+  {c:'D', v:'jechać', tpl:'{P} {V} do ___.', any:['city','country'], prepNot:'na'},
+  {c:'D', v:'mieć', tpl:'{P} {V} dużo ___.', any:['abstract']},
+  {c:'D', tpl:'Nie ma ___.', any:['food','drink','thing','person','transport'], variants:['Nie ma ___.','Tu nie ma ___.','Dzisiaj nie ma ___.']},
+  {c:'D', tpl:'Proszę kilo ___.', any:['mass']},
+  {c:'D', tpl:'Proszę butelkę ___.', any:['bottle']},
+  {c:'D', tpl:'Proszę szklankę ___.', any:['glass']},
+  {c:'D', tpl:'Proszę filiżankę ___.', any:['cup']},
+  /* ---------- MIEJSCOWNIK ---------- */
+  {c:'L', v:'mieszkać', tpl:'{P} {V} ___.', any:['city','country'], withPrep:true},
+  {c:'L', v:'być', tpl:'{P} {V} ___.', any:['place','goto','room','work'], withPrep:true},
+  {c:'L', v:'pracować', tpl:'{P} {V} ___.', any:['work'], withPrep:true},
+  {c:'L', v:'jeść', tpl:'{P} {V} obiad ___.', any:['goto','work'], withPrep:true, has:['place']},
+  {c:'L', v:'czekać', tpl:'{P} {V} ___.', any:['place'], withPrep:true},
+  {c:'L', v:'myśleć', tpl:'{P} {V} o ___.', any:['abstract','person','family','event','interest','city','country','thing']},
+  {c:'L', v:'mówić', tpl:'{P} {V} o ___.', any:['abstract','person','family','event','interest','city','country','thing']},
+  {c:'L', v:'marzyć', tpl:'{P} {V} o ___.', any:['event','country','city','thing']},
+  {c:'L', tpl:'Urodziny mam ___.', any:['month'], withPrep:true, variants:['Urodziny mam ___.','Wakacje są ___.','Egzamin jest ___.','Zaczynam pracę ___.','Święta są ___.']}
+];
+
+/* реплика лица: по индексу 0..5 → Ja/Ty/On(Ona)/My/Wy/Oni(One) */
+function pron(pi, alt){ return (alt && C_PRON_ALT[pi]) || C_PRON[pi]; }
+
+function buildCaseData(){
+  const out = [];
+  const nounOk = (x, f) => {
+    if(f.any && !f.any.some(t => x.tags.includes(t))) return false;
+    if(f.has && !f.has.every(t => x.tags.includes(t))) return false;
+    if(f.prepNot && x.prep === f.prepNot) return false;
+    if(f.withPrep && !x.prep) return false;
+    return true;
+  };
+
+  CASE_FRAMES.forEach((f, fi) => {
+    CASE_NOUNS.forEach((x, ni) => {
+      if(!nounOk(x, f)) return;
+      const form = x[f.c];
+      if(!form) return;
+      const answer = f.withPrep ? `${x.prep} ${form}` : form;
+      const g = f.c;
+      if(!f.v){
+        (f.variants || [f.tpl]).forEach((tpl, vi) => {
+          if((ni + vi) % 2) return;                       // разрежаем: половина сочетаний
+          out.push({g, hint:x.n, noun:x, sentence:tpl, answer});
+        });
+        return;
+      }
+      const forms = vf(f.v);
+      if(!forms) return;
+      for(let pi = 0; pi < 6; pi++){
+        if(f.c !== 'N' && (ni + fi + pi) % 2) continue;  // разрежаем: 3 лица из 6 (кроме narzędnika — там сочетаний мало)
+        let P;
+        if(f.predicative){
+          /* Jestem/Jesteś — любой род; On — только с мужским словом, Ona — с женским */
+          if(pi === 2) P = x.g === 'f' ? 'Ona' : 'On';
+          else if(pi > 2) continue;                      // мн. число потребовало бы studentami
+          else P = C_PRON[pi];
+        } else {
+          P = pron(pi, (ni + fi) % 2 === 1);
+        }
+        out.push({g, hint:x.n, noun:x, sentence:f.tpl.replace('{P}', P).replace('{V}', forms[pi]), answer});
+      }
+    });
+  });
+
+  /* ---------- MIANOWNIK: множественное число ---------- */
+  const plFrames = ['To są ___.','Tu są ___.','Tam są ___.','Gdzie są ___?'];
+  CASE_NOUNS.forEach((x, ni) => {
+    if(!x.pl) return;
+    plFrames.forEach((tpl, vi) => {
+      if((ni + vi) % 2) return;
+      out.push({g:'M', hint:x.n, noun:x, sentence:tpl, answer:x.pl, sub:'мн. ч.'});
+    });
+  });
+  /* ---------- MIANOWNIK: согласование прилагательного ---------- */
+  const DEM = {m:'Ten', f:'Ta', n:'To'};
+  const adjFor = x => {
+    if(x.tags.some(t => ['food','drink'].includes(t)))   return ['smaczny','dobry','zimny','ciepły','drogi','tani'];
+    if(x.tags.some(t => ['thing','transport'].includes(t))) return ['nowy','stary','dobry','duży','mały','ładny','drogi','tani','czysty'];
+    if(x.tags.some(t => ['place','room','city'].includes(t))) return ['nowy','stary','duży','mały','ładny','czysty','ciekawy'];
+    if(x.tags.some(t => ['person','family','animal'].includes(t))) return ['dobry','mały','duży','stary','ładny'];
+    if(x.tags.some(t => ['read','watch','interest'].includes(t))) return ['ciekawy','nowy','dobry','polski','stary'];
+    return null;
+  };
+  CASE_NOUNS.forEach((x, ni) => {
+    if(!['m','f','n'].includes(x.g)) return;
+    const pool = adjFor(x);
+    if(!pool) return;
+    pool.forEach((am, ai) => {
+      if((ni + ai) % 3) return;                          // по 2–3 прилагательных на слово
+      const a = CASE_ADJ.find(z => z.m === am);
+      if(!a) return;
+      const form = a[x.g];
+      const which = (ni + ai) % 2;
+      const sentence = which === 0 ? `To jest ___ ${x.n}.` : `${DEM[x.g]} ${x.n} jest ___.`;
+      out.push({g:'M', hint:am, noun:x, sentence, answer:form, sub:'прилагательное'});
+      /* мн. число прилагательного — только не-мужсколичные существительные */
+      const virile = x.g === 'm' && x.an && x.tags.includes('person');
+      if(x.pl && !virile && (ni + ai) % 4 === 0){
+        out.push({g:'M', hint:am, noun:x, sentence:`To są ___ ${x.pl}.`, answer:a.pl, sub:'прилагательное, мн. ч.'});
+      }
+    });
+  });
+
+  /* ---------- CELOWNIK: только местоимения, как в учебнике ---------- */
+  const datFrames = [];
+  ['ten film','ta piosenka','to miasto','Kraków','ta książka','ten hotel','Warszawa','ta kawiarnia']
+    .forEach(o => datFrames.push(`Podoba ___ się ${o}.`));
+  ['te buty','te zdjęcia','polskie filmy','te książki','góry'].forEach(o => datFrames.push(`Podobają ___ się ${o}.`));
+  ['ta zupa','ten ser','polska kuchnia','to ciasto','ta kawa'].forEach(o => datFrames.push(`Smakuje ___ ${o}.`));
+  ['zimno','gorąco','ciepło','smutno','wesoło','nudno','dobrze','źle','wygodnie','niedobrze','miło','przyjemnie']
+    .forEach(a => datFrames.push(`Jest ___ ${a}.`));
+  ['Smutno','Zimno','Wesoło','Nudno','Miło','Przykro'].forEach(a => datFrames.push(`${a} ___.`));
+  ['spać','jeść','pić','tańczyć','płakać','śmiać'].forEach(v => datFrames.push(`Chce ___ się ${v}.`));
+  datFrames.push('Wydaje ___ się, że to dobry pomysł.', 'Wydaje ___ się, że będzie padać.',
+                 'Ładnie ___ w tym kolorze.', 'Nie chce ___ się wstawać.');
+  ['ta muzyka','ten obraz'].forEach(o => datFrames.push(`Podoba ___ się ${o}.`));
+  /* местоимение — объект глагола; для «ja» такие фразы бессмысленны, пропускаем */
+  const datObj = ['Pomagam ___.','Dziękuję ___ za pomoc.','Daję ___ prezent.','Kupuję ___ kawę.',
+                  'Mówię ___ prawdę.','Życzę ___ miłego dnia.','Pokazuję ___ zdjęcia.',
+                  'Opowiadam ___ o Polsce.','Czytam ___ książkę.','Piszę ___ e-mail.'];
+  DAT_PRON.forEach(p => {
+    datFrames.forEach(tpl => out.push({g:'C', hint:p.n, sentence:tpl, answer:p.form, alt:p.alt || []}));
+    if(p.n !== 'ja') datObj.forEach(tpl => out.push({g:'C', hint:p.n, sentence:tpl, answer:p.form, alt:p.alt || []}));
+  });
+  return out;
+}
+
+/* справочные таблицы для модала */
+const CASE_REF = {
+  M: {title:'Mianownik', sub:'Kto? Co? Словарная форма. Прилагательное согласуется по роду: nowy dom, nowa kawa, nowe piwo; во мн. числе (не о мужчинах) — nowe. Мн. число существительных: -y / -i / -e, у названий мужчин часто со смягчением: student → studenci, Polak → Polacy, lekarz → lekarze.',
+      cols:['Слово','Мн. число','Прилагательное'],
+      rows:[['dom (м.)','domy','nowy dom'],['kawa (ж.)','kawy','nowa kawa'],['piwo (ср.)','piwa','nowe piwo'],['książka (ж.)','książki','dobra książka'],['student (м., чел.)','studenci','dobry student'],['lekarz (м., чел.)','lekarze','dobry lekarz'],['dziecko (ср.)','dzieci','małe dziecko']]},
+  N: {title:'Narzędnik', sub:'Kim? Czym? После być (Jestem studentem), interesować się, транспорт (jadę autobusem), z + N (z bratem, kawa z mlekiem). Окончания: м. и ср. -em (после k/g -iem), ж. -ą.',
+      cols:['Род','Окончание','Пример'],
+      rows:[['мужской','-em','student → studentem'],['мужской на k/g','-iem','Polak → Polakiem'],['женский','-ą','studentka → studentką'],['средний','-em','mleko → mlekiem'],['ж. на -i','-ą','pani → panią']]},
+  B: {title:'Biernik', sub:'Kogo? Co? Прямой объект: mam, lubię, kupuję, jem, piję, widzę, znam; na + B (idę na koncert). Женский -a → -ę; мужской одушевлённый = dopełniacz (-a); мужской неодушевлённый и средний = mianownik.',
+      cols:['Род','Окончание','Пример'],
+      rows:[['женский -a','-ę','kawa → kawę'],['ж. на -i','-ą','pani → panią'],['м. одушевлённый','-a (= D)','brat → brata, kot → kota'],['м. неодушевлённый','= M','dom → dom'],['средний','= M','piwo → piwo']]},
+  D: {title:'Dopełniacz', sub:'Kogo? Czego? Отрицание (nie mam czasu, nie lubię kawy), szukać, słuchać, uczyć się, do + D (do sklepu), количества (kilo sera, dużo pracy, butelka wody). Ж. -y/-i; м. одуш. -a; м. неодуш. -u или -a (запоминать!); ср. -a.',
+      cols:['Род','Окончание','Пример'],
+      rows:[['женский','-y / -i','kawa → kawy, książka → książki'],['м. одушевлённый','-a','brat → brata'],['м. неодуш.','-u (чаще)','dom → domu, sklep → sklepu'],['м. неодуш.','-a (запомнить)','chleb → chleba, komputer → komputera'],['средний','-a','piwo → piwa'],['мн. число','—','pieniądze → pieniędzy']]},
+  L: {title:'Miejscownik', sub:'Gdzie? O kim? O czym? Только с предлогом: w / we / na (место), o (о чём). Окончания -e (со смягчением: Kraków → w Krakowie, szkoła → w szkole, brat → o bracie) или -u (после k, g, ch и мягких: bank → w banku, hotel → w hotelu). Месяцы: w styczniu, w lutym, we wrześniu.',
+      cols:['Тип','Окончание','Пример'],
+      rows:[['твёрдая основа','-e + смягчение','Warszawa → w Warszawie, student → o studencie'],['k, g, ch','-u','park → w parku, Gdańsk → w Gdańsku'],['мягкая основа','-u','hotel → w hotelu, pokój → w pokoju'],['ж. мягкая','-i / -y','kawiarnia → w kawiarni, praca → w pracy'],['na вместо w','','na poczcie, na dworcu, na uniwersytecie, na Ukrainie'],['we перед w/f','','we Wrocławiu, we Francji, we wrześniu']]},
+  C: {title:'Celownik', sub:'Komu? В учебнике — только личные местоимения в безличных оборотах: podoba mi się, smakuje ci, jest mu zimno, chce nam się spać. Существительные в этом падеже — уже в следующей книге.',
+      cols:['Кто','Форма','Пример'],
+      rows:[['ja','mi (mnie)','Podoba mi się.'],['ty','ci (tobie)','Smutno ci?'],['on / ono','mu (jemu)','Jest mu zimno.'],['ona','jej','Smakuje jej zupa.'],['my','nam','Chce nam się spać.'],['wy','wam','Podobają wam się?'],['oni / one','im','Nudno im.']]}
+};
+
+/* вопросы по падежам собираются один раз при загрузке */
+const CASE_DATA = buildCaseData();
+
+/* ============ ТАБЛИЦЫ ПАДЕЖЕЙ (книжные) ============
+   Воспроизводят развороты «Tablice gramatyczne» (Polski krok po kroku): шапка tab. N,
+   колонки родов, ряд прилагательного (жёлтые плашки), ряд существительного (красные),
+   примеры и строка вопроса JAKI?. Это справочник, движок тестов их не читает.
+
+   Формат ячейки: {end, span, alt:[[когда, окончание]], eq:'= BIERNIK'}.
+   В примерах {..} — окончание прилагательного (жёлтое), [..] — существительного (красное);
+   слово с маркером выделяется жирным, пустой маркер [] = нулевое окончание.
+
+   verified:true — таблица сверена со скриншотом книги плашка в плашку.
+   verified:false — страницы в скринах не было, собрана по правилам. На экране не отличается:
+   владелец проверил и снял пометку 2026-10-02; флаг оставлен как память о том, что сверялось. */
+/* когда какой падеж нужен — одна строка на падеж, выводится под шапкой каждой таблицы */
+const CASE_USE = {
+  M:'Kto? Co? Словарная форма: подлежащее и всё после <i>to jest / to są</i>.',
+  D:'После отрицания (<i>nie mam czasu</i>), количества (<i>dużo pracy, kilo sera</i>), предлогов <i>do, z, od, dla, bez, u, obok</i> и глаголов <i>szukać, słuchać, uczyć się, potrzebować</i>.',
+  C:'Komu? Адресат: <i>dawać, pomagać, dziękować, podobać się</i>, безличное (<i>zimno mi</i>), предлоги <i>dzięki, przeciwko</i>.',
+  B:'Прямой объект: <i>mam, lubię, kupuję, jem, piję, znam, widzę</i>; направление и время: <i>na koncert, w piątek, przez</i>.',
+  N:'После <i>być</i> (<i>jestem studentem</i>), <i>interesować się</i>, транспорт (<i>jadę autobusem</i>), <i>z</i> + кем/чем (<i>z bratem, kawa z mlekiem</i>), <i>przed, za, pod, nad, między</i>.',
+  L:'Только с предлогом: <i>w / we / na</i> (где: <i>w Krakowie, na poczcie</i>), <i>o</i> (о чём: <i>o filmie</i>), <i>przy, po</i>; месяцы (<i>w maju</i>).'
+};
+
+const CASE_TABLES = [
+  { id:'M1', num:'tab. 1', kase:'MIANOWNIK', q:'Kto? Co?', n:'l. poj.', group:'M', color:'sand', verified:false,
+    cols:[{label:'rodzaj męski', ic:'m'},{label:'rodzaj żeński', ic:'f'},{label:'rodzaj nijaki', ic:'n'}],
+    adj:[{end:'-y', alt:[['k, g','-i']]},{end:'-a'},{end:'-e'}],
+    noun:[{end:'-ø', alt:[['kolega, tata, mężczyzna','-a']]},{end:'-a', alt:[['pani','-i'],['noc, miłość','-ø']]},{end:'-o<br>-e<br>-ę<br>-um'}],
+    ex:[{lines:['To jest dobr{y} student[].','To jest wysok{i} mężczyzn[a].']},
+        {lines:['To jest dobr{a} studentk[a].','To jest now{a} kaw[a].']},
+        {lines:['To jest dobr{e} dzieck[o].','To jest ładn{e} imi[ę].','To jest now{e} muze[um].']}],
+    ask:[{t:'JAKI?'},{t:'JAKA?'},{t:'JAKIE?'}] },
+
+  { id:'M2', num:'tab. 2', kase:'MIANOWNIK', q:'Kto? Co?', n:'l. mn.', group:'M', color:'sand', verified:false,
+    cols:[{label:'rodzaj męski osobowy', ic:'mm'},{label:'rodzaj męski nieosobowy', ic:'h'},{label:'rodzaj żeński', ic:'f'},{label:'rodzaj nijaki', ic:'n'}],
+    adj:[{end:'-i', alt:[['k, g, r + sz, ż, cz, rz','-y']]},{end:'-e', span:3}],
+    noun:[{end:'-i', alt:[['k, g, r + c','-y'],['ś, ć, ź, dź, ń, l, j<br>sz, ż, cz, rz','-e'],['pan, syn, ojciec','-owie']]},
+          {end:'-y', span:2, alt:[['k, g','-i'],['sz, cz, dz, dż, ż, rz<br>ś, ć, ź, dź, ń, c, l, j','-e']]},
+          {end:'-a'}],
+    ex:[{lines:['To są dobrz{y} studenc[i].','To są mil{i} Polac[y].','To są now{i} nauczyciel[e].']},
+        {lines:['To są now{e} komputer[y].','To są drog{ie} hotel[e].']},
+        {lines:['To są dobr{e} studentk[i].','To są czarn{e} kaw[y].']},
+        {lines:['To są włosk{ie} win[a].','To są smaczn{e} jabłk[a].']}],
+    ask:[{t:'JACY?'},{t:'JAKIE?', span:3}],
+    note:'<b>Мужско-личный род меняет согласную:</b> student → studenci, Polak → Polacy, aktor → aktorzy, Francuz → Francuzi; dobry → dobrzy, miły → mili, wysoki → wysocy, drogi → drodzy.' },
+
+  { id:'D1', num:'tab. 5', kase:'DOPEŁNIACZ', q:'Kogo? Czego?', n:'l. poj.', group:'D', color:'olive', verified:true,
+    cols:[{label:'rodzaj męski', ic:'m', span:2},{label:'rodzaj żeński', ic:'f'},{label:'rodzaj nijaki', ic:'n'}],
+    subs:[{label:'żywotne', ic:'♡'},{label:'nieżywotne', ic:'⊘'},null,null],
+    adj:[{end:'-ego', eq:'= BIERNIK'},{end:'-ego'},{end:'-ej'},{end:'-ego'}],
+    noun:[{end:'-a'},{end:'-a<br>-u'},{end:'-y', alt:[['k, g<br>ś, ć, ź, dź, ń + l, j','-i']]},{end:'-a'}],
+    ex:[{lines:['Nie mam starsz{ego} brat[a].','Nie mam młod{ego} tat[y].']},
+        {lines:['Nie lubię ciemn{ego} chleb[a].','Nie jem słodk{iego} dżem[u].']},
+        {lines:['Nie lubię zimn{ej} zup[y].','Nie kupuję tłust{ej} szynk[i].','Nie mam now{ej} powieśc[i].','Nie jem smażon{ej} cebul[i].']},
+        {lines:['Nie chcę gorąc{ego} mlek[a].']}],
+    ask:[{t:'JAKIEGO?', span:2},{t:'JAKIEJ?'},{t:'JAKIEGO?'}] },
+
+  { id:'D2', num:'tab. 6', kase:'DOPEŁNIACZ', q:'Kogo? Czego?', n:'l. mn.', group:'D', color:'olive', verified:false,
+    cols:[{label:'rodzaj męski', ic:'m'},{label:'rodzaj żeński', ic:'f'},{label:'rodzaj nijaki', ic:'n'}],
+    adj:[{end:'-ych', span:3, alt:[['k, g','-ich']]}],
+    noun:[{end:'-ów', alt:[['sz, cz, dz, dż<br>ż, rz + c','-y'],['ś, ć, ź, dź<br>ń + l, j','-i']]},
+          {end:'-ø', alt:[['kawiarnia, lekcja, powieść','-i'],['ulica, noc, rzecz','-y']]},
+          {end:'-ø', alt:[['imię → imion',''],['muzeum → muzeów','']]}],
+    ex:[{lines:['Nie mam dobr{ych} koleg[ów].','Nie lubię tych star{ych} film[ów].','Nie znam t{ych} nauczyciel[i].']},
+        {lines:['Nie mam now{ych} książ[ek].','Nie znam mił{ych} student[ek].','Nie mam dziś lekcj[i].']},
+        {lines:['Nie kupuję drog{ich} win[].','Nie znam krakowsk{ich} muze[ów].']}],
+    ask:[{t:'JAKICH?', span:3}] },
+
+  { kind:'lists', id:'Dau', group:'D', color:'olive', verified:true,
+    title:'DOPEŁNIACZ – rodzaj męski nieżywotny: „-a” czy „-u”?',
+    cols:[
+      {end:'-a', groups:[
+        ['Nazwy walut', ['dolar – dolar[a]','funt – funt[a]','cent – cent[a]']],
+        ['Marki', ['Ford – Ford[a]','Citroen – Citroen[a]','Adidas – Adidas[a]']],
+        ['Miary', ['kilogram – kilogram[a]','kilometr – kilometr[a]','metr – metr[a]']],
+        ['Naczynia i sztućce', ['talerz – talerz[a]','nóż – noż[a]','garnek – garnk[a]']],
+        ['Gry i sport', ['tenis – tenis[a]','hokej – hokej[a]','brydż – brydż[a]']],
+        ['Części ciała', ['brzuch – brzuch[a]','palec – palc[a]','nos – nos[a]']],
+        ['Narzędzia', ['młotek – młotk[a]','klucz – klucz[a]','ołówek – ołówk[a]']],
+        ['Tańce', ['walc – walc[a]','polonez – polonez[a]','fokstrot – fokstrot[a]']],
+        ['Nazwy miast', ['Berlin – Berlin[a]','Paryż – Paryż[a]','Gdańsk – Gdańsk[a]']],
+        ['Niektóre produkty spożywcze', ['chleb – chleb[a]','ser – ser[a]','naleśnik – naleśnik[a]']],
+        ['Nazwy miesięcy', ['styczni[a], marc[a], kwietni[a], maj[a], czerwc[a], lipc[a], sierpni[a], wrześni[a], październik[a], listopad[a], grudni[a]']],
+        ['Kwiaty, warzywa, owoce', ['tulipan – tulipan[a]','banan – banan[a]','ogórek – ogórk[a]']]
+      ]},
+      {end:'-u', groups:[
+        ['Substancje płynne', ['sok – sok[u]','majonez – majonez[u]','klej – klej[u]']],
+        ['Środki transportu', ['samochód – samochod[u]','rower – rower[u]','autobus – autobus[u]']],
+        ['Dni tygodnia', ['poniedziałek – poniedziałk[u]','wtorek – wtork[u]','czwartek – czwartk[u]','piątek – piątk[u]']],
+        ['Rzeczowniki „zbiorowe”', ['makaron – makaron[u]','cukier – cukr[u]','las – las[u]']],
+        ['Pojęcia abstrakcyjne', ['Nie ma problem[u]!','Nie rób hałas[u]!','Z chaos[u] wyłoniła się Gaja i Uranos.']]
+      ]}
+    ],
+    note:'<b>UWAGA!</b> Регулярное окончание — <b>-u</b>, но <b>-a</b> встречается почти так же часто. Сомневаешься — проверь слово в Wikisłownik. У некоторых слов допустимы оба: krawat – krawat<b>a</b> / krawat<b>u</b>.' },
+
+  { id:'C1', num:'tab. 7', kase:'CELOWNIK', q:'Komu? Czemu?', n:'l. poj.', group:'C', color:'rose', verified:false,
+    cols:[{label:'rodzaj męski', ic:'m'},{label:'rodzaj żeński', ic:'f'},{label:'rodzaj nijaki', ic:'n'}],
+    adj:[{end:'-emu', alt:[['k, g','-iemu']]},{end:'-ej'},{end:'-emu', alt:[['k, g','-iemu']]}],
+    noun:[{end:'-owi', alt:[['brat, ojciec, pan, chłopiec<br>kot, pies, Bóg','-u']]},
+          {end:'-e', alt:[['k → ce, g → dze, r → rze<br>t → cie, d → dzie, ł → le',''],['miękkie + sz, ż, cz, rz, c','-i / -y']]},
+          {end:'-u'}],
+    ex:[{lines:['Pomagam dobr{emu} student[owi].','Ufam star{emu} brat[u].']},
+        {lines:['Daję kwiaty mił{ej} koleżan[ce].','Dziękuję moj{ej} mam[ie].']},
+        {lines:['Przyglądam się mał{emu} dzieck[u].']}],
+    ask:[{t:'JAKIEMU?'},{t:'JAKIEJ?'},{t:'JAKIEMU?'}],
+    note:'В «Krok po kroku 1» celownik даётся только на местоимениях (<b>podoba mi się</b>, <b>pomagam ci</b>); существительные в этом падеже — уже книга 2.' },
+
+  { id:'C2', num:'tab. 8', kase:'CELOWNIK', q:'Komu? Czemu?', n:'l. mn.', group:'C', color:'rose', verified:false,
+    cols:[{label:'rodzaj męski', ic:'m'},{label:'rodzaj żeński', ic:'f'},{label:'rodzaj nijaki', ic:'n'}],
+    adj:[{end:'-ym', span:3, alt:[['k, g','-im']]}],
+    noun:[{end:'-om', span:3}],
+    ex:[{lines:['Pomagam dobr{ym} student[om].']},{lines:['Dziękuję mił{ym} koleżank[om].']},{lines:['Przyglądam się mał{ym} dzieci[om].']}],
+    ask:[{t:'JAKIM?', span:3}] },
+
+  { id:'B1', num:'tab. 9', kase:'BIERNIK', q:'Kogo? Co?', n:'l. poj.', group:'B', color:'olive', verified:true,
+    cols:[{label:'rodzaj męski', ic:'m', span:2},{label:'rodzaj żeński', ic:'f'},{label:'rodzaj nijaki', ic:'n'}],
+    subs:[{label:'żywotne', ic:'♡'},{label:'nieżywotne', ic:'⊘'},null,null],
+    adj:[{end:'-ego'},{end:'-y', alt:[['k, g','-i']], eq:'= MIANOWNIK'},{end:'-ą'},{end:'-e', eq:'= MIANOWNIK'}],
+    noun:[{end:'-a'},{end:'-ø'},{end:'-ę'},{end:'-o<br>-e<br>-ę<br>-um'}],
+    ex:[{lines:['Mam inteligentn{ego} brat[a].','Mam czarn{ego} kot[a].','Mam dobr{ego} tat[ę].']},
+        {lines:['Mam woln{y} czas[].','Mam niebiesk{i} sweter[].']},
+        {lines:['Znam twoj{ą} siostr[ę].','Czytam ciekaw{ą} książk[ę].']},
+        {lines:['Mam sportow{e} aut[o].','Jem dobr{e} śniadani[e].','Masz ładn{e} imi[ę].','Lubię to now{e} centr[um] handlow{e}.']}],
+    ask:[{t:'JAKIEGO?'},{t:'JAKI?'},{t:'JAKĄ?'},{t:'JAKIE?'}] },
+
+  { id:'B2', num:'tab. 10', kase:'BIERNIK', q:'Kogo? Co?', n:'l. mn.', group:'B', color:'olive', verified:true,
+    cols:[{label:'rodzaj męski osobowy', ic:'mm'},{label:'rodzaj męski nieosobowy', ic:'h'},{label:'rodzaj żeński', ic:'f'},{label:'rodzaj nijaki', ic:'n'}],
+    adj:[{end:'-ych', alt:[['k, g','-ich']], eq:'= DOPEŁNIACZ'},{end:'-e', span:3, eq:'= MIANOWNIK'}],
+    noun:[{end:'-ów', alt:[['sz, cz, dz, dż<br>ż, rz + c','-y'],['ś, ć, ź, dź<br>ń + l, j','-i']]},
+          {end:'-y', span:2, alt:[['k, g','-i'],['sz, cz, dz, dż, ż, rz<br>ś, ć, ź, dź, ń, c, l, j','-e']]},
+          {end:'-a'}],
+    ex:[{lines:['Znam tych starsz{ych} pan[ów].','Poznałem polsk{ich} piłkarz[y].','Lubię nasz{ych} nauczyciel[i].']},
+        {lines:['Znam te piękn{e} obraz[y].','Lubię rusk{ie} pierog[i].','Masz drobn{e} pieniądz[e]?']},
+        {lines:['Proszę dwie czarn{e} kaw[y].','Znam te mił{e} studentk[i].','Kupiłem czerwon{e} róż[e].']},
+        {lines:['Lubię włosk{ie} win[a].','Jemy smaczn{e} śniadani[a].','Macie ładn{e} imion[a].','Zwiedzam krakowsk{ie} muze[a].']}],
+    ask:[{t:'JAKICH?'},{t:'JAKIE?', span:3}],
+    note:'<b>mąż → mężów</b>' },
+
+  { id:'N1', num:'tab. 11', kase:'NARZĘDNIK', q:'(z) Kim? (z) Czym?', n:'l. poj.', group:'N', color:'blue', verified:true,
+    cols:[{label:'rodzaj męski', ic:'m'},{label:'rodzaj żeński', ic:'f'},{label:'rodzaj nijaki', ic:'n'}],
+    adj:[{end:'-ym', alt:[['k, g','-im']]},{end:'-ą'},{end:'-ym', alt:[['k, g','-im']]}],
+    noun:[{end:'<small>(i)</small>-em'},{end:'-ą'},{end:'<small>(i)</small>-em'}],
+    ex:[{lines:['On jest dobr{ym} student[em].','On jest wysok{im} mężczyzn[ą].']},
+        {lines:['Ona jest dobr{ą} studentk[ą].']},
+        {lines:['Ono jest dobr{ym} dzieck[iem].']}],
+    ask:[{t:'JAKIM?'},{t:'JAKĄ?'},{t:'JAKIM?'}],
+    note:'<b>(i)-em</b> — после k, g вставляется i: Polak → Polak<b>iem</b>, dziecko → dzieck<b>iem</b>.' },
+
+  { id:'N2', num:'tab. 12', kase:'NARZĘDNIK', q:'(z) Kim? (z) Czym?', n:'l. mn.', group:'N', color:'blue', verified:true,
+    cols:[{label:'rodzaj męski', ic:'m'},{label:'rodzaj żeński', ic:'f'},{label:'rodzaj nijaki', ic:'n'}],
+    adj:[{end:'-ymi', span:3, alt:[['k, g','-imi']]}],
+    noun:[{end:'-ami', span:3}],
+    ex:[{lines:['Oni są dobr{ymi} student[ami].']},{lines:['Interesuję się star{ymi} monet[ami].']},{lines:['Deser ze słodk{imi} jabłk[ami].']}],
+    ask:[{t:'JAKIMI?', span:3}],
+    note:'<b>Wyjątki -mi:</b> ludźmi, braćmi, przyjaciółmi, dziećmi, pieniędzmi, końmi, liśćmi (а также gośćmi, księżmi, kośćmi, dłońmi, nićmi).' },
+
+  { id:'L1', num:'tab. 13', kase:'MIEJSCOWNIK', q:'(o) Kim? (o) Czym? Gdzie?', n:'l. poj.', group:'L', color:'green', verified:false,
+    cols:[{label:'rodzaj męski', ic:'m'},{label:'rodzaj żeński', ic:'f'},{label:'rodzaj nijaki', ic:'n'}],
+    adj:[{end:'-ym', alt:[['k, g','-im']]},{end:'-ej'},{end:'-ym', alt:[['k, g','-im']]}],
+    noun:[{end:'-e', alt:[['t → cie, d → dzie, r → rze<br>ł → le, st → ście',''],['k, g, ch + miękkie<br>sz, ż, cz, rz, c, l, j','-u']]},
+          {end:'-e', alt:[['k → ce, g → dze, r → rze<br>t → cie, d → dzie, ł → le',''],['miękkie + sz, ż, cz, rz, c, l, j','-i / -y']]},
+          {end:'-e', alt:[['k, g, ch + miękkie, -um','-u']]}],
+    ex:[{lines:['Mieszkam w now{ym} dom[u].','Mówię o dobr{ym} studen[cie].']},
+        {lines:['Jestem w dobr{ej} szko[le].','Myślę o now{ej} książ[ce].','Jestem w prac[y].']},
+        {lines:['Jestem w duż{ym} mie[ście].','Mówię o mał{ym} dzieck[u].']}],
+    ask:[{t:'JAKIM?'},{t:'JAKIEJ?'},{t:'JAKIM?'}],
+    note:'Только с предлогом: <b>w / we</b>, <b>na</b>, <b>o</b>, <b>przy</b>. Месяцы: w styczniu, w lutym, we wrześniu.' },
+
+  { id:'L2', num:'tab. 14', kase:'MIEJSCOWNIK', q:'(o) Kim? (o) Czym? Gdzie?', n:'l. mn.', group:'L', color:'green', verified:false,
+    cols:[{label:'rodzaj męski', ic:'m'},{label:'rodzaj żeński', ic:'f'},{label:'rodzaj nijaki', ic:'n'}],
+    adj:[{end:'-ych', span:3, alt:[['k, g','-ich']]}],
+    noun:[{end:'-ach', span:3}],
+    ex:[{lines:['Mówię o dobr{ych} student[ach].']},{lines:['Myślę o star{ych} monet[ach].']},{lines:['Czytam o mał{ych} dzieci[ach].']}],
+    ask:[{t:'JAKICH?', span:3}] }
+];
+
+/* ============ РЕЕСТР ТЕМ ============ */
+const SUB_EMOJI = {jednosci:'1️⃣', dziesiatki:'🔟', setki:'💯', tysiace:'💰', daty:'📅', czas:'🕐',
+                   M:'📗', ISZ:'📘', ESZ:'📙', EXC:'⭐'};
+
+const TOPICS = {
+  czasowniki: {
+    id:'czasowniki', title:'Глаголы', subtitle:'Спряжение в настоящем времени',
+    emoji:'🗣️', color:'green', level:'A1', subtopics:VERB_SUBTOPICS,
+    note:'55 глаголов. Спряжения названы по окончаниям ja/ty — как в учебнике «Polski krok po kroku».',
+    blockInput:false,
+    questions(subs){
+      const out = [];
+      VERB_DATA.forEach(q => {
+        const isExc = EXCEPTIONS.has(q.v);
+        const group = isExc ? null : getConjGroup(q.v);
+        const g = isExc ? 'EXC' : (group ? group.key : 'OTHER');
+        if(subs && !subs.has(g)) return;
+        out.push({g, hint:q.v, sentence:q.sentence, answer:q.answer, ref:q.v, person:q.person, v:q.v});
+      });
+      return out;
+    },
+    groupLabel(key){
+      if(key === 'EXC') return 'być';
+      return CONJ_GROUPS[key] ? CONJ_GROUPS[key].shortLabel : key;
+    },
+    wrongHtml(q){
+      if(q.g === 'EXC') return `<button type="button" class="ref-link" data-ref="${q.ref}">Нерегулярный глагол</button>. Правильно: <b>${q.answer}</b>.`;
+      const group = CONJ_GROUPS[q.g];
+      if(!group) return `Правильно: <b>${q.answer}</b>.`;
+      return `По <button type="button" class="ref-link" data-ref="${q.ref}">спряжению</button> — ${group.label}, ${PERSON_LABEL[q.person]}, окончание <b>${group.endings[q.person]}</b> → нужно <b>${q.answer}</b>.`;
+    },
+    adviceHtml(key){
+      if(key === 'EXC') return `<li><span class="a-ico">📌</span><span>Выучи наизусть <button type="button" class="ref-link" data-ref="${EXC_BASE_VERB}">być</button>: jestem, jesteś, jest, jesteśmy, jesteście, są — единственный глагол, который не подчиняется ни одному спряжению.</span></li>`;
+      const g = CONJ_GROUPS[key];
+      if(!g) return '';
+      const ends = PERSON_ORDER.map(p => `${p} ${g.endings[p]}`).join(', ');
+      return `<li><span class="a-ico">📌</span><span>Подтяни спряжение <button type="button" class="ref-link" data-ref="${g.baseVerb}">${g.shortLabel}</button> (образец <i>${g.baseVerb}</i>, инфинитив на «${g.infEnding}»). Окончания: ${ends}.</span></li>`;
+    },
+    reference(refKey){
+      const forms = PARADIGMS[refKey];
+      if(!forms) return null;
+      const isExc = EXCEPTIONS.has(refKey);
+      const group = isExc ? null : getConjGroup(refKey);
+      return {title:refKey, tag:isExc ? 'нерегулярный' : (group ? group.shortLabel : ''),
+              sub:'Все формы, настоящее время.', cols:['Лицо','Окончание','Форма'],
+              rows:PERSON_ORDER.map((p,i) => [p, (!isExc && group) ? group.endings[p] : '—', forms[i]])};
+    }
+  },
+
+  liczebniki: {
+    id:'liczebniki', title:'Числительные', subtitle:'Цифры, даты и время словами',
+    emoji:'🔢', color:'amber', level:'A1', subtopics:NUM_SUBTOPICS,
+    note:'Пиши словами: ą, ć, ę, ł, ń, ó, ś, ź, ż. Следи за родом: jeden/jedna/jedno, dwa/dwie.',
+    blockInput:true,
+    questions(subs){
+      return NUM_DATA.filter(q => !subs || subs.has(q.sub))
+        .map(q => ({g:q.sub, hint:q.hint, sentence:q.sentence, answer:q.answer, alt:q.alt || [], ref:q.sub}));
+    },
+    groupLabel(key){ const s = NUM_SUBTOPICS.find(s => s.id === key); return s ? s.label : key; },
+    wrongHtml(q){
+      return `<button type="button" class="ref-link" data-ref="${q.ref}">${this.groupLabel(q.g)}</button> — правильно: <b>${q.answer}</b>.`;
+    },
+    adviceHtml(key){
+      const s = NUM_SUBTOPICS.find(s => s.id === key), ref = NUM_REF[key];
+      if(!s || !ref) return '';
+      return `<li><span class="a-ico">📌</span><span>Подтяни <button type="button" class="ref-link" data-ref="${key}">${s.label.toLowerCase()}</button> (${s.caption}). ${ref.sub}</span></li>`;
+    },
+    reference(refKey){
+      const r = NUM_REF[refKey];
+      return r ? {title:r.title, tag:'Подсказка', sub:r.sub, cols:r.cols, rows:r.rows} : null;
+    }
+  },
+
+  przypadki: {
+    id:'przypadki', title:'Падежи', subtitle:'Склонение существительных',
+    emoji:'🧩', color:'purple', level:'A1', subtopics:CASE_SUBTOPICS,
+    subEmoji:{M:'🏷️', N:'🤝', B:'🛒', D:'🚫', L:'📍', C:'💬'},
+    note:'Падежи как в «Polski krok po kroku 1»: 162 существительных; celownik — только местоимения, как в книге. Где есть предлог, пиши с ним: w Krakowie, na poczcie.',
+    blockInput:false,
+    questions(subs){
+      return CASE_DATA.filter(q => !subs || subs.has(q.g))
+        .map(q => ({g:q.g, hint:q.hint, sentence:q.sentence, answer:q.answer, alt:q.alt || [], ref:q.g, noun:q.noun}));
+    },
+    groupLabel(key){ const s = CASE_SUBTOPICS.find(s => s.id === key); return s ? s.label : key; },
+    wrongHtml(q){
+      const gl = q.noun ? ({m:'м. р.', f:'ж. р.', n:'ср. р.', pl:'мн. ч.'})[q.noun.g] : null;
+      const who = q.noun ? `<i>${q.noun.n}</i>${gl ? ' (' + gl + ')' : ''} → ` : '';
+      return `<button type="button" class="ref-link" data-ref="${q.ref}">${this.groupLabel(q.g)}</button>: ${who}<b>${q.answer}</b>.`;
+    },
+    adviceHtml(key){
+      const s = CASE_SUBTOPICS.find(s => s.id === key), r = CASE_REF[key];
+      if(!s || !r) return '';
+      return `<li><span class="a-ico">📌</span><span>Подтяни <button type="button" class="ref-link" data-ref="${key}">${s.label}</button> (${s.caption}). ${r.sub}</span></li>`;
+    },
+    reference(refKey){
+      const r = CASE_REF[refKey];
+      return r ? {title:r.title, tag:'Подсказка', sub:r.sub, cols:r.cols, rows:r.rows} : null;
+    }
+  }
+};
+const TOPIC_ORDER = ['czasowniki','liczebniki','przypadki'];
+
+/* ============ ОЧКИ ============
+   Точный ответ — 100. Иначе доля совпадения букв (расстояние Левенштейна). */
+const POINTS_PER_Q = 100;
+const CLOSE_THRESHOLD = 0.6;
+
+function levenshtein(a, b){
+  if(a === b) return 0;
+  if(!a.length) return b.length;
+  if(!b.length) return a.length;
+  let prev = Array.from({length:b.length+1}, (_, i) => i);
+  const cur = new Array(b.length+1);
+  for(let i = 1; i <= a.length; i++){
+    cur[0] = i;
+    for(let j = 1; j <= b.length; j++){
+      cur[j] = Math.min(cur[j-1]+1, prev[j]+1, prev[j-1] + (a[i-1] === b[j-1] ? 0 : 1));
+    }
+    prev = cur.slice();
+  }
+  return prev[b.length];
+}
+function similarity(user, target){
+  const a = normalize(user), b = normalize(target);
+  if(!a && !b) return 1;
+  if(!a || !b) return 0;
+  if(a === b) return 1;
+  return Math.max(0, 1 - levenshtein(a, b) / Math.max(a.length, b.length));
+}
+function gradeAnswer(q, value){
+  let best = similarity(value, q.answer);
+  (q.alt || []).forEach(a => { best = Math.max(best, similarity(value, a)); });
+  const exact = best === 1;
+  return {sim:best, points:Math.round(POINTS_PER_Q * best), exact,
+          verdict: exact ? 'correct' : (best >= CLOSE_THRESHOLD ? 'close' : 'wrong')};
+}
+
+/* ============ ПРОГРЕСС И УРОВЕНЬ ============ */
+const STORE_KEY = 'polski.progress.v1';
+const LEVELS = [
+  {min:95, name:'Мастер',   emoji:'👑'},
+  {min:80, name:'Знаток',   emoji:'🎓'},
+  {min:60, name:'Уверенно', emoji:'💪'},
+  {min:40, name:'Ученик',   emoji:'📗'},
+  {min:0,  name:'Новичок',  emoji:'🌱'}
+];
+function levelOf(best){
+  if(best === undefined || best === null) return {name:'Не начато', emoji:'✨', best:null};
+  const l = LEVELS.find(l => best >= l.min);
+  return {name:l.name, emoji:l.emoji, best};
+}
+function loadProg(){
+  try { return JSON.parse(localStorage.getItem(STORE_KEY) || '{}'); } catch(e){ return {}; }
+}
+function saveProg(p){
+  try { localStorage.setItem(STORE_KEY, JSON.stringify(p)); } catch(e){}
+}
+function recKey(topicId, subId){ return subId ? topicId + ':' + subId : topicId + ':all'; }
+function getRec(key){
+  const r = loadProg()[key];
+  return r || {points:0, best:null, played:0};
+}
+function addRec(key, points, pct){
+  const p = loadProg();
+  const r = p[key] || {points:0, best:null, played:0};
+  r.points += points;
+  r.best = (r.best === null || pct > r.best) ? pct : r.best;
+  r.played++;
+  p[key] = r;
+  saveProg(p);
+  return r;
+}
+function fmtPts(n){ return n >= 1000 ? (n/1000).toFixed(n >= 10000 ? 0 : 1).replace('.0','') + 'k' : String(n); }
+
+/* ============ СОСТОЯНИЕ ============ */
+const BATCH_SIZE = 10;
+let state = 'topic';           // 'topic' | 'sub' | 'quiz' | 'summary' | 'tables'
+let topicIdx = 0;
+let topic = TOPICS[TOPIC_ORDER[0]];
+let selectedSub = null;
+let selectedCount = 3;
+let sessionBatches = [];
+let currentIndex = 0;
+let checked = false;
+let stats = null;
+
+const app = document.getElementById('app');
+const hudBest = document.getElementById('hudBest');
+const hudPoints = document.getElementById('hudPoints');
+const modalBackdrop = document.getElementById('modalBackdrop');
+const modalBox = document.getElementById('modalBox');
+
+/* Микс: набор подтем, отмеченных кнопкой «в микс». Пока он не пуст — тест идёт по нему,
+   а не по той карточке, что сейчас в центре свайпера. */
+let mixSet = new Set();
+
+const subsSet = () => mixSet.size ? new Set(mixSet)
+                    : (selectedSub ? new Set([selectedSub]) : null);
+/* под каким ключом писать прогресс: одна подтема — своя запись, несколько — общая «микс» */
+function currentRecKey(){
+  if(mixSet.size > 1) return topic.id + ':mix';
+  if(mixSet.size === 1) return recKey(topic.id, [...mixSet][0]);
+  return recKey(topic.id, selectedSub);
+}
+function mixName(){
+  if(mixSet.size) return 'микс: ' + topic.subtopics
+    .filter(x => mixSet.has(x.id)).map(x => x.label).join(' + ');
+  if(selectedSub) return topic.groupLabel(selectedSub);
+  return topic.subtopics ? 'Всё подряд' : null;
+}
+const currentPool = () => topic.questions(subsSet());
+const maxTests = () => Math.max(1, Math.floor(currentPool().length / BATCH_SIZE));
+
+function buildBatches(){
+  const all = shuffle(currentPool());
+  const b = [];
+  for(let i = 0; i < all.length; i += BATCH_SIZE) b.push(all.slice(i, i + BATCH_SIZE));
+  return b.filter(x => x.length > 0);
+}
+function resetStats(){ stats = {correct:0, wrong:0, total:0, points:0, maxPoints:0, byGroup:{}}; }
+function bumpStat(k, exact){
+  if(!stats.byGroup[k]) stats.byGroup[k] = {wrong:0, total:0};
+  stats.byGroup[k].total++;
+  if(!exact) stats.byGroup[k].wrong++;
+}
+function plural(n, one, few, many){
+  const a = n % 10, b = n % 100;
+  if(a === 1 && b !== 11) return one;
+  if(a >= 2 && a <= 4 && (b < 12 || b > 14)) return few;
+  return many;
+}
+function syncHud(){
+  const r = getRec(currentRecKey());
+  const lv = levelOf(r.best);
+  hudBest.textContent = r.best === null ? '—' : r.best + '%';
+  hudPoints.textContent = stats ? stats.points : fmtPts(r.points);
+}
+
+/* ============ СВАЙПЕР ============
+   Лента во всю ширину экрана, карточка уезжает за край.
+   Активный слайд определяется по ближайшему к центру — надёжно при любых отступах. */
+function buildSwiper(slides, activeIndex, onChange){
+  const dots = slides.map((_, i) => `<div class="sw-dot${i === activeIndex ? ' active' : ''}"></div>`).join('');
+  return {
+    html: `
+      <div class="swiper">
+        <div class="swiper-track">${slides.map(s => `<div class="slide">${s}</div>`).join('')}</div>
+        ${slides.length > 1 ? `<div class="sw-dots">${dots}</div>` : ''}
+      </div>`,
+    init(root){
+      const track = root.querySelector('.swiper-track');
+      const dotEls = [...root.querySelectorAll('.sw-dot')];
+      const kids = () => [...track.children];
+      let idx = activeIndex;
+
+      const centerOf = el => el.offsetLeft + el.offsetWidth / 2;
+      const scrollTargetFor = i => centerOf(kids()[i]) - track.clientWidth / 2;
+
+      function jump(i, smooth){
+        track.scrollTo({left: scrollTargetFor(i), behavior: smooth ? 'smooth' : 'auto'});
+      }
+      function nearest(){
+        const mid = track.scrollLeft + track.clientWidth / 2;
+        let best = 0, bestD = Infinity;
+        kids().forEach((el, i) => {
+          const d = Math.abs(centerOf(el) - mid);
+          if(d < bestD){ bestD = d; best = i; }
+        });
+        return best;
+      }
+      function settle(){
+        if(!track.isConnected) return false;     // экран уже перерисован — не трогаем состояние
+        const i = nearest();
+        if(i !== idx){
+          idx = i;
+          dotEls.forEach((d, j) => d.classList.toggle('active', j === idx));
+          onChange(idx);
+          return true;
+        }
+        return false;
+      }
+      jump(idx, false);
+      /* точки кликабельны — на компьютере это единственный способ переключиться без перетаскивания */
+      dotEls.forEach((d, i) => d.addEventListener('click', () => jump(i, true)));
+      let timer;
+      track.addEventListener('scroll', () => { clearTimeout(timer); timer = setTimeout(settle, 70); });
+      if('onscrollend' in track) track.addEventListener('scrollend', settle);
+      window.addEventListener('resize', () => { if(track.isConnected) jump(idx, false); });
+      return {settle, jump: i => jump(i, true), get index(){ return idx; }};
+    }
+  };
+}
+
+/* карточка выбора: эмодзи, название, уровень, очки, сколько вопросов */
+function pickCard(kind, color, emoji, title, sub, total, key, mixId){
+  const r = getRec(key);
+  const lv = levelOf(r.best);
+  const on = mixId && mixSet.has(mixId);
+  const toggle = mixId
+    ? `<button type="button" class="mix-toggle${on ? ' on' : ''}" data-mix="${mixId}">${on ? '✓ в миксе' : '＋ в микс'}</button>`
+    : '';
+  return `
+    <div class="pick pick-${kind} pick-c-${color}">
+      <div class="pick-emoji">${emoji}</div>
+      <h2>${title}</h2>
+      <p>${sub}</p>
+      <div class="pick-stats">
+        <span class="pk-chip">${lv.emoji} ${lv.name}${r.best !== null ? ' · ' + r.best + '%' : ''}</span>
+        <span class="pk-chip">⭐ ${fmtPts(r.points)}</span>
+        <span class="pk-chip">${total} ${plural(total,'вопрос','вопроса','вопросов')}</span>
+      </div>
+      ${toggle}
+    </div>`;
+}
+
+/* ============ ЭКРАН 1: ТЕМА ============ */
+function renderTopicScreen(){
+  /* микс живёт ровно один заход на экран подтем: вернулся к темам — начинаем с чистого листа,
+     иначе он молча переопределял бы карточку, на которую человек свайпнул */
+  mixSet.clear();
+  const slides = TOPIC_ORDER.map(id => {
+    const t = TOPICS[id];
+    return pickCard('topic', t.color, t.emoji, t.title, t.subtitle, t.questions(null).length, recKey(id, null));
+  });
+  const sw = buildSwiper(slides, topicIdx, i => {
+    topicIdx = i;
+    topic = TOPICS[TOPIC_ORDER[i]];
+    selectedSub = null;
+    mixSet.clear();
+    syncHud();
+  });
+
+  app.innerHTML = `
+    ${tabsHtml('tests')}
+    <div class="screen-title">Выбери тему</div>
+    ${sw.html}
+    <div class="screen-pad">
+      <button type="button" class="gbtn g-green btn-xl" id="pickTopicBtn">ВЫБРАТЬ</button>
+    </div>`;
+  const ctl = sw.init(app.querySelector('.swiper'));
+
+  document.getElementById('pickTopicBtn').addEventListener('click', () => {
+    ctl.settle();                       // палец могли отпустить только что
+    selectedCount = Math.min(3, maxTests());
+    state = 'sub';
+    render();
+    window.scrollTo({top:0, behavior:'smooth'});
+  });
+  syncHud();
+}
+
+/* ============ ЭКРАН 2: ПОДТЕМА И НАСТРОЙКИ ============ */
+function renderSubScreen(){
+  const items = topic.subtopics
+    ? [{id:null, label:'Всё подряд', caption:'вопросы из всех подтем', emoji:'🎲'}]
+        .concat(topic.subtopics.map(s => ({...s, emoji: (topic.subEmoji && topic.subEmoji[s.id]) || SUB_EMOJI[s.id] || '•'})))
+    : null;
+
+  let swHtml = '', sw = null;
+  if(items){
+    const slides = items.map(s => pickCard('sub', 'blue', s.emoji, s.label, s.caption,
+      topic.questions(s.id ? new Set([s.id]) : null).length, recKey(topic.id, s.id), s.id));
+    const active = Math.max(0, items.findIndex(s => s.id === selectedSub));
+    sw = buildSwiper(slides, active, i => {
+      selectedSub = items[i].id;
+      if(selectedSub === null) mixSet.clear();   // «Всё подряд» и есть всё — микс тут лишний
+      selectedCount = Math.min(selectedCount, maxTests());
+      syncMix();
+    });
+    swHtml = sw.html;
+  }
+
+  app.innerHTML = `
+    <button type="button" class="back-link" id="backBtn">‹ другая тема</button>
+    <div class="screen-title">${topic.emoji} ${topic.title}</div>
+    ${items ? '<div class="screen-sub">Подтема · листай вбок, можно смешать несколько</div>' + swHtml : ''}
+    <div class="screen-pad">
+      <div class="mix-bar" id="mixBar" style="display:none">
+        <span id="mixText"></span>
+        <button type="button" class="mini-btn" id="mixClear">сбросить</button>
+      </div>
+      <div class="panel">
+        <div class="panel-title">Сколько тестов подряд</div>
+        <div class="stepper">
+          <button type="button" class="step-btn" id="stepDown">−</button>
+          <div class="step-val" id="stepValue">${selectedCount}</div>
+          <button type="button" class="step-btn" id="stepUp">+</button>
+        </div>
+        <div class="step-caption" id="stepCaption"></div>
+      </div>
+      <button type="button" class="gbtn g-green btn-xl" id="startBtn">СТАРТ</button>
+      <div class="step-caption" style="margin-top:12px">${topic.note}</div>
+    </div>`;
+
+  const ctl = sw ? sw.init(app.querySelector('.swiper')) : null;
+
+  function syncCount(){
+    if(!document.getElementById('stepValue')) return;
+    const pool = currentPool().length, max = maxTests();
+    selectedCount = Math.max(1, Math.min(selectedCount, max));
+    document.getElementById('stepValue').textContent = selectedCount;
+    document.getElementById('stepDown').disabled = selectedCount <= 1;
+    document.getElementById('stepUp').disabled = selectedCount >= max;
+    document.getElementById('stepCaption').textContent =
+      `по ${BATCH_SIZE} вопросов · максимум ${max} из ${pool}`;
+  }
+
+  /* микс-панель, подпись кнопки старта и счётчик — всё зависит от mixSet */
+  function syncMix(){
+    const bar = document.getElementById('mixBar');
+    if(bar){
+      bar.style.display = mixSet.size ? 'flex' : 'none';
+      if(mixSet.size){
+        const names = topic.subtopics.filter(x => mixSet.has(x.id)).map(x => x.label).join(' + ');
+        document.getElementById('mixText').textContent =
+          `Вперемешку: ${names} · ${currentPool().length} вопросов`;
+      }
+    }
+    const btn = document.getElementById('startBtn');
+    if(btn) btn.textContent = mixSet.size > 1 ? `СТАРТ · МИКС (${mixSet.size})` : 'СТАРТ';
+    syncCount();
+    syncHud();
+  }
+
+  /* кнопки «в микс» живут внутри слайдов — ловим кликом по свайперу */
+  const swRoot = app.querySelector('.swiper');
+  if(swRoot) swRoot.addEventListener('click', e => {
+    const b = e.target.closest('.mix-toggle');
+    if(!b) return;
+    const id = b.dataset.mix;
+    if(mixSet.has(id)) mixSet.delete(id); else mixSet.add(id);
+    b.classList.toggle('on', mixSet.has(id));
+    b.textContent = mixSet.has(id) ? '✓ в миксе' : '＋ в микс';
+    syncMix();
+  });
+  const mixClear = document.getElementById('mixClear');
+  if(mixClear) mixClear.addEventListener('click', () => {
+    mixSet.clear();
+    app.querySelectorAll('.mix-toggle').forEach(b => {
+      b.classList.remove('on'); b.textContent = '＋ в микс';
+    });
+    syncMix();
+  });
+
+  document.getElementById('backBtn').addEventListener('click', () => {
+    state = 'topic'; render(); window.scrollTo({top:0, behavior:'smooth'});
+  });
+  document.getElementById('stepDown').addEventListener('click', () => { selectedCount--; syncCount(); });
+  document.getElementById('stepUp').addEventListener('click', () => { selectedCount++; syncCount(); });
+  document.getElementById('startBtn').addEventListener('click', () => {
+    if(ctl) ctl.settle();
+    sessionBatches = buildBatches().slice(0, selectedCount);
+    if(!sessionBatches.length) return;
+    currentIndex = 0; resetStats(); state = 'quiz';
+    render(); window.scrollTo({top:0, behavior:'smooth'});
+  });
+
+  syncMix();
+}
+
+/* ============ ЭКРАН ТЕСТА ============ */
+function renderQuiz(){
+  checked = false;
+  const batch = sessionBatches[currentIndex];
+  app.innerHTML = `
+    <div class="screen-pad">
+      <div class="quizbar">
+        <div class="quizbar-label">Тест ${currentIndex+1}/${sessionBatches.length}</div>
+        <div class="pbar"><div class="pbar-fill" id="pbarFill" style="width:${Math.round(currentIndex/sessionBatches.length*100)}%"></div></div>
+        <div class="quizbar-label" id="scoreLabel">0/${batch.length}</div>
+      </div>
+      <div class="grid" id="quiz"></div>
+      <div class="result-banner" id="resultBanner"></div>
+      <div class="actions">
+        <button class="gbtn g-green" id="checkBtn">Проверить</button>
+        <button class="gbtn g-amber" id="nextBtn" style="display:none">Дальше →</button>
+        <button class="gbtn g-ghost" id="resetBtn" style="flex:0 0 42%">Выйти</button>
+      </div>
+    </div>`;
+
+  const quizEl = document.getElementById('quiz');
+  batch.forEach((q, i) => {
+    const card = document.createElement('div');
+    card.className = 'card' + (topic.blockInput ? ' block' : '');
+    card.dataset.index = i;
+    const parts = q.sentence.split('___');
+    const field = `<input type="text" class="blank" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" data-i="${i}">`;
+    card.innerHTML = `
+      <div class="q-meta"><span>№${i+1}</span><span class="q-hint">${q.hint}</span></div>
+      <div class="q-sentence">${topic.blockInput
+        ? `${parts[0]}<span class="blank-gap"></span>${parts[1] || ''}${field}`
+        : `${parts[0]}${field}${parts[1] || ''}`}</div>
+      <div class="feedback" id="fb-${i}"></div>`;
+    quizEl.appendChild(card);
+  });
+
+  quizEl.querySelectorAll('input.blank').forEach((inp, idx, arr) => {
+    inp.addEventListener('keydown', e => {
+      if(e.key === 'Enter'){ e.preventDefault(); if(idx+1 < arr.length) arr[idx+1].focus(); else requestCheck(); }
+    });
+  });
+  quizEl.addEventListener('input', updateCount);
+  updateCount(); syncHud();
+
+  document.getElementById('checkBtn').addEventListener('click', requestCheck);
+  document.getElementById('resetBtn').addEventListener('click', () => {
+    state = 'sub'; stats = null; render(); window.scrollTo({top:0, behavior:'smooth'});
+  });
+}
+
+function updateCount(){
+  if(checked) return;
+  const inputs = document.querySelectorAll('#quiz input.blank');
+  const label = document.getElementById('scoreLabel');
+  let filled = 0;
+  inputs.forEach(i => { if(i.value.trim() !== '') filled++; });
+  if(label) label.textContent = `${filled}/${inputs.length}`;
+}
+function requestCheck(){
+  const inputs = document.querySelectorAll('#quiz input.blank');
+  let empty = 0;
+  inputs.forEach(i => { if(i.value.trim() === '') empty++; });
+  if(empty > 0) showConfirmModal(empty, inputs.length); else checkAnswers();
+}
+function showConfirmModal(empty, total){
+  modalBox.innerHTML = `
+    <button type="button" class="modal-close" id="modalCloseBtn">✕</button>
+    <h3>Не всё заполнено</h3>
+    <div class="confirm-text">Пусто: <b>${empty}</b> из <b>${total}</b>. Проверить сейчас? За пустые поля будет 0 очков.</div>
+    <div class="confirm-actions">
+      <button type="button" class="gbtn g-ghost" id="confirmBack">Вернуться</button>
+      <button type="button" class="gbtn g-amber" id="confirmGo">Проверить</button>
+    </div>`;
+  modalBackdrop.classList.add('open');
+  document.getElementById('modalCloseBtn').addEventListener('click', closeModal);
+  document.getElementById('confirmBack').addEventListener('click', closeModal);
+  document.getElementById('confirmGo').addEventListener('click', () => { closeModal(); checkAnswers(); });
+}
+
+function checkAnswers(){
+  const batch = sessionBatches[currentIndex];
+  let exact = 0, pts = 0;
+  const maxPts = batch.length * POINTS_PER_Q;
+
+  batch.forEach((q, i) => {
+    const card = document.querySelector(`#quiz .card[data-index="${i}"]`);
+    const input = card.querySelector('input.blank');
+    const fb = document.getElementById(`fb-${i}`);
+    card.classList.remove('correct','close','wrong');
+
+    const r = gradeAnswer(q, input.value);
+    card.classList.add(r.verdict);
+
+    const given = document.createElement('div');   // длинный ответ должен переноситься
+    given.className = 'given';
+    given.textContent = input.value.trim() || '—';
+    input.replaceWith(given);
+
+    const badge = document.createElement('div');
+    badge.className = 'pts ' + (r.exact ? 'full' : r.points > 0 ? 'part' : 'zero');
+    badge.textContent = '+' + r.points;
+    card.appendChild(badge);
+
+    stats.total++; stats.points += r.points; stats.maxPoints += POINTS_PER_Q;
+    pts += r.points;
+    bumpStat(q.g, r.exact);
+    if(r.exact){ exact++; stats.correct++; fb.innerHTML = ''; }
+    else {
+      stats.wrong++;
+      fb.innerHTML = `<span class="icon">${r.verdict === 'close' ? '≈' : '✕'}</span>${r.verdict === 'close' ? '<b>Почти!</b> ' : ''}${topic.wrongHtml(q)}`;
+    }
+  });
+
+  checked = true;
+  document.getElementById('scoreLabel').textContent = `${exact}/${batch.length}`;
+  document.getElementById('pbarFill').style.width = Math.round((currentIndex+1)/sessionBatches.length*100) + '%';
+  syncHud();
+
+  const pct = Math.round(pts / maxPts * 100);
+  const banner = document.getElementById('resultBanner');
+  banner.style.display = 'block';
+  banner.className = 'result-banner ' + (pct >= 80 ? 'rb-great' : pct >= 50 ? 'rb-ok' : 'rb-low');
+  banner.innerHTML = `Тест ${currentIndex+1}: <b>${pts}</b> из ${maxPts} очков · точных <b>${exact}/${batch.length}</b>`;
+
+  document.getElementById('checkBtn').style.display = 'none';
+  const nextBtn = document.getElementById('nextBtn');
+  nextBtn.style.display = 'block';
+  const isLast = currentIndex >= sessionBatches.length - 1;
+  nextBtn.textContent = isLast ? 'Итоги →' : 'Дальше →';
+  nextBtn.addEventListener('click', () => {
+    if(isLast) state = 'summary'; else currentIndex++;
+    render(); window.scrollTo({top:0, behavior:'smooth'});
+  }, {once:true});
+
+  document.querySelector('.quizbar').scrollIntoView({behavior:'smooth', block:'start'});
+}
+
+/* ============ ИТОГИ ============ */
+function renderSummary(){
+  const pct = stats.maxPoints ? Math.round(stats.points / stats.maxPoints * 100) : 0;
+  const starCount = pct >= 90 ? 3 : pct >= 70 ? 2 : pct >= 40 ? 1 : 0;
+  const stars = [0,1,2].map(i => `<span class="star${i < starCount ? ' on' : ''}">★</span>`).join('');
+
+  const subKey = currentRecKey();
+  const allKey = recKey(topic.id, null);
+  const before = getRec(subKey).best;
+  const isRecord = before === null || pct > before;
+  const subName = mixName();
+  addRec(subKey, stats.points, pct);
+  if(subKey !== allKey) addRec(allKey, stats.points, pct);   // общий счёт темы
+  const lv = levelOf(getRec(subKey).best);
+
+  const rows = Object.keys(stats.byGroup)
+    .filter(k => stats.byGroup[k].wrong > 0)
+    .map(k => ({key:k, label:topic.groupLabel(k), wrong:stats.byGroup[k].wrong}))
+    .sort((a,b) => b.wrong - a.wrong);
+  const maxWrong = rows.length ? rows[0].wrong : 1;
+  const breakdown = rows.length ? rows.map(r => `
+    <div class="breakdown-row">
+      <div class="breakdown-label">${r.label}</div>
+      <div class="breakdown-track"><div class="breakdown-fill" style="width:${Math.round(r.wrong/maxWrong*100)}%"></div></div>
+      <div class="breakdown-count">${r.wrong}</div>
+    </div>`).join('') : `<div class="breakdown-row"><div class="breakdown-label">Ни одной ошибки 🎉</div></div>`;
+
+  const advice = stats.wrong === 0
+    ? `<li><span class="a-ico">🎉</span><span>Идеально! Бери больше тестов за раз или другую подтему.</span></li>`
+    : rows.slice(0,2).map(r => topic.adviceHtml(r.key)).join('');
+
+  app.innerHTML = `
+    <div class="screen-pad">
+      <div class="panel">
+        <div class="score-hero">
+          <div class="stars">${stars}</div>
+          <div class="big-points">${stats.points}</div>
+          <div class="big-points-cap">очков из ${stats.maxPoints}</div>
+          <div class="score-line">
+            <div class="score-chip">${topic.emoji} ${topic.title}${subName ? ' · ' + subName : ''}</div>
+          </div>
+          <div class="score-line">
+            <div class="score-chip">🎯 ${pct}%</div>
+            <div class="score-chip">✓ точных ${stats.correct}/${stats.total}</div>
+            <div class="score-chip">${lv.emoji} ${lv.name}</div>
+          </div>
+          ${isRecord ? '<div class="best-flag">🏆 Новый рекорд!</div>' : ''}
+        </div>
+      </div>
+      <div class="panel"><div class="panel-title">Ошибки по типам</div>${breakdown}</div>
+      <div class="panel"><div class="panel-title">Что подтянуть</div><ul class="advice-list">${advice}</ul></div>
+      <div class="btn-row">
+        <button type="button" class="gbtn g-green" id="againBtn">Ещё раз</button>
+        <button type="button" class="gbtn g-blue" id="homeBtn">К темам</button>
+      </div>
+    </div>`;
+
+  stats = null;
+  syncHud();
+  document.getElementById('againBtn').addEventListener('click', () => {
+    sessionBatches = buildBatches().slice(0, selectedCount);
+    currentIndex = 0; resetStats(); state = 'quiz';
+    render(); window.scrollTo({top:0, behavior:'smooth'});
+  });
+  document.getElementById('homeBtn').addEventListener('click', () => {
+    state = 'topic'; render(); window.scrollTo({top:0, behavior:'smooth'});
+  });
+}
+
+/* ============ ЭКРАН: ТАБЛИЦЫ ============
+   Отдельная вкладка рядом с тестами. Ничего не считает и не пишет в прогресс —
+   только рисует CASE_TABLES. Фильтр по падежу живёт в tablesFilter и переживает
+   переходы между вкладками в рамках одной сессии. */
+let tablesFilter = null;   // null = все падежи, иначе ключ группы ('M','D',…)
+const TABLE_CASES = [['M','Mianownik'],['D','Dopełniacz'],['C','Celownik'],['B','Biernik'],['N','Narzędnik'],['L','Miejscownik']];
+const GENDER_ICON = {m:'👨', f:'👩', n:'👶', mm:'👥', h:'🏠'};
+
+function tabsHtml(on){
+  return `<div class="tabs">
+    <button type="button" class="tab${on === 'tests' ? ' on' : ''}" data-tab="tests">📝 Тесты</button>
+    <button type="button" class="tab${on === 'tables' ? ' on' : ''}" data-tab="tables">📖 Таблицы</button>
+  </div>`;
+}
+
+/* {..} → окончание прилагательного, [..] → окончание существительного; слово с маркером — жирное */
+function exHtml(s){
+  return s.split(' ').map(w => {
+    const marked = /[{\[]/.test(w);
+    const h = w.replace(/\{([^}]*)\}/g, '<span class="e-a">$1</span>')
+               .replace(/\[([^\]]*)\]/g, '<span class="e-n">$1</span>');
+    return marked ? `<b>${h}</b>` : h;
+  }).join(' ');
+}
+function pillHtml(c, cls){
+  const alt = (c.alt || []).map(([when, end]) =>
+    `<span class="alt"><i>${when}</i>${end ? `<b>${end}</b>` : ''}</span>`).join('');
+  return `<span class="pill ${cls}">${c.end}${alt}</span>${c.eq ? `<span class="gt-eq">${c.eq}</span>` : ''}`;
+}
+const spanAttr = c => (c.span || 1) > 1 ? ` style="grid-column:span ${c.span}"` : '';
+
+function tableHeadHtml(t){
+  return `<div class="gt-head">
+      <span class="gt-num">${t.num}</span><span class="gt-case">${t.kase}</span>
+      <span class="gt-q">${t.q}</span><span class="gt-n">${t.n}</span>
+    </div>
+    <div class="gt-use"><b>Когда:</b> ${CASE_USE[t.group]}</div>`;
+}
+function gridTableHtml(t){
+  const leaf = t.cols.reduce((s, c) => s + (c.span || 1), 0);
+  let g = '<i></i>' + t.cols.map(c =>
+    `<div class="gt-gen"${spanAttr(c)}><span>${c.label}</span><span class="ic">${GENDER_ICON[c.ic] || ''}</span></div>`).join('');
+  if(t.subs) g += '<i></i>' + t.subs.map(s =>
+    s ? `<div class="gt-sub"><span class="ic">${s.ic}</span>${s.label}</div>` : '<div class="gt-sub"></div>').join('');
+  g += '<div class="gt-lbl">przymiotnik</div>' + t.adj.map(c => `<div class="gt-cell"${spanAttr(c)}>${pillHtml(c, 'y')}</div>`).join('');
+  g += '<div class="gt-lbl">rzeczownik</div>'  + t.noun.map(c => `<div class="gt-cell"${spanAttr(c)}>${pillHtml(c, 'r')}</div>`).join('');
+  g += '<div class="gt-lbl">przykład</div>'    + t.ex.map(c => `<div class="gt-ex"${spanAttr(c)}>${c.lines.map(exHtml).join('<br>')}</div>`).join('');
+  g += '<i></i>' + t.ask.map(c => `<div class="gt-ask"${spanAttr(c)}>${c.t}</div>`).join('');
+  return `<section class="gt c-${t.color}" data-case="${t.group}">
+    ${tableHeadHtml(t)}
+    <div class="gt-grid" style="--n:${leaf}">${g}</div>
+    ${t.note ? `<div class="gt-note">${t.note}</div>` : ''}
+  </section>`;
+}
+function listsTableHtml(t){
+  const cols = t.cols.map(c => `<div class="gt-lcol"><span class="gt-badge">${c.end}</span>${
+    c.groups.map(([h, items]) => `<div class="gt-grp"><h4>${h}</h4><div>${items.map(exHtml).join('<br>')}</div></div>`).join('')
+  }</div>`).join('');
+  return `<section class="gt c-${t.color}" data-case="${t.group}">
+    <div class="gt-title">${t.title}</div>
+    <div class="gt-use"><b>Когда:</b> ${CASE_USE[t.group]}</div>
+    <div class="gt-lists">${cols}</div>
+    ${t.note ? `<div class="gt-note">${t.note}</div>` : ''}
+  </section>`;
+}
+const tableHtml = t => t.kind === 'lists' ? listsTableHtml(t) : gridTableHtml(t);
+
+function renderTables(){
+  const chips = [['all', 'Все']].concat(TABLE_CASES).map(([k, l]) =>
+    `<button type="button" class="gt-chip${(tablesFilter || 'all') === k ? ' on' : ''}" data-case="${k}">${l}</button>`).join('');
+  const shown = CASE_TABLES.filter(t => !tablesFilter || t.group === tablesFilter);
+  /* пустой список невозможен при текущих данных, но если фильтр не нашёл таблиц — сказать словами, а не показать пустоту */
+  const list = shown.length ? shown.map(tableHtml).join('')
+                            : '<div class="panel" style="text-align:center">Для этого падежа таблиц пока нет.</div>';
+  app.innerHTML = `${tabsHtml('tables')}
+    <div class="screen-title">Таблицы падежей</div>
+    <div class="screen-sub">как в «Tablice gramatyczne» · Polski krok po kroku</div>
+    <div class="gt-filter">${chips}</div>
+    ${list}`;
+  app.querySelectorAll('.gt-chip').forEach(b => b.addEventListener('click', () => {
+    tablesFilter = b.dataset.case === 'all' ? null : b.dataset.case;
+    renderTables();
+    window.scrollTo({top:0, behavior:'smooth'});
+  }));
+}
+
+/* ============ МОДАЛ ============ */
+document.addEventListener('click', e => {
+  const tab = e.target.closest('.tab');
+  if(tab){
+    state = tab.dataset.tab === 'tables' ? 'tables' : 'topic';
+    render();
+    window.scrollTo({top:0, behavior:'smooth'});
+    return;
+  }
+  const link = e.target.closest('.ref-link');
+  if(link){ openRefModal(link.dataset.ref); return; }
+  if(e.target === modalBackdrop) closeModal();
+});
+document.addEventListener('keydown', e => { if(e.key === 'Escape') closeModal(); });
+
+function openRefModal(refKey){
+  const r = topic.reference(refKey);
+  if(!r) return;
+  const head = `<tr>${r.cols.map(c => `<th>${c}</th>`).join('')}</tr>`;
+  const body = r.rows.map(row => `<tr>${row.map((c, i) =>
+    `<td${i === 1 && r.cols.length === 3 ? ' class="end-col"' : ''}>${c}</td>`).join('')}</tr>`).join('');
+  modalBox.innerHTML = `
+    <button type="button" class="modal-close" id="modalCloseBtn">✕</button>
+    <h3>${r.title} ${r.tag ? `<span class="modal-tag">${r.tag}</span>` : ''}</h3>
+    <div class="modal-sub">${r.sub}</div>
+    <table class="conj-table">${head}${body}</table>`;
+  modalBackdrop.classList.add('open');
+  document.getElementById('modalCloseBtn').addEventListener('click', closeModal);
+  modalBox.scrollTop = 0;
+}
+function closeModal(){ modalBackdrop.classList.remove('open'); }
+
+/* ============ РОУТЕР ============ */
+function render(){
+  if(state === 'topic') renderTopicScreen();
+  else if(state === 'sub') renderSubScreen();
+  else if(state === 'quiz') renderQuiz();
+  else if(state === 'summary') renderSummary();
+  else if(state === 'tables') renderTables();
+  /* на вкладке таблиц HUD с очками не нужен — он про тесты */
+  document.body.classList.toggle('tables-mode', state === 'tables');
+}
+render();
+
+/* ============ ЗАПРЕТ ЗУМА ============ */
+['gesturestart','gesturechange','gestureend'].forEach(ev => {
+  document.addEventListener(ev, e => e.preventDefault(), {passive:false});
+});
+
+/* ============ PWA ============ */
+if('serviceWorker' in navigator){
+  window.addEventListener('load', () => { navigator.serviceWorker.register('sw.js').catch(() => {}); });
+}
+</script>
+</body>
+</html>

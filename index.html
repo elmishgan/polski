@@ -427,14 +427,15 @@
   }
   .pill{
     color:#fff;font-family:var(--ser);font-style:italic;font-weight:700;font-size:1.05rem;line-height:1.15;
-    padding:8px 9px;border-radius:9px;border:2px solid #fff;box-shadow:0 2px 3px rgba(0,0,0,.25);
+    padding:8px 6px;border-radius:9px;border:2px solid #fff;box-shadow:0 2px 3px rgba(0,0,0,.25);
     text-align:center;min-width:54px;max-width:100%;
+    white-space:nowrap;       /* «-owie» не должно рваться после дефиса в узкой колонке */
   }
   .pill.y{background:#ffd400;color:#111;}
   .pill.r{background:#f31b3c;}
   .pill small{font-size:.6em;vertical-align:top;}
   .pill .alt{
-    display:block;font-family:var(--font);font-style:normal;font-weight:700;font-size:.56rem;
+    display:block;font-family:var(--font);font-style:normal;font-weight:700;font-size:.56rem;white-space:normal;overflow-wrap:anywhere;
     margin-top:4px;text-align:left;line-height:1.3;
   }
   .pill .alt b{
@@ -457,6 +458,7 @@
     background:#fff;border:1px solid var(--col-dark);text-align:center;font-weight:700;font-size:.68rem;
     padding:6px 2px;letter-spacing:.02em;
   }
+  .gt-alt{background:var(--col);padding:8px 3px;font-size:.68rem;line-height:1.55;font-weight:700;text-align:center;}
   .gt-note{font-size:.7rem;margin-top:8px;color:#444;line-height:1.4;}
   .gt-note b{color:#1c1c1c;}
 
@@ -1763,7 +1765,8 @@ const CASE_DATA = buildCaseData();
    колонки родов, ряд прилагательного (жёлтые плашки), ряд существительного (красные),
    примеры и строка вопроса JAKI?. Это справочник, движок тестов их не читает.
 
-   Формат ячейки: {end, span, alt:[[когда, окончание]], eq:'= BIERNIK'}.
+   Формат ячейки: {end, span, alt:[[когда, окончание]], eq:'= BIERNIK'}. Ряды adj/noun необязательны
+   (у tab. 3 только существительные, у tab. 4 только прилагательные), altern — ряд чередований.
    В примерах {..} — окончание прилагательного (жёлтое), [..] — существительного (красное);
    слово с маркером выделяется жирным, пустой маркер [] = нулевое окончание.
 
@@ -1790,18 +1793,58 @@ const CASE_TABLES = [
         {lines:['To jest dobr{e} dzieck[o].','To jest ładn{e} imi[ę].','To jest now{e} muze[um].']}],
     ask:[{t:'JAKI?'},{t:'JAKA?'},{t:'JAKIE?'}] },
 
-  { id:'M2', num:'tab. 2', kase:'MIANOWNIK', q:'Kto? Co?', n:'l. mn.', group:'M', color:'sand', verified:false,
-    cols:[{label:'rodzaj męski osobowy', ic:'mm'},{label:'rodzaj męski nieosobowy', ic:'h'},{label:'rodzaj żeński', ic:'f'},{label:'rodzaj nijaki', ic:'n'}],
-    adj:[{end:'-i', alt:[['k, g, r + sz, ż, cz, rz','-y']]},{end:'-e', span:3}],
-    noun:[{end:'-i', alt:[['k, g, r + c','-y'],['ś, ć, ź, dź, ń, l, j<br>sz, ż, cz, rz','-e'],['pan, syn, ojciec','-owie']]},
-          {end:'-y', span:2, alt:[['k, g','-i'],['sz, cz, dz, dż, ż, rz<br>ś, ć, ź, dź, ń, c, l, j','-e']]},
-          {end:'-a'}],
-    ex:[{lines:['To są dobrz{y} studenc[i].','To są mil{i} Polac[y].','To są now{i} nauczyciel[e].']},
-        {lines:['To są now{e} komputer[y].','To są drog{ie} hotel[e].']},
-        {lines:['To są dobr{e} studentk[i].','To są czarn{e} kaw[y].']},
-        {lines:['To są włosk{ie} win[a].','To są smaczn{e} jabłk[a].']}],
-    ask:[{t:'JACY?'},{t:'JAKIE?', span:3}],
-    note:'<b>Мужско-личный род меняет согласную:</b> student → studenci, Polak → Polacy, aktor → aktorzy, Francuz → Francuzi; dobry → dobrzy, miły → mili, wysoki → wysocy, drogi → drodzy.' },
+  { id:'M2', num:'tab. 2', kase:'MIANOWNIK', q:'rzeczowników niemęskoosobowych', n:'l. mn.', group:'M', color:'blue', verified:true,
+    cols:[{label:'rodzaj męski nieosobowy ONE', ic:'h'},{label:'rodzaj żeński ONE', ic:'f'},{label:'rodzaj nijaki ONE', ic:'n'}],
+    adj:[{end:'-e', span:3}],
+    noun:[{end:'-y', span:2, alt:[['k, g','-i'],['sz, cz, dz, dż, ż, rz<br>ś, ć, ź, dź, ń, c, l, j','-e']]},{end:'-a'}],
+    ex:[{lines:['To są czarn{e} kot[y].','To są zielon{e} ogórk[i].','To są smaczn{e} owoc[e].']},
+        {lines:['To są now{e} płyt[y].','To są mił{e} studentk[i].','To są słodk{ie} pomarańcz[e].']},
+        {lines:['To są zielon{e} jabłk[a].','To są łatw{e} zadani[a].','To są ładn{e} imion[a].','To są now{e} muze[a].']}],
+    ask:[{t:'JAKIE?', span:3}] },
+
+  { id:'M3', num:'tab. 3', kase:'MIANOWNIK', q:'rzeczowników męskoosobowych', n:'l. mn.', group:'M', color:'olive', verified:true,
+    cols:[{label:'rodzaj męskoosobowy – ONI', ic:'mm', span:4}],
+    noun:[{end:'-i', alt:[['b, d, f, ch, ł, m<br>n, p, s, t, w, z','']]},
+          {end:'-y', alt:[['k, g, r, c','']]},
+          {end:'-e', alt:[['sz, cz, dz, dż, ż, rz<br>ś, ć, dź, ź, ń, l, j','']]},
+          {end:'-owie', alt:[['rodzina, tytuł<br>narodowość (1 sylaba)','']]}],
+    altern:[{lines:['t → ci','d → dzi','ch → si','sta → ści']},
+            {lines:['k → cy','g → dzy','r → rzy','ec → cy','ca → cy']},
+            {lines:['anin → anie']},
+            {lines:[]}],
+    ex:[{lines:['student → studenc[i]','sąsiad → sąsiedz[i]','mnich → mnis[i]','artysta → artyśc[i]']},
+        {lines:['fizyk → fizyc[y]','kolega → koledz[y]','aktor → aktorz[y]','chłopiec → chłopc[y]','kierowca → kierowc[y]']},
+        {lines:['wegetarianin → wegetarian[ie]','Amerykanin → Amerykan[ie]','krakowianin → krakowian[ie]']},
+        {lines:['syn[owie]','król[owie]','Belg[owie]']}],
+    ask:[{t:'DWAJ / TRZEJ / CZTEREJ', span:4}],
+    note:'<b>Uwaga:</b> brat – bracia, człowiek – ludzie, ksiądz – księża.' },
+
+  { id:'M4', num:'tab. 4', kase:'MIANOWNIK', q:'przymiotników męskoosobowych', n:'l. mn.', group:'M', color:'blue', verified:true,
+    cols:[{label:'rodzaj męskoosobowy', ic:'mm', span:3}],
+    adj:[{end:'-i', span:2},{end:'-y', alt:[['k, g, r, c, cz, dz, ż','']]}],
+    altern:[{lines:['t → ci','d → dzi','ł → li']},
+            {lines:['sz → si','ch → si','st → ści','ony → eni','oły → eli']},
+            {lines:['k → cy','g → dzy','r → rzy','cy = cy','czy = czy','dzy = dzy','ży = ży']}],
+    ex:[{lines:['To są punktualn{i} fachowcy.','To są leniw{i} pracownicy.','To są grub{i} faceci.','To są pracowic{i} studenci.','To są młodz{i} ludzie.','To są mil{i} profesorowie.']},
+        {lines:['To są leps{i} uczniowie.','To są głus{i} pacjenci.','To są barczyśc{i} sportowcy.','To są zadowolen{i} kursanci.','To są wesel{i} Włosi.']},
+        {lines:['To są aroganc{cy} chłopcy.','To są drodz{y} przyjaciele.','To są dobrz{y} koledzy.','To są obc{y} ludzie.','To są urocz{y} mężczyźni.','To są cudz{y} pracownicy.','To są śwież{y} adepci.']}],
+    ask:[{t:'JACY?', span:3}] },
+
+  /* разворот из «Gramatyka z kulturą przez przypadki» (polskigram): та же система on → oni,
+     но с большим списком примеров; пропуски упражнения заполнены */
+  { kind:'lists', id:'Moni', group:'M', color:'sand', verified:true,
+    title:'MIANOWNIK l. mn. męskoosobowy (on → oni): więcej przykładów',
+    cols:[
+      {end:'-y', groups:[['po -k, -g, -r, -c: k → cy, g → dzy, r → rzy, c → cy',
+        ['Polak – Polac[y]','Słowak – Słowac[y]','prawnik – prawnic[y]','Norweg – Norwedz[y]','chirurg – chirurdz[y]','kolega – koledz[y]','Bułgar – Bułgarz[y]','aktor – aktorz[y]','fryzjer – fryzjerz[y]','Ukrainiec – Ukraińc[y]','Niemiec – Niemc[y]','Węgier – Węgrz[y]','odkrywca – odkrywc[y]']]]},
+      {end:'-i', groups:[['po spółgłoskach twardych: b → bi, d → dzi, t → ci, m → mi, n → ni, s → si, z → zi, ch → si',
+        ['sąsiad – sąsiedz[i]','Szwed – Szwedz[i]','logopeda – logopedz[i]','Chorwat – Chorwac[i]','student – studenc[i]','artysta – artyśc[i]','Białorusin – Białorusin[i]','kuzyn – kuzyn[i]','mężczyzna – mężczyźn[i]','Czech – Czes[i]','Włoch – Włos[i]','mnich – mnis[i]']]]},
+      {end:'-e', groups:[['po miękkich i stwardniałych (-ć, -ń, -ś, -ź, -l, -j, -cz, -sz, -rz) i w nazwach na -anin',
+        ['gość – gośc[ie]','przyjaciel – przyjaciel[e]','geniusz – geniusz[e]','notariusz – notariusz[e]','tłumacz – tłumacz[e]','słuchacz – słuchacz[e]','lekarz – lekarz[e]','malarz – malarz[e]','Rosjanin – Rosjan[ie]','Słowianin – Słowian[ie]','Amerykanin – Amerykan[ie]','warszawianin – warszawian[ie]','Hiszpan – Hiszpan[ie]']]]},
+      {end:'-owie', groups:[['pokrewieństwo, tytuły, narodowości i plemiona, słowa na -f, -ek, nazwiska',
+        ['ojciec – ojc[owie]','syn – syn[owie]','wujek – wujk[owie]','dziadek – dziadk[owie]','teść – teśc[iowie]','król – król[owie]','pan – pan[owie]','sędzia – sędzi[owie]','mistrz – mistrz[owie]','Serb – Serb[owie]','Kazach – Kazach[owie]','Wiking – Wiking[owie]','Nowak – Nowak[owie]','Kowalczyk – Kowalczyk[owie]']]]}
+    ],
+    note:'<b>Wyjątki:</b> człowiek – ludzie, brat – bracia, ksiądz – księża, kibic – kibice, rodzic – rodzice. Формы на <b>-owie</b> иногда живут как вариант: profesorzy / profesorowie, senatorzy / senatorowie, oficerzy / oficerowie, bohaterzy / bohaterowie.' },
 
   { id:'D1', num:'tab. 5', kase:'DOPEŁNIACZ', q:'Kogo? Czego?', n:'l. poj.', group:'D', color:'olive', verified:true,
     cols:[{label:'rodzaj męski', ic:'m', span:2},{label:'rodzaj żeński', ic:'f'},{label:'rodzaj nijaki', ic:'n'}],
@@ -2643,8 +2686,9 @@ function gridTableHtml(t){
     `<div class="gt-gen"${spanAttr(c)}><span>${c.label}</span><span class="ic">${GENDER_ICON[c.ic] || ''}</span></div>`).join('');
   if(t.subs) g += '<i></i>' + t.subs.map(s =>
     s ? `<div class="gt-sub"><span class="ic">${s.ic}</span>${s.label}</div>` : '<div class="gt-sub"></div>').join('');
-  g += '<div class="gt-lbl">przymiotnik</div>' + t.adj.map(c => `<div class="gt-cell"${spanAttr(c)}>${pillHtml(c, 'y')}</div>`).join('');
-  g += '<div class="gt-lbl">rzeczownik</div>'  + t.noun.map(c => `<div class="gt-cell"${spanAttr(c)}>${pillHtml(c, 'r')}</div>`).join('');
+  if(t.adj)  g += '<div class="gt-lbl">przymiotnik</div>' + t.adj.map(c => `<div class="gt-cell"${spanAttr(c)}>${pillHtml(c, 'y')}</div>`).join('');
+  if(t.noun) g += '<div class="gt-lbl">rzeczownik</div>'  + t.noun.map(c => `<div class="gt-cell"${spanAttr(c)}>${pillHtml(c, 'r')}</div>`).join('');
+  if(t.altern) g += '<div class="gt-lbl">alternacje</div>' + t.altern.map(c => `<div class="gt-alt"${spanAttr(c)}>${c.lines.join('<br>')}</div>`).join('');
   g += '<div class="gt-lbl">przykład</div>'    + t.ex.map(c => `<div class="gt-ex"${spanAttr(c)}>${c.lines.map(exHtml).join('<br>')}</div>`).join('');
   g += '<i></i>' + t.ask.map(c => `<div class="gt-ask"${spanAttr(c)}>${c.t}</div>`).join('');
   return `<section class="gt c-${t.color}" data-case="${t.group}">
